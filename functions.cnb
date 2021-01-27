@@ -1,0 +1,67 @@
+{
+	"cell_id": 862531085534105402,
+	"cells": [
+		{
+			"cell_id": 6952436960393603390,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,q,r,s,u,v,w,x,y,z#}::Indices(full,values={t,x,y}, position=independent).\n\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting.\nh_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\ndelh_{m? n?}::Symmetric.\ndelh^{m? n?}::Symmetric.\n\\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2}).\nG3_{m? n?}::Symmetric.\nDh::Depends(\\partial{#}).\n\\delta^{m?}_{n?}::KroneckerDelta.\n\\delta_{m?}^{n?}::KroneckerDelta.\nF_{m? n?}::AntiSymmetric."
+		},
+		{
+			"cell_id": 12865507769665094275,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def tidy (expr):\n   converge(expr):\n       distribute(expr)\n       product_rule(expr)\n       canonicalise(expr)\n   return expr"
+		},
+		{
+			"cell_id": 8122226354943683683,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def split(ex):\n\tsplit_index(ex, $\\mu, m1, 4$, repeat=True)\n\tsubstitute(ex, $\\partial_{4}{A??} -> 0$, repeat=True)\n\tsubstitute(ex, $\\partial_{4 m?}{A??} -> 0$, repeat=True)\n\tsubstitute(ex, $\\partial_{m? 4}{A??} -> 0$, repeat=True)\n\tcanonicalise(ex)\n\treturn ex"
+		},
+		{
+			"cell_id": 5842869526328321304,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def select_index(used_indices):\n\tindeces = r'z y x w v u t s r q o n m l k j i h g f e d c b a'.split() \n\tfor uind in indeces:\n\t\tfound = False\n\t\tfor qind in used_indices:\n\t\t\tif qind == uind:\n\t\t\t\tfound = True\n\t\t\t\tbreak\t\n\t\tif not found:\n\t\t\tused_indices.add(uind)\n\t\t\tindex = uind\n\t\t\tbreak\t\n\treturn Ex(index), used_indices"
+		},
+		{
+			"cell_id": 3139226686227207264,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "\ndef one_nabla(ex, used_indices):\n\tt3, used_indices = select_index(used_indices)\n\tfree = dict()\n\tfree['sub'] = set()\n\tfree['up'] = set()\n\tfor nabla in ex[r'\\nabla']:\n\t\tnabla.name=r'\\partial'\n\t\tdindex = nabla.indices().__next__() \n\t\tfor arg in nabla.args():             \n\t\t\tret:=0;\n\t\t\tfor index in arg.free_indices():\n\t\t\t\tif index.parent_rel==sub:\n\t\t\t\t\tfree['sub'].add(str(index.ex()))\n\t\t\t\telse:\n\t\t\t\t\tfree['up'].add(str(index.ex()))\n\t\t\tfor key in free.keys():\n\t\t\t\tfor index in free[key]:\n\t\t\t\t\tind = Ex(index)\n\t\t\t\t\tif key == 'sub':\n\t\t\t\t\t\tt1:= -\\Gamma^{@[t3]}_{@(dindex) @[ind]};\n\t\t\t\t\telse:\n\t\t\t\t\t\tt1:=  \\Gamma^{@[ind]}_{@(dindex) @[t3]};\n\t\t\t\t\tt2:= @[arg];\n\t\t\t\t\tfor term_index in arg.free_indices():\n\t\t\t\t\t\tif str(term_index.ex()) == index:\n\t\t\t\t\t\t\tif term_index.parent_rel==sub:\n\t\t\t\t\t\t\t\tt2[term_index]:= _{@[t3]};\n\t\t\t\t\t\t\telse:\n\t\t\t\t\t\t\t\tt2[term_index]:= ^{@[t3]};\n\t\t\t\t\tret += Ex(str(nabla.multiplier)) * t1 * t2\n\t\t\tnabla += ret\n\t\t\tbreak\n\t\tbreak\n\treturn ex, used_indices"
+		},
+		{
+			"cell_id": 733015745890015971,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def nabla_calculation(ex, used_indices, count):\n\tex = ex.ex()\n\tnew := 0;\n\tfor element in ex.top().terms():\n\t\tlocal_count = 0\n\t\tfor nabla in element[r'\\nabla']:\n\t\t\tlocal_count += 1\n\t\tif local_count == 0:\n\t\t\tnew += element.ex()\n\t\telif count == 1:\n\t\t\tnew, used_indices = (one_nabla(ex, used_indices))\n\t\t\tcount -= 1\n\t\telse:\n\t\t\tfor nabla in ex[r'\\nabla']:\n\t\t\t\tfor arg1 in nabla.args():\n\t\t\t\t\targ2, used_indices = nabla_calculation(arg1, used_indices, count - 1)\n\t\t\t\t\tindex = nabla.indices().__next__() \n\t\t\t\t\tt := \\nabla_{@(index)}{@[arg2]};\n\t\t\t\tnew += Ex(str(nabla.multiplier)) *  t\n\t\t\t\tnabla1, used_indices = one_nabla(new, used_indices)\n\t\t\t\tnew = Ex(str(nabla.multiplier)) * nabla1\n\t\t\t\tbreak\n\treturn new, used_indices"
+		},
+		{
+			"cell_id": 6210540499683200558,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def expand_nabla(ex):\n\tnew_ex :=0;\n\tfor element in ex.top().terms():\n\t\tcount = 0\n\t\tused_indices = set()\n\t\tfor nabla in element[r'\\nabla']:\n\t\t\tcount += 1\n\t\tif count == 0:\n\t\t\tnew_ex += element.ex()\n\t\telse:\n\t\t\tfor n in element.ex():\n\t\t\t\tfor index in n.indices():\n\t\t\t\t\tused_indices.add(str(index))\n\t\t\telement1, used_indices = nabla_calculation(element, used_indices, count)\n\t\t\tnew_ex += element1\n\treturn new_ex\t"
+		},
+		{
+			"cell_id": 6202135451276414406,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def kaluza(ex):\n\tsubstitute(ex, $g_{4 4} -> \\phi**{2}$ )\n\tsubstitute(ex, $g_{m 4} -> \\phi**{2} A_{m}$ )\n\tsubstitute(ex, $g_{4 m} -> \\phi**{2} A_{m}$ )\n\tsubstitute(ex, $g_{m n} -> h_{m n} + \\phi**{2} A_{m} A_{n}$ )\n\tsubstitute(ex, $g^{4 4} -> \\phi**{-2} +  A_{m} h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{m 4} -> - h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{4 m} -> - h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{m n} -> h^{m n}$ )\n\treturn ex"
+		},
+		{
+			"cell_id": 4073406499368588177,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def writing(ex):\n\twith open(\"output\", \"a\") as file:\n   \t\tfile.write(\"\\n\" + ex.input_form() + \"\\n\")"
+		},
+		{
+			"cell_id": 5565772250685938253,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
