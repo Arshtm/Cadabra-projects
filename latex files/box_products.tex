@@ -1,0 +1,373 @@
+% This is the bit of LaTeX style information that DataCell.cc needs in
+% order to write notebooks out in standalone LaTeX form. It is very
+% similar to ../frontend/common/preamble.tex; keep them in sync.
+
+\documentclass[10pt]{article}
+\usepackage[scale=.8]{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage[fleqn]{amsmath}
+\usepackage{color}
+\usepackage{changepage}
+\usepackage[colorlinks=true, urlcolor=black, plainpages=false, pdfpagelabels]{hyperref}
+\usepackage{etoolbox}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+%\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\algo}[1]{{\tt \detokenize{#1}}}
+\newcommand{\prop}[1]{{\tt \detokenize{#1}}}
+\renewcommand{\author}[1]{{\bfseries #1}}
+\newcommand{\email}[1]{, {\tt #1}}
+%\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+%\ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Math expressions wrapped in \brwrap will get typeset with
+% round brackets around them, which have the appropriate size.
+% The expression itself can still be broken over multiple lines.
+
+\newcommand\brwrap[3]{%
+  \setbox0=\hbox{$#2$}
+  \left#1\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
+  \begingroup #2\endgroup\kern-.15em
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#3
+}
+
+\renewcommand{\arraystretch}{1.2}
+\tolerance=10000
+\relpenalty=10
+\binoppenalty=10
+\hyphenpenalty=10
+\raggedright
+
+\lstnewenvironment{python}[1][]{\lstset{language=python,
+   columns=fullflexible,
+   xleftmargin=1em,
+   belowskip=0pt,
+   tabsize=3,
+   commentstyle={}, % otherwise {#} cadabra arguments look ugly
+   breaklines=true,   
+   basicstyle=\small\ttfamily\color{blue},
+   keywordstyle={}
+}}{}
+  
+
+\everymath{\displaystyle}
+
+% Page numbers
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[LE,RO]{{\small\thepage}}
+\fancyfoot[LO,RE]{{\tiny\href{http://cadabra.science}{{\tt http://cadabra.science}}}}
+
+% \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+% \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Ensure that maths broken over multiple lines has a bit of spacing
+% between lines.
+\lineskiplimit=0mm
+\lineskip=1.5ex
+
+% Typesetting Young tableaux, originally in a separate style
+% file, now included to avoid path searching problems. 
+% Some internals for the typesetting macros below; nothing
+% user-servicable here; please read on.
+
+\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
+\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
+\long\def\ReturnAfterFi#1\fi{\fi#1}
+    \def\tabf@rc#1#2#3{%
+      \def\temp@ty{#2}%
+      \ifx\@empty\temp@ty
+      \else
+        \ReturnAfterFi{%
+          \tabf@@rc#1#2\tabf@@rc{#3}%
+        }%
+      \fi
+    }%
+
+% Sorry, some global registers for sizes and keeping track of
+% measurements.
+    
+\newdimen\ytsize\ytsize=2mm
+\newdimen\ytfsize\ytfsize=4mm
+\newcount\repcnt
+\newdimen\acchspace
+\newdimen\accvspace
+\newdimen\raiseh
+\newdimen\maxw
+
+\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
+
+% Typeset a Young tableau with filled boxes. Takes a single 
+% argument which is a string of symbols for each row,
+% separated by commas. Examples:
+%
+%   \ftableau{abc,de}
+%   \ftableau{ab{d_2},f{g_3}}
+
+\newcommand\ftableau[1]{%
+\def\ctest{,}
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\vbox{\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
+		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
+ \else\ifx\thisel\ctest
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
+     \kern\acchspace\acchspace=0ex
+	  \advance\accvspace by -\ytfsize
+ \else
+     \setbox3=\hbox{$\thisel$}%
+	  \raiseh=\ytfsize%
+	  \advance\raiseh by -1ex%
+	  \divide\raiseh by 2%
+     \advance\acchspace by-\ytfsize%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
+        \ytfsize{\vrule height \ytfsize\hskip.5ex%
+         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
+ \fi\fi}}}}
+
+% Typeset a Young tableau with unlabelled boxes. Takes a single 
+% argument which is a string of numbers, one for the length of
+% each row of the tableau. Example:
+%
+%   \tableau{{10}{8}{3}}
+%
+% typesets a tableau with 10 boxes in the 1st row, 8 in the 2nd
+% and 3 in the 3rd. Curly brackets can be omitted if numbers
+% are less than 10.
+
+\newcommand\tableau[1]{%
+\def\stest{ }
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{}
+ \else
+     \repcnt=\thisel%
+     \loop{}%
+     \advance\acchspace by-\ytsize%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
+			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
+     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
+     \kern\acchspace\acchspace=0ex%
+	  \advance\accvspace by -\ytsize%
+ \fi}\kern-\maxw}}
+ 
+\begin{document}
+\begin{python}
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Indices(full, position=independent);
+{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Indices(subspace, position=independent, parent=full);
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Integer(1..4);
+{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Integer(1..3);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Indices(position=independent) to~}\brwrap{[}{\mu,~\discretionary{}{}{} \nu,~\discretionary{}{}{} \rho,~\discretionary{}{}{} \sigma,~\discretionary{}{}{} \kappa,~\discretionary{}{}{} \lambda,~\discretionary{}{}{} \eta,~\discretionary{}{}{} \chi\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Indices(position=independent) to~}\brwrap{[}{m,~\discretionary{}{}{} n,~\discretionary{}{}{} p,~\discretionary{}{}{} q,~\discretionary{}{}{} r,~\discretionary{}{}{} s,~\discretionary{}{}{} t,~\discretionary{}{}{} u,~\discretionary{}{}{} v,~\discretionary{}{}{} w,~\discretionary{}{}{} x,~\discretionary{}{}{} y,~\discretionary{}{}{} z,~\discretionary{}{}{} m\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Integer to~}\brwrap{[}{\mu,~\discretionary{}{}{} \nu,~\discretionary{}{}{} \rho,~\discretionary{}{}{} \sigma,~\discretionary{}{}{} \kappa,~\discretionary{}{}{} \lambda,~\discretionary{}{}{} \eta,~\discretionary{}{}{} \chi\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Integer to~}\brwrap{[}{m,~\discretionary{}{}{} n,~\discretionary{}{}{} p,~\discretionary{}{}{} q,~\discretionary{}{}{} r,~\discretionary{}{}{} s,~\discretionary{}{}{} t,~\discretionary{}{}{} u,~\discretionary{}{}{} v,~\discretionary{}{}{} w,~\discretionary{}{}{} x,~\discretionary{}{}{} y,~\discretionary{}{}{} z,~\discretionary{}{}{} m\#}{]}.$\end{adjustwidth}
+\begin{python}
+\partial{#}::PartialDerivative.
+\nabla{#}::Derivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.
+g_{\mu? \nu?}::Symmetric.
+g^{\mu? \nu?}::Symmetric.
+h_{m n}::Metric.
+h^{m n}::InverseMetric.
+\delta^{\mu?}_{\nu?}::KroneckerDelta.
+\delta_{\mu?}^{\nu?}::KroneckerDelta.
+\delta^{m?}_{n?}::KroneckerDelta.
+\delta_{m?}^{n?}::KroneckerDelta.
+\delta^{\mu?}_{n?}::KroneckerDelta.
+\delta_{\mu?}^{n?}::KroneckerDelta.
+F_{m n}::AntiSymmetric.
+\pi::Depends(\nabla{#}).
+h_{m n}::Depends(\partial{#}).
+h^{m n}::Depends(\partial{#}).
+g_{\mu\nu}::Depends(\partial{#}).
+g^{\mu\nu}::Depends(\partial{#}).
+\Gamma^{\alpha}_{\mu\nu}::TableauSymmetry(shape={2}, indices={1,2}).
+\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2}).
+\end{python}
+\begin{python}
+def tidy (expr):
+   converge(expr):
+       distribute(expr)
+       product_rule(expr)
+       canonicalise(expr)
+   return expr
+\end{python}
+\begin{python}
+def split(ex):
+	split_index(ex, $\mu, m1, 4$, repeat=True)
+	substitute(ex, $\partial_{4}{A??} -> 0$, repeat=True)
+	substitute(ex, $\partial_{4 m?}{A??} -> 0$, repeat=True)
+	substitute(ex, $\partial_{m? 4}{A??} -> 0$, repeat=True)
+	canonicalise(ex)
+	return ex
+\end{python}
+\begin{python}
+def expand_nabla(ex):
+    for nabla in ex[r'\nabla']:
+        nabla.name=r'\partial'
+        dindex = nabla.indices().__next__() 
+        for arg in nabla.args():             
+            ret:=0;
+            for index in arg.free_indices():
+                t2:= @(arg);
+                if index.parent_rel==sub:
+                    t1:= -\Gamma^{\rho}_{@(dindex) @(index)};
+                    t2[index]:= _{\rho};
+                else:
+                    t1:=  \Gamma^{@(index)}_{@(dindex) \rho};
+                    t2[index]:= ^{\rho};
+                ret += Ex(str(nabla.multiplier)) * t1 * t2
+            nabla += ret
+    return ex
+\end{python}
+\begin{python}
+def kaluza(ex):
+	substitute(ex, $g_{4 4} -> \phi**{2}$ )
+	substitute(ex, $g_{m 4} -> \phi**{2} A_{m}$ )
+	substitute(ex, $g_{4 m} -> \phi**{2} A_{m}$ )
+	substitute(ex, $g_{m n} -> h_{m n} + \phi**{2} A_{m} A_{n}$ )
+	substitute(ex, $g^{4 4} -> \phi**{-2} +  A_{m} h^{m n} A_{n}$ )
+	substitute(ex, $g^{m 4} -> - h^{m n} A_{n}$ )
+	substitute(ex, $g^{4 m} -> - h^{m n} A_{n}$ )
+	substitute(ex, $g^{m n} -> h^{m n}$ )
+	return ex
+\end{python}
+\begin{python}
+Gtog:= \Gamma^{\lambda?}_{\mu?\nu?} ->
+  (1/2) * g^{\lambda?\kappa} ( 
+        \partial_{\nu?}{ g_{\kappa\mu?} } + \partial_{\mu?}{ g_{\kappa\nu?} } - \partial_{\kappa}{ g_{\mu?\nu?} } );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\Gamma^{\lambda?}\,_{\mu? \nu?} \rightarrow \frac{1}{2}g^{\lambda? \kappa} \brwrap{(}{\partial_{\nu?}{g_{\kappa \mu?}}+\partial_{\mu?}{g_{\kappa \nu?}}-\partial_{\kappa}{g_{\mu? \nu?}}}{)}$\end{adjustwidth}
+\begin{python}
+second:= \nabla_{m?}{\nabla_{n?}{\pi}} -> \nabla_{m?}{\partial_{n?}{\pi}}-\frac{1}{2}A_{m?}\partial_{p}{\pi} {\phi}**{2} F_{n? q}h^{q p} - \frac{1}{2}A_{n?} \partial_{p}{\pi} {\phi}**{2} F_{m? q}h^{q p}+A_{m?}A_{n?}\partial_{p}{\phi}\partial_{q}{\pi} \phi h^{p q};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m?}\brwrap{(}{\nabla_{n?}{\pi}}{)} \rightarrow \nabla_{m?}\brwrap{(}{\partial_{n?}{\pi}}{)} - \frac{1}{2}A_{m?} \partial_{p}{\pi} {\phi}^{2} F_{n? q} h^{q p} - \frac{1}{2}A_{n?} \partial_{p}{\pi} {\phi}^{2} F_{m? q} h^{q p}+A_{m?} A_{n?} \partial_{p}{\phi} \partial_{q}{\pi} \phi h^{p q}$\end{adjustwidth}
+\begin{python}
+second4m:=\nabla_{4}{\nabla_{m?}{\pi}}->  - \frac{1}{2}\partial_{n}{\pi} {\phi}**{2} F_{m? p} h^{n p}+A_{m?} \partial_{n}{\phi} \partial_{p}{\pi} \phi h^{n p};
+secondm4:=\nabla_{m?}{\nabla_{4}{\pi}}->  - \frac{1}{2}\partial_{n}{\pi} {\phi}**{2} F_{m? p} h^{n p}+A_{m?} \partial_{n}{\phi} \partial_{p}{\pi} \phi h^{n p};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{4}\brwrap{(}{\nabla_{m?}{\pi}}{)} \rightarrow  - \frac{1}{2}\partial_{n}{\pi} {\phi}^{2} F_{m? p} h^{n p}+A_{m?} \partial_{n}{\phi} \partial_{p}{\pi} \phi h^{n p}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m?}\brwrap{(}{\nabla_{4}{\pi}}{)} \rightarrow  - \frac{1}{2}\partial_{n}{\pi} {\phi}^{2} F_{m? p} h^{n p}+A_{m?} \partial_{n}{\phi} \partial_{p}{\pi} \phi h^{n p}$\end{adjustwidth}
+\begin{python}
+second44:= \nabla_{4}{\nabla_{4}{\pi}}->\frac{1}{2}h^{m n} \partial_{m}{{\phi}**{2}} \partial_{n}{\pi};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} \rightarrow \frac{1}{2}h^{m n} \partial_{m}{{\phi}^{2}} \partial_{n}{\pi}$\end{adjustwidth}
+\begin{python}
+sq:= \nabla_{\mu}{\nabla_{\nu}{\pi}}\nabla_{\kappa}{\nabla_{\sigma}{\pi}} g^{\mu \kappa}g^{\nu \sigma};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{\mu}\brwrap{(}{\nabla_{\nu}{\pi}}{)} \nabla_{\kappa}\brwrap{(}{\nabla_{\sigma}{\pi}}{)} g^{\mu \kappa} g^{\nu \sigma}$\end{adjustwidth}
+\begin{python}
+split(sq);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\nabla_{q}{\pi}}{)} g^{m p} g^{n q}+\nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{m p} g^{4 n}+\nabla_{m}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{n}\brwrap{(}{\nabla_{p}{\pi}}{)} g^{m n} g^{4 p}+\nabla_{m}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{n}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{m n} g^{4 4}+\nabla_{4}\brwrap{(}{\nabla_{m}{\pi}}{)} \nabla_{n}\brwrap{(}{\nabla_{p}{\pi}}{)} g^{4 n} g^{m p}+\nabla_{4}\brwrap{(}{\nabla_{m}{\pi}}{)} \nabla_{n}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 n} g^{4 m}+\nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} g^{4 m} g^{4 n}+\nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{m}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 m} g^{4 4}+\nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{p}{\pi}}{)} g^{4 m} g^{n p}+\nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 m} g^{4 n}+\nabla_{m}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{n}{\pi}}{)} g^{4 m} g^{4 n}+\nabla_{m}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 m} g^{4 4}+\nabla_{4}\brwrap{(}{\nabla_{m}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{n}{\pi}}{)} g^{4 4} g^{m n}+\nabla_{4}\brwrap{(}{\nabla_{m}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 4} g^{4 m}+\nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{m}{\pi}}{)} g^{4 4} g^{4 m}+\nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} \nabla_{4}\brwrap{(}{\nabla_{4}{\pi}}{)} g^{4 4} g^{4 4}$\end{adjustwidth}
+\begin{python}
+substitute(_,second44)
+substitute(_,second4m)
+substitute(_,secondm4)
+substitute(_,second)
+\end{python}
+\begin{python}
+tidy(sq)
+\end{python}
+\begin{python}
+kaluza(sq)
+\end{python}
+\begin{python}
+tidy(_)
+\end{python}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_)
+converge(sq):
+	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+	eliminate_kronecker(_)
+	canonicalise(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m}\brwrap{(}{\partial_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} h^{m p} h^{n q} - \frac{1}{2}A_{m} F_{n p} \nabla_{q}\brwrap{(}{\partial_{t}{\pi}}{)} \partial_{u}{\pi} {\phi}^{2} h^{m q} h^{n t} h^{p u} - \frac{1}{2}A_{m} F_{n p} \nabla_{q}\brwrap{(}{\partial_{t}{\pi}}{)} \partial_{u}{\pi} {\phi}^{2} h^{m t} h^{n q} h^{p u}+A_{m} A_{n} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} \partial_{t}{\phi} \partial_{u}{\pi} \phi h^{m p} h^{n q} h^{t u}+\frac{1}{2}A_{m} F_{n p} \nabla_{q}\brwrap{(}{\partial_{r}{\pi}}{)} \partial_{s}{\pi} {\phi}^{2} h^{m q} h^{n r} h^{p s}+\frac{1}{2}A_{m} F_{n p} \nabla_{q}\brwrap{(}{\partial_{r}{\pi}}{)} \partial_{s}{\pi} {\phi}^{2} h^{m r} h^{n q} h^{p s}-A_{m} A_{n} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} \partial_{r}{\phi} \partial_{s}{\pi} \phi h^{m p} h^{n q} h^{r s}+\frac{1}{2}F_{m n} F_{p q} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{2} h^{m p} h^{n r} h^{q s}-2A_{m} F_{n p} \partial_{q}{\phi} \partial_{r}{\pi} \partial_{s}{\pi} \phi h^{m n} h^{p r} h^{q s}+3A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{\phi} \partial_{r}{\pi} \partial_{s}{\pi} h^{m n} h^{p r} h^{q s}+2A_{m} F_{n p} \partial_{q}{\phi} \partial_{r}{\pi} \partial_{u}{\pi} \phi h^{m n} h^{p r} h^{q u}-4A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{\phi} \partial_{r}{\pi} \partial_{u}{\pi} h^{m n} h^{p r} h^{q u}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\pi} \partial_{q}{\pi} {\phi}^{-2} h^{m p} h^{n q}+A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{\phi} \partial_{t}{\pi} \partial_{u}{\pi} h^{m n} h^{p t} h^{q u}$\end{adjustwidth}
+\begin{python}
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m}\brwrap{(}{\partial_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} h^{m p} h^{n q}+\frac{1}{2}F_{m n} F_{p q} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{2} h^{m p} h^{n r} h^{q s}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\pi} \partial_{q}{\pi} {\phi}^{-2} h^{m p} h^{n q}$\end{adjustwidth}
+\begin{python}
+eliminate_metric(_,repeat=True);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla^{p}\brwrap{(}{\partial_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} h^{n q}+\frac{1}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{2}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\pi} \partial_{q}{\pi} {\phi}^{-2} h^{m p} h^{n q}$\end{adjustwidth}
+\begin{python}
+cub:= \nabla_{\mu}{\nabla_{\nu}{\pi}}\nabla_{\rho}{\nabla_{\sigma}{\pi}}\nabla_{\lambda}{\nabla_{\eta}{\pi}}g^{\rho \mu}g^{\sigma \eta}g^{\lambda \nu};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{\mu}\brwrap{(}{\nabla_{\nu}{\pi}}{)} \nabla_{\rho}\brwrap{(}{\nabla_{\sigma}{\pi}}{)} \nabla_{\lambda}\brwrap{(}{\nabla_{\eta}{\pi}}{)} g^{\rho \mu} g^{\sigma \eta} g^{\lambda \nu}$\end{adjustwidth}
+\begin{python}
+split(cub)
+\end{python}
+\begin{python}
+substitute(_,second44)
+substitute(_,second4m)
+substitute(_,secondm4)
+substitute(_,second)
+\end{python}
+\begin{python}
+kaluza(cub)
+tidy(cub)
+\end{python}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_)
+converge(cub):
+	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+	eliminate_kronecker(_)
+	canonicalise(_)
+\end{python}
+\begin{python}
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla_{m}\brwrap{(}{\partial_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} \nabla_{r}\brwrap{(}{\partial_{s}{\pi}}{)} h^{m p} h^{n r} h^{q s}+\frac{3}{4}F_{m n} F_{p q} \nabla_{r}\brwrap{(}{\partial_{s}{\pi}}{)} \partial_{t}{\pi} \partial_{u}{\pi} {\phi}^{2} h^{m r} h^{n t} h^{p s} h^{q u}+\frac{3}{4}F_{m n} F_{p q} \partial_{r}{\phi} \partial_{s}{\pi} \partial_{t}{\pi} \partial_{u}{\pi} \phi h^{m p} h^{n s} h^{q t} h^{r u}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\phi} \partial_{q}{\pi} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{-3} h^{m q} h^{n r} h^{p s}$\end{adjustwidth}
+\begin{python}
+eliminate_metric(_,repeat=True);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\nabla^{p}\brwrap{(}{\partial_{n}{\pi}}{)} \nabla_{p}\brwrap{(}{\partial_{q}{\pi}}{)} \nabla^{n}\brwrap{(}{\partial_{s}{\pi}}{)} h^{q s}+\frac{3}{4}F^{r t} F^{s u} \nabla_{r}\brwrap{(}{\partial_{s}{\pi}}{)} \partial_{t}{\pi} \partial_{u}{\pi} {\phi}^{2}+\frac{3}{4}F^{p s} F_{p}\,^{t} \partial_{r}{\phi} \partial_{s}{\pi} \partial_{t}{\pi} \partial_{u}{\pi} \phi h^{r u}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\phi} \partial_{q}{\pi} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{-3} h^{m q} h^{n r} h^{p s}$\end{adjustwidth}
+\begin{python}
+\end{python}
+\end{document}

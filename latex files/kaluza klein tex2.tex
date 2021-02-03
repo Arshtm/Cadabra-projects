@@ -1,0 +1,517 @@
+\documentclass[12pt,a4paper,svgnames]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[scale=.8]{geometry}% This is the bit of LaTeX style information that DataCell.cc needs in
+\usepackage[english,russian]{babel}
+\usepackage{amsmath, amsthm, amsfonts, amssymb,amscd}
+\usepackage{esdiff}
+\usepackage[all]{xy}
+\ifx\pdfoutput\undefined
+\usepackage{graphicx}
+\else
+\usepackage[pdftex]{graphicx}
+\fi
+\usepackage{multirow}
+\usepackage{cellspace}
+\usepackage{colortbl}
+\usepackage{bbm}
+\usepackage[table]{xcolor}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{floatrow}
+\textheight 24cm
+\textwidth 15.9cm
+\topmargin -.5in
+\oddsidemargin 0in
+\graphicspath{{pic/}}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{changepage}
+\usepackage[colorlinks=true, urlcolor=black, plainpages=false, pdfpagelabels]{hyperref}
+\usepackage{etoolbox}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+%\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\algo}[1]{{\tt \detokenize{#1}}}
+\newcommand{\prop}[1]{{\tt \detokenize{#1}}}
+\renewcommand{\author}[1]{{\bfseries #1}}
+\newcommand{\email}[1]{, {\tt #1}}
+%\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+%\ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Math expressions wrapped in \brwrap will get typeset with
+% round brackets around them, which have the appropriate size.
+% The expression itself can still be broken over multiple lines.
+
+\newcommand\brwrap[3]{%
+  \setbox0=\hbox{$#2$}
+  \left#1\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
+  \begingroup #2\endgroup\kern-.15em
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#3
+}
+
+\renewcommand{\arraystretch}{1.2}
+\tolerance=10000
+\relpenalty=10
+\binoppenalty=10
+\hyphenpenalty=10
+\raggedright
+
+\lstnewenvironment{python}[1][]{\lstset{language=python,
+   columns=fullflexible,
+   xleftmargin=1em,
+   belowskip=0pt,
+   tabsize=3,
+   commentstyle={}, % otherwise {#} cadabra arguments look ugly
+   breaklines=true,   
+   basicstyle=\small\ttfamily\color{blue},
+   keywordstyle={}
+}}{}
+  
+
+\everymath{\displaystyle}
+
+% Page numbers
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[LE,RO]{{\small\thepage}}
+\fancyfoot[LO,RE]{{\tiny\href{http://cadabra.science}{{\tt http://cadabra.science}}}}
+
+% \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+% \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Ensure that maths broken over multiple lines has a bit of spacing
+% between lines.
+\lineskiplimit=0mm
+\lineskip=1.5ex
+
+% Typesetting Young tableaux, originally in a separate style
+% file, now included to avoid path searching problems. 
+% Some internals for the typesetting macros below; nothing
+% user-servicable here; please read on.
+
+\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
+\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
+\long\def\ReturnAfterFi#1\fi{\fi#1}
+    \def\tabf@rc#1#2#3{%
+      \def\temp@ty{#2}%
+      \ifx\@empty\temp@ty
+      \else
+        \ReturnAfterFi{%
+          \tabf@@rc#1#2\tabf@@rc{#3}%
+        }%
+      \fi
+    }%
+
+% Sorry, some global registers for sizes and keeping track of
+% measurements.
+    
+\newdimen\ytsize\ytsize=2mm
+\newdimen\ytfsize\ytfsize=4mm
+\newcount\repcnt
+\newdimen\acchspace
+\newdimen\accvspace
+\newdimen\raiseh
+\newdimen\maxw
+
+\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
+
+% Typeset a Young tableau with filled boxes. Takes a single 
+% argument which is a string of symbols for each row,
+% separated by commas. Examples:
+%
+%   \ftableau{abc,de}
+%   \ftableau{ab{d_2},f{g_3}}
+
+\newcommand\ftableau[1]{%
+\def\ctest{,}
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\vbox{\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
+		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
+ \else\ifx\thisel\ctest
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
+     \kern\acchspace\acchspace=0ex
+	  \advance\accvspace by -\ytfsize
+ \else
+     \setbox3=\hbox{$\thisel$}%
+	  \raiseh=\ytfsize%
+	  \advance\raiseh by -1ex%
+	  \divide\raiseh by 2%
+     \advance\acchspace by-\ytfsize%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
+        \ytfsize{\vrule height \ytfsize\hskip.5ex%
+         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
+ \fi\fi}}}}
+
+% Typeset a Young tableau with unlabelled boxes. Takes a single 
+% argument which is a string of numbers, one for the length of
+% each row of the tableau. Example:
+%
+%   \tableau{{10}{8}{3}}
+%
+% typesets a tableau with 10 boxes in the 1st row, 8 in the 2nd
+% and 3 in the 3rd. Curly brackets can be omitted if numbers
+% are less than 10.
+
+\newcommand\tableau[1]{%
+\def\stest{ }
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{}
+ \else
+     \repcnt=\thisel%
+     \loop{}%
+     \advance\acchspace by-\ytsize%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
+			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
+     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
+     \kern\acchspace\acchspace=0ex%
+	  \advance\accvspace by -\ytsize%
+ \fi}\kern-\maxw}}
+ 
+\begin{document}
+Рассматриваем теорию с действием
+\begin{equation}
+	S = \int d^4x\sqrt{-g}\left(\mathcal{L}_{2}+\mathcal{L}_{3}+\mathcal{L}_{4}+\mathcal{L}_{5}\right)
+\end{equation}
+, где
+\begin{align}
+	& \mathcal{L}_{2} = F\left(\pi, X\right)\\
+	& \mathcal{L}_{3} = K\left(\pi, X\right) \Box\pi\\
+	& \mathcal{L}_{4} = -G_4(\pi,X)R + 2G_{4X}\left(\pi, X\right)\left[\left(\Box\pi\right)^2 - \pi_{;\mu\nu}\pi^{;\mu\nu}\right]\\
+	&\mathcal{L}_{5} = G_5\left(\pi, X\right) G^{\mu\nu}\pi_{;\mu\nu} + \frac{1}{3} G_{5X}\left[\left(\Box\pi\right)^{3} - 3\Box\pi\pi_{;\mu\nu}\pi^{;\mu\nu}+2\pi_{;\mu\nu}\pi^{;\mu\rho}\pi^{\nu}_{;\rho}\right]
+\end{align}
+\begin{python}
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Indices(full, position=independent);
+{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Indices(subspace, position=independent, parent=full);
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Integer(1..5);
+{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Integer(1..4);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Indices(position=independent) to~}\brwrap{[}{\mu,~\discretionary{}{}{} \nu,~\discretionary{}{}{} \rho,~\discretionary{}{}{} \sigma,~\discretionary{}{}{} \kappa,~\discretionary{}{}{} \lambda,~\discretionary{}{}{} \eta,~\discretionary{}{}{} \chi\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Indices(position=independent) to~}\brwrap{[}{m,~\discretionary{}{}{} n,~\discretionary{}{}{} p,~\discretionary{}{}{} q,~\discretionary{}{}{} r,~\discretionary{}{}{} s,~\discretionary{}{}{} t,~\discretionary{}{}{} u,~\discretionary{}{}{} v,~\discretionary{}{}{} w,~\discretionary{}{}{} x,~\discretionary{}{}{} y,~\discretionary{}{}{} z,~\discretionary{}{}{} m\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Integer to~}\brwrap{[}{\mu,~\discretionary{}{}{} \nu,~\discretionary{}{}{} \rho,~\discretionary{}{}{} \sigma,~\discretionary{}{}{} \kappa,~\discretionary{}{}{} \lambda,~\discretionary{}{}{} \eta,~\discretionary{}{}{} \chi\#}{]}.$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\text{Attached property Integer to~}\brwrap{[}{m,~\discretionary{}{}{} n,~\discretionary{}{}{} p,~\discretionary{}{}{} q,~\discretionary{}{}{} r,~\discretionary{}{}{} s,~\discretionary{}{}{} t,~\discretionary{}{}{} u,~\discretionary{}{}{} v,~\discretionary{}{}{} w,~\discretionary{}{}{} x,~\discretionary{}{}{} y,~\discretionary{}{}{} z,~\discretionary{}{}{} m\#}{]}.$\end{adjustwidth}
+\begin{python}
+\partial{#}::PartialDerivative.
+\nabla{#}::Derivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.
+g_{\mu? \nu?}::Symmetric.
+g^{\mu? \nu?}::Symmetric.
+h_{m n}::Metric.
+h^{m n}::InverseMetric.
+\delta^{\mu?}_{\nu?}::KroneckerDelta.
+\delta_{\mu?}^{\nu?}::KroneckerDelta.
+\delta^{m?}_{n?}::KroneckerDelta.
+\delta_{m?}^{n?}::KroneckerDelta.
+F_{m n}::AntiSymmetric.
+\pi::Depends(\nabla{#}).
+\end{python}
+\begin{python}
+RtoG:= R^{\lambda?}_{\mu?\nu?\kappa?} -> 
+ - \partial_{\kappa?}{ \Gamma^{\lambda?}_{\mu?\nu?} }
+ + \partial_{\nu?}{ \Gamma^{\lambda?}_{\mu?\kappa?} }
+ - \Gamma^{\eta}_{\mu?\nu?} \Gamma^{\lambda?}_{\kappa?\eta}
+ + \Gamma^{\eta}_{\mu?\kappa?} \Gamma^{\lambda?}_{\nu?\eta};
+
+Gtog:= \Gamma^{\lambda?}_{\mu?\nu?} ->
+  (1/2) * g^{\lambda?\kappa} ( 
+        \partial_{\nu?}{ g_{\kappa\mu?} } + \partial_{\mu?}{ g_{\kappa\nu?} } - \partial_{\kappa}{ g_{\mu?\nu?} } );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}R^{\lambda?}\,_{\mu? \nu? \kappa?} \rightarrow -\partial_{\kappa?}{\Gamma^{\lambda?}\,_{\mu? \nu?}}+\partial_{\nu?}{\Gamma^{\lambda?}\,_{\mu? \kappa?}}-\Gamma^{\eta}\,_{\mu? \nu?} \Gamma^{\lambda?}\,_{\kappa? \eta}+\Gamma^{\eta}\,_{\mu? \kappa?} \Gamma^{\lambda?}\,_{\nu? \eta}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\Gamma^{\lambda?}\,_{\mu? \nu?} \rightarrow \frac{1}{2}g^{\lambda? \kappa} \brwrap{(}{\partial_{\nu?}{g_{\kappa \mu?}}+\partial_{\mu?}{g_{\kappa \nu?}}-\partial_{\kappa}{g_{\mu? \nu?}}}{)}$\end{adjustwidth}
+\begin{python}
+R:=g^{\sigma \chi} R^{\rho}_{\sigma \rho \chi};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{\sigma \chi} R^{\rho}\,_{\sigma \rho \chi}$\end{adjustwidth}
+\begin{python}
+substitute(_, RtoG)
+substitute(_, Gtog)
+distribute(_)
+product_rule(_)
+distribute(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${} - \frac{1}{2}\partial_{\chi}{g^{\rho \kappa}} \partial_{\rho}{g_{\kappa \sigma}} g^{\sigma \chi} - \frac{1}{2}\partial_{\chi \rho}{g_{\kappa \sigma}} g^{\rho \kappa} g^{\sigma \chi} - \frac{1}{2}\partial_{\chi}{g^{\rho \kappa}} \partial_{\sigma}{g_{\kappa \rho}} g^{\sigma \chi} - \frac{1}{2}\partial_{\chi \sigma}{g_{\kappa \rho}} g^{\rho \kappa} g^{\sigma \chi}+\frac{1}{2}\partial_{\chi}{g^{\rho \kappa}} \partial_{\kappa}{g_{\sigma \rho}} g^{\sigma \chi}+\frac{1}{2}\partial_{\chi \kappa}{g_{\sigma \rho}} g^{\rho \kappa} g^{\sigma \chi}+\frac{1}{2}\partial_{\rho}{g^{\rho \kappa}} \partial_{\chi}{g_{\kappa \sigma}} g^{\sigma \chi}+\frac{1}{2}\partial_{\rho \chi}{g_{\kappa \sigma}} g^{\rho \kappa} g^{\sigma \chi}+\frac{1}{2}\partial_{\sigma}{g_{\kappa \chi}} \partial_{\rho}{g^{\rho \kappa}} g^{\sigma \chi}+\frac{1}{2}\partial_{\rho \sigma}{g_{\kappa \chi}} g^{\rho \kappa} g^{\sigma \chi} - \frac{1}{2}\partial_{\rho}{g^{\rho \kappa}} \partial_{\kappa}{g_{\sigma \chi}} g^{\sigma \chi} - \frac{1}{2}\partial_{\rho \kappa}{g_{\sigma \chi}} g^{\rho \kappa} g^{\sigma \chi} - \frac{1}{4}\partial_{\eta}{g_{\mu \chi}} \partial_{\rho}{g_{\kappa \sigma}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\chi}{g_{\mu \eta}} \partial_{\rho}{g_{\kappa \sigma}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\mu}{g_{\chi \eta}} \partial_{\rho}{g_{\kappa \sigma}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\eta}{g_{\mu \chi}} \partial_{\sigma}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\chi}{g_{\mu \eta}} \partial_{\sigma}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\mu}{g_{\chi \eta}} \partial_{\sigma}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\eta}{g_{\mu \chi}} \partial_{\kappa}{g_{\sigma \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}%
++\frac{1}{4}\partial_{\chi}{g_{\mu \eta}} \partial_{\kappa}{g_{\sigma \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\kappa}{g_{\sigma \rho}} \partial_{\mu}{g_{\chi \eta}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\chi}{g_{\kappa \sigma}} \partial_{\eta}{g_{\mu \rho}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\chi}{g_{\kappa \sigma}} \partial_{\rho}{g_{\mu \eta}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\chi}{g_{\kappa \sigma}} \partial_{\mu}{g_{\rho \eta}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\eta}{g_{\mu \rho}} \partial_{\sigma}{g_{\kappa \chi}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\rho}{g_{\mu \eta}} \partial_{\sigma}{g_{\kappa \chi}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\mu}{g_{\rho \eta}} \partial_{\sigma}{g_{\kappa \chi}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\eta}{g_{\mu \rho}} \partial_{\kappa}{g_{\sigma \chi}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi} - \frac{1}{4}\partial_{\kappa}{g_{\sigma \chi}} \partial_{\rho}{g_{\mu \eta}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}+\frac{1}{4}\partial_{\kappa}{g_{\sigma \chi}} \partial_{\mu}{g_{\rho \eta}} g^{\eta \kappa} g^{\rho \mu} g^{\sigma \chi}$\end{adjustwidth}
+\begin{python}
+split_index(_, $\mu, m1, 5$, repeat=True)
+substitute(_, $\partial_{5}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{5 m?}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{m? 5}{A??} -> 0$, repeat=True)
+canonicalise(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial_{m n}{g_{p q}} g^{m p} g^{n q}+\partial_{m n}{g_{5 p}} g^{m p} g^{5 n}+\partial_{m n}{g_{5 p}} g^{5 m} g^{n p}+\partial_{m n}{g_{5 5}} g^{5 m} g^{5 n} - \frac{1}{2}\partial_{m}{g^{n p}} \partial_{q}{g_{n p}} g^{m q}-\partial_{m}{g^{5 n}} \partial_{p}{g_{5 n}} g^{m p} - \frac{1}{2}\partial_{m}{g^{5 5}} \partial_{n}{g_{5 5}} g^{m n}-\partial_{m n}{g_{p q}} g^{m n} g^{p q}-\partial_{m n}{g_{5 p}} g^{5 p} g^{m n} - \frac{1}{2}\partial_{m n}{g_{5 5}} g^{5 5} g^{m n}+\frac{1}{2}\partial_{m}{g^{m n}} \partial_{p}{g_{n q}} g^{p q}+\frac{1}{2}\partial_{m}{g^{m n}} \partial_{p}{g_{5 n}} g^{5 p}+\frac{1}{2}\partial_{m}{g^{5 m}} \partial_{n}{g_{5 p}} g^{n p}+\frac{1}{2}\partial_{m}{g^{5 m}} \partial_{n}{g_{5 5}} g^{5 n}+\frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g^{n q}} g^{m p}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g^{5 p}} g^{m n}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g^{n p}} g^{5 m}+\frac{1}{2}\partial_{m}{g_{5 5}} \partial_{n}{g^{5 n}} g^{5 m} - \frac{1}{2}\partial_{m}{g^{m n}} \partial_{n}{g_{p q}} g^{p q}%
+-\partial_{m}{g^{m n}} \partial_{n}{g_{5 p}} g^{5 p} - \frac{1}{2}\partial_{m}{g^{m n}} \partial_{n}{g_{5 5}} g^{5 5}-\partial_{m n}{g_{5 p}} g^{m n} g^{5 p} - \frac{1}{2}\partial_{m n}{g_{5 5}} g^{m n} g^{5 5} - \frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{m r} g^{n q} g^{p s} - \frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{m r} g^{n q} g^{5 p} - \frac{3}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{m q} g^{5 p} g^{n r} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{m q} g^{5 p} g^{5 n} - \frac{3}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{5 m} g^{n q} g^{p r} - \frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 m} g^{n q} g^{5 p} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 m} g^{5 p} g^{n q} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 m} g^{5 p} g^{5 n} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{m q} g^{n p} g^{5 r} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{m q} g^{n p} g^{5 5} - \frac{3}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{m p} g^{5 n} g^{5 q} - \frac{1}{2}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{m p} g^{5 n} g^{5 5} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 m} g^{n p} g^{5 q} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 m} g^{n p} g^{5 5}-\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 m} g^{5 n} g^{5 p} - \frac{1}{2}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 m} g^{5 n} g^{5 5}%
+ - \frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 n} g^{p q} g^{5 m} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 n} g^{5 p} g^{5 m} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{5 n} g^{m q} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 5} g^{n p} g^{5 m} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{5 n} g^{m p}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{m q} g^{n r} g^{p s}+\frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{m q} g^{n r} g^{5 p}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 n} g^{m q} g^{5 p}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 n} g^{m p} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 5} g^{m p} g^{5 n}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{m p} g^{n q} g^{5 r}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{m p} g^{n q} g^{5 5}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 n} g^{m p} g^{5 5}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{m n} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 p} g^{m n} g^{5 5}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{m n} g^{5 p}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{m n} g^{5 5} - \frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 m} g^{5 n} g^{p q} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 m} g^{5 5} g^{n p} - \frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 n} g^{5 p} g^{m q}%
+ - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 n} g^{5 q} g^{m p} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 n} g^{5 5} g^{m p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{5 q} g^{m n} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 p} g^{5 5} g^{m n} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 5} g^{5 n} g^{m p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{5 p} g^{m n} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 5} g^{m n}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{n q} g^{5 m} g^{p r}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 n} g^{5 m} g^{p q}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 5} g^{5 m} g^{n p}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{m q} g^{5 n}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{m p} g^{5 n}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{m q} g^{5 n} g^{5 p} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{m p} g^{5 n} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{m p} g^{5 5} g^{5 n}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{m n} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{m n} g^{5 p} g^{5 5}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{n q} g^{5 m} g^{5 p}+\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{m q} g^{5 n} g^{5 p}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{n p} g^{5 5} g^{5 m}%
++\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{5 p} g^{m q} g^{n r}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 m} g^{5 n} g^{5 p}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 n} g^{5 p} g^{m q}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 m} g^{5 p} g^{5 n}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 n} g^{5 5} g^{m p}+\frac{1}{2}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 m} g^{5 5} g^{5 n}+\frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{m n} g^{p q} g^{r s}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{n p} g^{q r} g^{5 m}+\frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{m n} g^{5 r} g^{p q}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{m n} g^{5 5} g^{p q}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{5 p} g^{m n} g^{q r}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 n} g^{p q} g^{5 m}+\frac{3}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 m} g^{5 n} g^{p q}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 n} g^{5 m} g^{5 p}+\frac{1}{2}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 n} g^{5 p} g^{5 m}+\frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{5 p} g^{5 5} g^{m n} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 q}} g^{5 n} g^{5 m} g^{p q}+\frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{m q} g^{5 n} g^{p r}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{m p} g^{5 5} g^{n q}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{5 m} g^{n p} g^{q r}%
++\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 m} g^{5 5} g^{n p}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{m r} g^{n p} g^{5 q}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{5 m} g^{n p} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{5 m} g^{n q} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 m} g^{5 p} g^{n q} - \frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{m q} g^{n p} g^{r s} - \frac{1}{2}\partial_{m}{g_{n p}} \partial_{q}{g_{5 r}} g^{m q} g^{n p} g^{5 r} - \frac{1}{2}\partial_{m}{g_{5 n}} \partial_{p}{g_{q r}} g^{m p} g^{5 n} g^{q r} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{m n} g^{5 5} g^{p q} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{m n} g^{5 5} g^{5 p} - \frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{5 5}} g^{m q} g^{n p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{5 n}} \partial_{p}{g_{5 5}} g^{m p} g^{5 n} g^{5 5}$\end{adjustwidth}
+\begin{python}
+substitute(_, $g_{5 5} -> \phi**{2}$ )
+substitute(_, $g_{m 5} -> \phi**{2} A_{m}$ )
+substitute(_, $g_{5 m} -> \phi**{2} A_{m}$ )
+substitute(_, $g_{m n} -> h_{m n} + \phi**{2} A_{m} A_{n}$ )
+substitute(_, $g^{5 5} -> \phi**{-2} +  A_{m} h^{m n} A_{n}$ )
+substitute(_, $g^{m 5} -> - h^{m n} A_{n}$ )
+substitute(_, $g^{5 m} -> - h^{m n} A_{n}$ )
+substitute(_, $g^{m n} -> h^{m n}$ );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial_{m n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m p} h^{n q}-\partial_{m n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m p} h^{n q} A_{q}-\partial_{m n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m q} A_{q} h^{n p}+\partial_{m n}{{\phi}^{2}} h^{m p} A_{p} h^{n q} A_{q} - \frac{1}{2}\partial_{m}{h^{n p}} \partial_{q}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} h^{m q}+\partial_{m}\brwrap{(}{h^{n q} A_{q}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{m p} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} \partial_{n}{{\phi}^{2}} h^{m n}-\partial_{m n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m n} h^{p q}+\partial_{m n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p q} A_{q} h^{m n} - \frac{1}{2}\partial_{m n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} h^{m n}+\frac{1}{2}\partial_{m}{h^{m n}} \partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} h^{p q} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p q} A_{q} - \frac{1}{2}\partial_{m}\brwrap{(}{h^{m q} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{n p}+\frac{1}{2}\partial_{m}\brwrap{(}{h^{m p} A_{p}}{)} \partial_{n}{{\phi}^{2}} h^{n q} A_{q}+\frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{h^{n q}} h^{m p} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h^{p q} A_{q}}{)} h^{m n} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{h^{n p}} h^{m q} A_{q}+\frac{1}{2}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h^{n p} A_{p}}{)} h^{m q} A_{q} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p q}%
++\partial_{m}{h^{m n}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p q} A_{q} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)}+\partial_{m n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m n} h^{p q} A_{q} - \frac{1}{2}\partial_{m n}{{\phi}^{2}} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} - \frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{m r} h^{n q} h^{p s}+\frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m r} h^{n q} h^{p s} A_{s}+\frac{3}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{m q} h^{p s} A_{s} h^{n r} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m q} h^{p r} A_{r} h^{n s} A_{s}+\frac{3}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m s} A_{s} h^{n q} h^{p r} - \frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m r} A_{r} h^{n q} h^{p s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m r} A_{r} h^{p s} A_{s} h^{n q}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m q} A_{q} h^{p r} A_{r} h^{n s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{m q} h^{n p} h^{r s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m q} h^{n p} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{3}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m p} h^{n r} A_{r} h^{q s} A_{s}+\frac{1}{2}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m p} h^{n s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m r} A_{r} h^{n p} h^{q s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m s} A_{s} h^{n p} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m q} A_{q} h^{n r} A_{r} h^{p s} A_{s} - \frac{1}{2}\partial_{m}{{\phi}^{2}} \partial_{n}{{\phi}^{2}} h^{m r} A_{r} h^{n s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)}%
+ - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{n r} A_{r} h^{p q} h^{m s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{n q} A_{q} h^{p r} A_{r} h^{m s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{n s} A_{s} h^{m q}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n p} h^{m s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n s} A_{s} h^{m p}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{m q} h^{n r} h^{p s} - \frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m q} h^{n r} h^{p s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{n r} A_{r} h^{m q} h^{p s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{n r} A_{r} h^{m p} h^{q s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m p} h^{n s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{m p} h^{n q} h^{r s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m p} h^{n q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{n s} A_{s} h^{m p} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{m n} h^{q s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p s} A_{s} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m n} h^{p s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m r} A_{r} h^{n s} A_{s} h^{p q}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n p} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{n r} A_{r} h^{p s} A_{s} h^{m q}%
+ - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{n r} A_{r} h^{q s} A_{s} h^{m p}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{n s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m p} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s} h^{m n}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m n}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n s} A_{s} h^{m p}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s} h^{m n} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{m n} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{n q} h^{m s} A_{s} h^{p r}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{n r} A_{r} h^{m s} A_{s} h^{p q} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m s} A_{s} h^{n p}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{m q} h^{n s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m p} h^{n s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m q} h^{n r} A_{r} h^{p s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m p} h^{n r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m p} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m n} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m n} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{n q} h^{m r} A_{r} h^{p s} A_{s}+\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m q} h^{n r} A_{r} h^{p s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{n p} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m s} A_{s}%
+ - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{p s} A_{s} h^{m q} h^{n r} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m q} A_{q} h^{n r} A_{r} h^{p s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{n r} A_{r} h^{p s} A_{s} h^{m q} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m q} A_{q} h^{p r} A_{r} h^{n s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{n s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m p}+\frac{1}{2}\partial_{m}{{\phi}^{2}} \partial_{n}{{\phi}^{2}} h^{m r} A_{r} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} h^{n s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{m n} h^{p q} h^{r s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{n p} h^{q r} h^{m s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m n} h^{r s} A_{s} h^{p q}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{p s} A_{s} h^{m n} h^{q r}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{n r} A_{r} h^{p q} h^{m s} A_{s}+\frac{3}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{m r} A_{r} h^{n s} A_{s} h^{p q} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{n q} A_{q} h^{m r} A_{r} h^{p s} A_{s} - \frac{1}{2}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{n q} A_{q} h^{p r} A_{r} h^{m s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{m n} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{n r} A_{r} h^{m s} A_{s} h^{p q} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{m q} h^{n s} A_{s} h^{p r}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m p} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{n q} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m s} A_{s} h^{n p} h^{q r}%
+ - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{n p} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m r} h^{n p} h^{q s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m r} A_{r} h^{n p} h^{q s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{m s} A_{s} h^{n q} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m r} A_{r} h^{p s} A_{s} h^{n q} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{m q} h^{n p} h^{r s}+\frac{1}{2}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{m q} h^{n p} h^{r s} A_{s}+\frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{m p} h^{n s} A_{s} h^{q r} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{m n} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}{{\phi}^{2}} h^{m q} h^{n p} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}{{\phi}^{2}} h^{m p} h^{n s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}$\end{adjustwidth}
+\begin{python}
+converge(R):
+   distribute(_)
+   product_rule(_)
+   canonicalise(_)
+\end{python}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_)
+converge(R):
+	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+	eliminate_kronecker(_)
+	canonicalise(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial_{m n}{h_{p q}} h^{m p} h^{n q}+A_{m} \partial_{n}{A_{p}} \partial_{q}{\phi} \phi h^{m q} h^{n p}-A_{m} \partial_{n}{A_{p}} \partial_{q}{\phi} \phi h^{m n} h^{p q}+\frac{1}{2}\partial_{m}{A_{n}} \partial_{p}{A_{q}} {\phi}^{2} h^{m q} h^{n p} - \frac{1}{2}\partial_{m}{h^{n p}} \partial_{q}{h_{n p}} h^{m q} - \frac{1}{2}\partial_{m}{A_{n}} \partial_{p}{A_{q}} {\phi}^{2} h^{m p} h^{n q}-\partial_{m n}{h_{p q}} h^{m n} h^{p q}-2\partial_{m n}{\phi} {\phi}^{-1} h^{m n}+\partial_{m}{h_{n p}} \partial_{q}{h^{n q}} h^{m p} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{h_{p q}} h^{p q}-\partial_{m}{\phi} \partial_{n}{h^{m n}} {\phi}^{-1} - \frac{1}{2}\partial_{m}{h_{n p}} \partial_{q}{h_{r s}} h^{m r} h^{n q} h^{p s}+A_{m} \partial_{n}{A_{p}} \partial_{s}{\phi} \phi h^{m n} h^{p s}+\frac{1}{4}\partial_{m}{h_{n p}} \partial_{q}{h_{r s}} h^{m q} h^{n r} h^{p s}+\frac{1}{2}\partial_{m}{h_{n p}} \partial_{q}{h_{r s}} h^{m n} h^{p q} h^{r s}+\partial_{m}{\phi} \partial_{n}{h_{p q}} {\phi}^{-1} h^{m p} h^{n q}-A_{m} \partial_{n}{A_{p}} \partial_{s}{\phi} \phi h^{m s} h^{n p} - \frac{1}{4}\partial_{m}{h_{n p}} \partial_{q}{h_{r s}} h^{m q} h^{n p} h^{r s}-\partial_{m}{\phi} \partial_{n}{h_{p q}} {\phi}^{-1} h^{m n} h^{p q}$\end{adjustwidth}
+\begin{python}
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+distribute(_)
+sort_product(_)
+canonicalise(_)
+rename_dummies(_)
+eliminate_metric(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial^{p}\,_{n}{h_{p q}} h^{n q} - \frac{1}{4}F^{p}\,_{n} F_{p q} {\phi}^{2} h^{n q} - \frac{1}{2}\partial^{n}{h^{p q}} \partial_{n}{h_{p q}}-\partial^{n}\,_{n}{h_{p q}} h^{p q}-2\partial^{n}\,_{n}{\phi} {\phi}^{-1}+\partial^{q}{h_{p q}} \partial_{n}{h^{p n}} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{h^{q}\,_{q}}-\partial_{m}{\phi} \partial_{n}{h^{m n}} {\phi}^{-1} - \frac{1}{2}\partial^{r}{h_{p q}} \partial_{n}{h_{r s}} h^{p n} h^{q s}+\frac{1}{4}\partial^{n}{h_{p q}} \partial_{n}{h_{r s}} h^{p r} h^{q s}+\frac{1}{2}\partial^{p}{h_{p q}} \partial_{n}{h_{r s}} h^{q n} h^{r s}+\partial^{p}{\phi} \partial_{n}{h_{p q}} {\phi}^{-1} h^{n q} - \frac{1}{4}\partial^{n}{h_{p q}} \partial_{n}{h_{r s}} h^{p q} h^{r s}-\partial^{n}{\phi} \partial_{n}{h_{p q}} {\phi}^{-1} h^{p q}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+eliminate_metric(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial^{m p}{h_{m p}} - \frac{1}{4}F^{m p} F_{m p} {\phi}^{2} - \frac{1}{2}\partial^{m}{h^{n p}} \partial_{m}{h_{n p}}-\partial^{m}\,_{m}{h^{p}\,_{p}}-2\partial^{m}\,_{m}{\phi} {\phi}^{-1}+\partial^{m}{h_{m n}} \partial_{p}{h^{n p}} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{h^{p}\,_{p}}-\partial_{m}{\phi} \partial_{n}{h^{m n}} {\phi}^{-1} - \frac{1}{2}\partial^{m}{h^{q}\,_{p}} \partial_{q}{h_{m r}} h^{p r}+\frac{1}{4}\partial^{m}{h^{q}\,_{p}} \partial_{m}{h_{q r}} h^{p r}+\frac{1}{2}\partial^{m}{h_{m}\,^{p}} \partial_{p}{h_{q r}} h^{q r}+\partial^{m}{\phi} \partial^{p}{h_{m p}} {\phi}^{-1} - \frac{1}{4}\partial^{m}{h^{p}\,_{p}} \partial_{m}{h_{q r}} h^{q r}-\partial^{m}{\phi} \partial_{m}{h^{p}\,_{p}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial^{m p}{h_{m p}} - \frac{1}{4}F^{m p} F_{m p} {\phi}^{2} - \frac{1}{2}\partial^{m}{h^{n p}} \partial_{m}{h_{n p}}-\partial^{m}\,_{m}{h^{p}\,_{p}}-2\partial^{m}\,_{m}{\phi} {\phi}^{-1}+\partial^{m}{h_{m n}} \partial_{p}{h^{n p}} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{h^{p}\,_{p}}-\partial_{m}{\phi} \partial_{n}{h^{m n}} {\phi}^{-1} - \frac{1}{2}\partial^{m}{h^{q}\,_{p}} \partial_{q}{h_{m r}} h^{p r}+\frac{1}{4}\partial^{m}{h^{q}\,_{p}} \partial_{m}{h_{q r}} h^{p r}+\frac{1}{2}\partial^{m}{h_{m}\,^{p}} \partial_{p}{h_{q r}} h^{q r}+\partial^{m}{\phi} \partial^{p}{h_{m p}} {\phi}^{-1} - \frac{1}{4}\partial^{m}{h^{p}\,_{p}} \partial_{m}{h_{q r}} h^{q r}-\partial^{m}{\phi} \partial_{m}{h^{p}\,_{p}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+eliminate_metric(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\partial^{m n}{h_{m n}} - \frac{1}{4}F^{m n} F_{m n} {\phi}^{2} - \frac{1}{2}\partial^{m}{h^{n p}} \partial_{m}{h_{n p}}-\partial^{m}\,_{m}{h^{n}\,_{n}}-2\partial^{m}\,_{m}{\phi} {\phi}^{-1}+\partial^{m}{h_{m n}} \partial_{p}{h^{n p}} - \frac{1}{2}\partial_{m}{h^{m n}} \partial_{n}{h^{p}\,_{p}}-\partial_{m}{\phi} \partial_{n}{h^{m n}} {\phi}^{-1} - \frac{1}{2}\partial^{m}{h^{n q}} \partial_{n}{h_{m q}}+\frac{1}{4}\partial^{m}{h^{n q}} \partial_{m}{h_{n q}}+\frac{1}{2}\partial^{m}{h_{m}\,^{n}} \partial_{n}{h^{q}\,_{q}}+\partial^{m}{\phi} \partial^{n}{h_{m n}} {\phi}^{-1} - \frac{1}{4}\partial^{m}{h^{n}\,_{n}} \partial_{m}{h^{q}\,_{q}}-\partial^{m}{\phi} \partial_{m}{h^{n}\,_{n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+meld(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${} - \frac{1}{4}F^{m n} F_{m n} {\phi}^{2}-2\partial^{m}\,_{m}{\phi} {\phi}^{-1}+\partial^{m}{h_{m n}} \partial_{p}{h^{n p}} - \frac{1}{2}\partial^{m}{h^{n q}} \partial_{n}{h_{m q}} - \frac{1}{4}\partial^{m}{h^{n}\,_{n}} \partial_{m}{h^{q}\,_{q}} - \frac{1}{4}\partial^{m}{h^{n p}} \partial_{m}{h_{n p}}+\partial^{m n}{h_{m n}}+\brwrap{(}{-1-{\phi}^{-1}}{)} \partial^{m}\,_{m}{h^{n}\,_{n}}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h^{m1}_{m1} -> \delta^{m1}_{m1}$, repeat=True )
+eliminate_kronecker(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${} - \frac{1}{4}F^{m n} F_{m n} {\phi}^{2}-2\partial^{m}\,_{m}{\phi} {\phi}^{-1}+\partial^{m}{h_{m n}} \partial_{p}{h^{n p}} - \frac{1}{2}\partial^{m}{h^{n q}} \partial_{n}{h_{m q}} - \frac{1}{4}\partial^{m}{h^{n p}} \partial_{m}{h_{n p}}+\partial^{m n}{h_{m n}}$\end{adjustwidth}
+\begin{python}
+X:= g^{\mu \nu} \partial_{\mu}{\pi} \partial_{\nu}{\pi};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{\mu \nu} \partial_{\mu}{\pi} \partial_{\nu}{\pi}$\end{adjustwidth}
+\begin{python}
+split_index(_, $\mu, m1, 5$, repeat=True)
+substitute(_, $\partial_{5}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{5 m?}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{m? 5}{A??} -> 0$, repeat=True)
+canonicalise(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{m n} \partial_{m}{\pi} \partial_{n}{\pi}$\end{adjustwidth}
+\begin{python}
+substitute(_, $g^{m n} -> h^{m n}$ );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}h^{m n} \partial_{m}{\pi} \partial_{n}{\pi}$\end{adjustwidth}
+\begin{python}
+box:= g^{\mu \nu} \partial_{\mu \nu}{\pi};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{\mu \nu} \partial_{\mu \nu}{\pi}$\end{adjustwidth}
+\begin{python}
+split_index(_, $\mu, m1, 5$, repeat=True)
+substitute(_, $\partial_{5}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{5 m?}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{m? 5}{A??} -> 0$, repeat=True)
+canonicalise(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{m n} \partial_{m n}{\pi}$\end{adjustwidth}
+\begin{python}
+meld(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}g^{m n} \partial_{m n}{\pi}$\end{adjustwidth}
+\begin{python}
+substitute(_, $g^{m n} -> h^{m n}$ );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}h^{m n} \partial_{m n}{\pi}$\end{adjustwidth}
+\begin{python}
+Ricci4:=  R^{\rho}_{n \rho m};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}R^{\rho}\,_{n \rho m}$\end{adjustwidth}
+\begin{python}
+substitute(Ricci4,RtoG)
+substitute(Ricci4,Gtog);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${} - \frac{1}{2}\partial_{m}\brwrap{(}{g^{\rho \kappa} \brwrap{(}{\partial_{\rho}{g_{\kappa n}}+\partial_{n}{g_{\kappa \rho}}-\partial_{\kappa}{g_{n \rho}}}{)}}{)}+\frac{1}{2}\partial_{\rho}\brwrap{(}{g^{\rho \kappa} \brwrap{(}{\partial_{m}{g_{\kappa n}}+\partial_{n}{g_{\kappa m}}-\partial_{\kappa}{g_{n m}}}{)}}{)} - \frac{1}{4}g^{\eta \kappa} \brwrap{(}{\partial_{\rho}{g_{\kappa n}}+\partial_{n}{g_{\kappa \rho}}-\partial_{\kappa}{g_{n \rho}}}{)} g^{\rho \mu} \brwrap{(}{\partial_{\eta}{g_{\mu m}}+\partial_{m}{g_{\mu \eta}}-\partial_{\mu}{g_{m \eta}}}{)}+\frac{1}{4}g^{\eta \kappa} \brwrap{(}{\partial_{m}{g_{\kappa n}}+\partial_{n}{g_{\kappa m}}-\partial_{\kappa}{g_{n m}}}{)} g^{\rho \mu} \brwrap{(}{\partial_{\eta}{g_{\mu \rho}}+\partial_{\rho}{g_{\mu \eta}}-\partial_{\mu}{g_{\rho \eta}}}{)}$\end{adjustwidth}
+\begin{python}
+distribute(_)
+product_rule(_)
+distribute(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${} - \frac{1}{2}\partial_{\rho}{g_{\kappa n}} \partial_{m}{g^{\rho \kappa}} - \frac{1}{2}\partial_{m \rho}{g_{\kappa n}} g^{\rho \kappa} - \frac{1}{2}\partial_{m}{g^{\rho \kappa}} \partial_{n}{g_{\kappa \rho}} - \frac{1}{2}\partial_{m n}{g_{\kappa \rho}} g^{\rho \kappa}+\frac{1}{2}\partial_{\kappa}{g_{n \rho}} \partial_{m}{g^{\rho \kappa}}+\frac{1}{2}\partial_{m \kappa}{g_{n \rho}} g^{\rho \kappa}+\frac{1}{2}\partial_{\rho}{g^{\rho \kappa}} \partial_{m}{g_{\kappa n}}+\frac{1}{2}\partial_{\rho m}{g_{\kappa n}} g^{\rho \kappa}+\frac{1}{2}\partial_{\rho}{g^{\rho \kappa}} \partial_{n}{g_{\kappa m}}+\frac{1}{2}\partial_{\rho n}{g_{\kappa m}} g^{\rho \kappa} - \frac{1}{2}\partial_{\rho}{g^{\rho \kappa}} \partial_{\kappa}{g_{n m}} - \frac{1}{2}\partial_{\rho \kappa}{g_{n m}} g^{\rho \kappa} - \frac{1}{4}\partial_{\eta}{g_{\mu m}} \partial_{\rho}{g_{\kappa n}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\rho}{g_{\kappa n}} \partial_{m}{g_{\mu \eta}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\rho}{g_{\kappa n}} \partial_{\mu}{g_{m \eta}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\eta}{g_{\mu m}} \partial_{n}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{m}{g_{\mu \eta}} \partial_{n}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\mu}{g_{m \eta}} \partial_{n}{g_{\kappa \rho}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\eta}{g_{\mu m}} \partial_{\kappa}{g_{n \rho}} g^{\eta \kappa} g^{\rho \mu}%
++\frac{1}{4}\partial_{\kappa}{g_{n \rho}} \partial_{m}{g_{\mu \eta}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\kappa}{g_{n \rho}} \partial_{\mu}{g_{m \eta}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\eta}{g_{\mu \rho}} \partial_{m}{g_{\kappa n}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\rho}{g_{\mu \eta}} \partial_{m}{g_{\kappa n}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\mu}{g_{\rho \eta}} \partial_{m}{g_{\kappa n}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\eta}{g_{\mu \rho}} \partial_{n}{g_{\kappa m}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\rho}{g_{\mu \eta}} \partial_{n}{g_{\kappa m}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\mu}{g_{\rho \eta}} \partial_{n}{g_{\kappa m}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\eta}{g_{\mu \rho}} \partial_{\kappa}{g_{n m}} g^{\eta \kappa} g^{\rho \mu} - \frac{1}{4}\partial_{\rho}{g_{\mu \eta}} \partial_{\kappa}{g_{n m}} g^{\eta \kappa} g^{\rho \mu}+\frac{1}{4}\partial_{\mu}{g_{\rho \eta}} \partial_{\kappa}{g_{n m}} g^{\eta \kappa} g^{\rho \mu}$\end{adjustwidth}
+\begin{python}
+split_index(_, $\mu, m1, 5$, repeat=True)
+substitute(_, $\partial_{5}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{5 m?}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{m? 5}{A??} -> 0$, repeat=True)
+canonicalise(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m p}{g_{n q}} g^{p q}+\frac{1}{2}\partial_{m p}{g_{5 n}} g^{5 p} - \frac{1}{2}\partial_{m}{g^{p q}} \partial_{n}{g_{p q}}-\partial_{m}{g^{5 p}} \partial_{n}{g_{5 p}} - \frac{1}{2}\partial_{m}{g^{5 5}} \partial_{n}{g_{5 5}} - \frac{1}{2}\partial_{m n}{g_{p q}} g^{p q}-\partial_{m n}{g_{5 p}} g^{5 p} - \frac{1}{2}\partial_{m n}{g_{5 5}} g^{5 5}+\frac{1}{2}\partial_{p}{g^{p q}} \partial_{m}{g_{n q}}+\frac{1}{2}\partial_{p}{g^{5 p}} \partial_{m}{g_{5 n}}+\frac{1}{2}\partial_{p}{g^{p q}} \partial_{n}{g_{m q}}+\frac{1}{2}\partial_{p}{g^{5 p}} \partial_{n}{g_{5 m}}+\frac{1}{2}\partial_{n p}{g_{m q}} g^{p q}+\frac{1}{2}\partial_{n p}{g_{5 m}} g^{5 p} - \frac{1}{2}\partial_{p}{g^{p q}} \partial_{q}{g_{m n}} - \frac{1}{2}\partial_{p q}{g_{m n}} g^{p q} - \frac{1}{2}\partial_{p}{g_{m q}} \partial_{r}{g_{n s}} g^{p s} g^{q r} - \frac{1}{4}\partial_{p}{g_{5 m}} \partial_{q}{g_{n r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{r}{g_{5 n}} g^{5 p} g^{q r}%
+ - \frac{1}{2}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{q r} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 n}} \partial_{m}{g_{q r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 5}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{q}{g_{n 5}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{p}{g_{n 5}} \partial_{m}{g_{5 5}} g^{5 5} g^{5 p}+\frac{1}{2}\partial_{p}{g_{m q}} \partial_{r}{g_{n s}} g^{p r} g^{q s}+\frac{1}{4}\partial_{p}{g_{5 n}} \partial_{q}{g_{m r}} g^{5 r} g^{p q}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{r}{g_{5 m}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{5 m}} \partial_{n}{g_{q r}} g^{p q} g^{5 r} - \frac{1}{4}\partial_{n}{g_{5 p}} \partial_{q}{g_{m 5}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{5 p} g^{q r} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m 5}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{r s}} g^{p r} g^{q s} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{q r}} g^{p q} g^{5 r}%
+ - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 r}} g^{5 p} g^{q r} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 q} - \frac{1}{2}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{q r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 5}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{q r} g^{5 p}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 5}} g^{5 q} g^{5 p}+\frac{1}{4}\partial_{p}{g_{5 m}} \partial_{n}{g_{q r}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{n}{g_{5 p}} \partial_{q}{g_{m 5}} g^{5 5} g^{p q}+\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 p}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{r}{g_{5 n}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 m}} \partial_{q}{g_{n r}} g^{p q} g^{5 r}%
++\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 n}} \partial_{m}{g_{q r}} g^{p q} g^{5 r}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 p}} \partial_{q}{g_{n 5}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{5 p} g^{q r}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 5}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{n 5}} \partial_{m}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{p}{g_{5 n}} \partial_{q}{g_{m r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{r}{g_{5 m}} g^{5 p} g^{q r}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{p q} g^{r s}+\frac{1}{2}\partial_{p}{g_{5 q}} \partial_{m}{g_{n r}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{q r}} \partial_{m}{g_{5 n}} g^{5 p} g^{q r}+\frac{3}{4}\partial_{m}{g_{n 5}} \partial_{p}{g_{5 q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n 5}} g^{5 p} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{m}{g_{n 5}} \partial_{p}{g_{5 q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{n}{g_{m p}} \partial_{q}{g_{r s}} g^{p q} g^{r s}+\frac{1}{2}\partial_{p}{g_{5 q}} \partial_{n}{g_{m r}} g^{p r} g^{5 q}%
++\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{q r}} \partial_{n}{g_{5 m}} g^{5 p} g^{q r}+\frac{3}{4}\partial_{n}{g_{m 5}} \partial_{p}{g_{5 q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m 5}} g^{5 p} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{n}{g_{m 5}} \partial_{p}{g_{5 q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m n}} \partial_{q}{g_{r s}} g^{p q} g^{r s} - \frac{1}{2}\partial_{p}{g_{5 q}} \partial_{r}{g_{m n}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{5 q} g^{5 p}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{5 p} g^{5 q}$\end{adjustwidth}
+\begin{python}
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m p}{g_{n q}} g^{p q}+\frac{1}{2}\partial_{m p}{g_{5 n}} g^{5 p} - \frac{1}{2}\partial_{m}{g^{p q}} \partial_{n}{g_{p q}}-\partial_{m}{g^{5 p}} \partial_{n}{g_{5 p}} - \frac{1}{2}\partial_{m}{g^{5 5}} \partial_{n}{g_{5 5}} - \frac{1}{2}\partial_{m n}{g_{p q}} g^{p q}-\partial_{m n}{g_{5 p}} g^{5 p} - \frac{1}{2}\partial_{m n}{g_{5 5}} g^{5 5}+\frac{1}{2}\partial_{p}{g^{p q}} \partial_{m}{g_{n q}}+\frac{1}{2}\partial_{p}{g^{5 p}} \partial_{m}{g_{5 n}}+\frac{1}{2}\partial_{p}{g^{p q}} \partial_{n}{g_{m q}}+\frac{1}{2}\partial_{p}{g^{5 p}} \partial_{n}{g_{5 m}}+\frac{1}{2}\partial_{n p}{g_{m q}} g^{p q}+\frac{1}{2}\partial_{n p}{g_{5 m}} g^{5 p} - \frac{1}{2}\partial_{p}{g^{p q}} \partial_{q}{g_{m n}} - \frac{1}{2}\partial_{p q}{g_{m n}} g^{p q} - \frac{1}{2}\partial_{p}{g_{m q}} \partial_{r}{g_{n s}} g^{p s} g^{q r} - \frac{1}{4}\partial_{p}{g_{5 m}} \partial_{q}{g_{n r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{r}{g_{5 n}} g^{5 p} g^{q r}%
+ - \frac{1}{2}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{q r} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 n}} \partial_{m}{g_{q r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 5}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{q}{g_{n 5}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{p}{g_{n 5}} \partial_{m}{g_{5 5}} g^{5 5} g^{5 p}+\frac{1}{2}\partial_{p}{g_{m q}} \partial_{r}{g_{n s}} g^{p r} g^{q s}+\frac{1}{4}\partial_{p}{g_{5 n}} \partial_{q}{g_{m r}} g^{5 r} g^{p q}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{r}{g_{5 m}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{5 m}} \partial_{n}{g_{q r}} g^{p q} g^{5 r} - \frac{1}{4}\partial_{n}{g_{5 p}} \partial_{q}{g_{m 5}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{5 p} g^{q r} - \frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m 5}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{r s}} g^{p r} g^{q s} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{q r}} g^{p q} g^{5 r}%
+ - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 r}} g^{5 p} g^{q r} - \frac{1}{4}\partial_{m}{g_{p q}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 q} - \frac{1}{2}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{q r}} g^{5 q} g^{p r} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{p q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 q}} g^{5 5} g^{p q} - \frac{1}{4}\partial_{m}{g_{5 p}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 p}} g^{5 5} g^{5 p} - \frac{1}{4}\partial_{m}{g_{5 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 5}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{q r} g^{5 p}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 r}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{n}{g_{5 5}} g^{5 q} g^{5 p}+\frac{1}{4}\partial_{p}{g_{5 m}} \partial_{n}{g_{q r}} g^{5 q} g^{p r}+\frac{1}{4}\partial_{n}{g_{5 p}} \partial_{q}{g_{m 5}} g^{5 5} g^{p q}+\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{n}{g_{5 5}} g^{5 5} g^{5 p}+\frac{1}{4}\partial_{p}{g_{m q}} \partial_{r}{g_{5 n}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 m}} \partial_{q}{g_{n r}} g^{p q} g^{5 r}%
++\frac{1}{4}\partial_{p}{g_{m 5}} \partial_{q}{g_{n 5}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 n}} \partial_{m}{g_{q r}} g^{p q} g^{5 r}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{m}{g_{5 p}} \partial_{q}{g_{n 5}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 r}} g^{5 p} g^{q r}+\frac{1}{4}\partial_{p}{g_{n q}} \partial_{m}{g_{5 5}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{n 5}} \partial_{m}{g_{5 5}} g^{5 p} g^{5 5} - \frac{1}{4}\partial_{p}{g_{5 n}} \partial_{q}{g_{m r}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{n q}} \partial_{r}{g_{5 m}} g^{5 p} g^{q r}+\frac{1}{4}\partial_{m}{g_{n p}} \partial_{q}{g_{r s}} g^{p q} g^{r s}+\frac{1}{2}\partial_{p}{g_{5 q}} \partial_{m}{g_{n r}} g^{p r} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{q r}} \partial_{m}{g_{5 n}} g^{5 p} g^{q r}+\frac{3}{4}\partial_{m}{g_{n 5}} \partial_{p}{g_{5 q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n 5}} g^{5 p} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{m}{g_{n 5}} \partial_{p}{g_{5 q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{m}{g_{n q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{n}{g_{m p}} \partial_{q}{g_{r s}} g^{p q} g^{r s}+\frac{1}{2}\partial_{p}{g_{5 q}} \partial_{n}{g_{m r}} g^{p r} g^{5 q}%
++\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{p q} g^{5 5}+\frac{1}{4}\partial_{p}{g_{q r}} \partial_{n}{g_{5 m}} g^{5 p} g^{q r}+\frac{3}{4}\partial_{n}{g_{m 5}} \partial_{p}{g_{5 q}} g^{5 p} g^{5 q}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m 5}} g^{5 p} g^{5 5}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{n}{g_{m 5}} \partial_{p}{g_{5 q}} g^{5 q} g^{5 p} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{n}{g_{m q}} g^{5 p} g^{5 q} - \frac{1}{4}\partial_{p}{g_{m n}} \partial_{q}{g_{r s}} g^{p q} g^{r s} - \frac{1}{2}\partial_{p}{g_{5 q}} \partial_{r}{g_{m n}} g^{p r} g^{5 q} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{p q} g^{5 5} - \frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{5 q} g^{5 p}+\frac{1}{4}\partial_{p}{g_{5 5}} \partial_{q}{g_{m n}} g^{5 p} g^{5 q}$\end{adjustwidth}
+\begin{python}
+substitute(_, $g_{5 5} -> \phi**{2}$ )
+substitute(_, $g_{m 5} -> \phi**{2} A_{m}$ )
+substitute(_, $g_{5 m} -> \phi**{2} A_{m}$ )
+substitute(_, $g_{m n} -> h_{m n} + \phi**{2} A_{m} A_{n}$ )
+substitute(_, $g^{5 5} -> \phi**{-2} +  A_{m} h^{m n} A_{n}$ )
+substitute(_, $g^{m 5} -> - h^{m n} A_{n}$ )
+substitute(_, $g^{5 m} -> - h^{m n} A_{n}$ )
+substitute(_, $g^{m n} -> h^{m n}$ );
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} h^{p q} - \frac{1}{2}\partial_{m p}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p q} A_{q} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)}+\partial_{m}\brwrap{(}{h^{p q} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} \partial_{n}{{\phi}^{2}} - \frac{1}{2}\partial_{m n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p q}+\partial_{m n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p q} A_{q} - \frac{1}{2}\partial_{m n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} - \frac{1}{2}\partial_{p}\brwrap{(}{h^{p q} A_{q}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{n}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} - \frac{1}{2}\partial_{p}\brwrap{(}{h^{p q} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{m}}{)}+\frac{1}{2}\partial_{n p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} h^{p q} - \frac{1}{2}\partial_{n p}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{p q} A_{q} - \frac{1}{2}\partial_{p}{h^{p q}} \partial_{q}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} - \frac{1}{2}\partial_{p q}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} h^{p q} - \frac{1}{2}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{r}\brwrap{(}{h_{n s}+{\phi}^{2} A_{n} A_{s}}{)} h^{p s} h^{q r}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{q}\brwrap{(}{h_{n r}+{\phi}^{2} A_{n} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{r}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p s} A_{s} h^{q r}%
+ - \frac{1}{2}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p r} A_{r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{q r} h^{p s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{m}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{q s} A_{s} h^{p r}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{q s} A_{s} h^{p r} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}{{\phi}^{2}} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{n}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{m}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s}+\frac{1}{2}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{r}\brwrap{(}{h_{n s}+{\phi}^{2} A_{n} A_{s}}{)} h^{p r} h^{q s} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{q}\brwrap{(}{h_{m r}+{\phi}^{2} A_{m} A_{r}}{)} h^{r s} A_{s} h^{p q} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{r}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{q s} A_{s} h^{p r}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{n}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{n}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{p q} h^{r s} A_{s} - \frac{1}{4}\partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p s} A_{s} h^{q r} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}{{\phi}^{2}} h^{p r} A_{r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{n}{{\phi}^{2}} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} \partial_{n}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{p r} h^{q s}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{p q} h^{r s} A_{s}%
+ - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p s} A_{s} h^{q r} - \frac{1}{4}\partial_{m}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} \partial_{n}{{\phi}^{2}} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{2}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}{{\phi}^{2}} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{q s} A_{s} h^{p r} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{p q}+{\phi}^{2} A_{p} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{q}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s}+\frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s} - \frac{1}{4}\partial_{m}{{\phi}^{2}} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{p} h^{p q} A_{q}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{q r} h^{p s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{q s} A_{s} h^{p r}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{n}{{\phi}^{2}} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{n}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{q s} A_{s} h^{p r}+\frac{1}{4}\partial_{n}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{m}}{)} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} h^{p q} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{n}{{\phi}^{2}} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)} h^{p s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} \partial_{r}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{q}\brwrap{(}{h_{n r}+{\phi}^{2} A_{n} A_{r}}{)} h^{p q} h^{r s} A_{s}%
++\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{m}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} h^{p q} h^{r s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{p}}{)} \partial_{q}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{r}}{)} h^{p s} A_{s} h^{q r}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{m}{{\phi}^{2}} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{m}{{\phi}^{2}} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{p}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{q}\brwrap{(}{h_{m r}+{\phi}^{2} A_{m} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} \partial_{r}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{p s} A_{s} h^{q r}+\frac{1}{4}\partial_{m}\brwrap{(}{h_{n p}+{\phi}^{2} A_{n} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{p q} h^{r s} - \frac{1}{2}\partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} \partial_{m}\brwrap{(}{h_{n r}+{\phi}^{2} A_{n} A_{r}}{)} h^{p r} h^{q s} A_{s}+\frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{m}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} \partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p s} A_{s} h^{q r}+\frac{3}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{m}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{m}\brwrap{(}{{\phi}^{2} A_{n}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{m}\brwrap{(}{h_{n q}+{\phi}^{2} A_{n} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s}+\frac{1}{4}\partial_{n}\brwrap{(}{h_{m p}+{\phi}^{2} A_{m} A_{p}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{p q} h^{r s} - \frac{1}{2}\partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} \partial_{n}\brwrap{(}{h_{m r}+{\phi}^{2} A_{m} A_{r}}{)} h^{p r} h^{q s} A_{s}%
++\frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{q r}+{\phi}^{2} A_{q} A_{r}}{)} \partial_{n}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{p s} A_{s} h^{q r}+\frac{3}{4}\partial_{n}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{n}\brwrap{(}{{\phi}^{2} A_{m}}{)} h^{p s} A_{s} \brwrap{(}{{\phi}^{-2}+A_{q} h^{q r} A_{r}}{)}+\frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{n}\brwrap{(}{{\phi}^{2} A_{m}}{)} \partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} h^{q r} A_{r} h^{p s} A_{s} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{n}\brwrap{(}{h_{m q}+{\phi}^{2} A_{m} A_{q}}{)} h^{p r} A_{r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} \partial_{q}\brwrap{(}{h_{r s}+{\phi}^{2} A_{r} A_{s}}{)} h^{p q} h^{r s}+\frac{1}{2}\partial_{p}\brwrap{(}{{\phi}^{2} A_{q}}{)} \partial_{r}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} h^{p r} h^{q s} A_{s} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{q}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} h^{p q} \brwrap{(}{{\phi}^{-2}+A_{r} h^{r s} A_{s}}{)} - \frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{q}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} h^{q r} A_{r} h^{p s} A_{s}+\frac{1}{4}\partial_{p}{{\phi}^{2}} \partial_{q}\brwrap{(}{h_{m n}+{\phi}^{2} A_{m} A_{n}}{)} h^{p r} A_{r} h^{q s} A_{s}$\end{adjustwidth}
+\begin{python}
+converge(Ricci4):
+   distribute(_)
+   product_rule(_)
+   canonicalise(_)
+\end{python}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_)
+converge(Ricci4):
+	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+	eliminate_kronecker(_)
+	canonicalise(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m p}{h_{n q}} h^{p q}+A_{n} A_{p} \partial_{m}{\phi} \partial_{q}{\phi} h^{p q}+\frac{1}{2}A_{p} \partial_{m}{A_{n}} \partial_{q}{\phi} \phi h^{p q}+\frac{3}{2}A_{n} \partial_{m}{A_{p}} \partial_{q}{\phi} \phi h^{p q}+\frac{1}{2}\partial_{m}{A_{p}} \partial_{q}{A_{n}} {\phi}^{2} h^{p q}+\frac{1}{2}A_{n} \partial_{m p}{A_{q}} {\phi}^{2} h^{p q} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}}-A_{p} \partial_{m}{A_{q}} \partial_{n}{\phi} \phi h^{p q} - \frac{1}{2}\partial_{m}{A_{p}} \partial_{n}{A_{q}} {\phi}^{2} h^{p q} - \frac{1}{2}\partial_{m n}{h_{p q}} h^{p q}-3A_{p} A_{q} \partial_{m}{\phi} \partial_{n}{\phi} h^{p q}-A_{p} \partial_{n}{A_{q}} \partial_{m}{\phi} \phi h^{p q}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} \partial_{m}{A_{p}} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m p}} \partial_{q}{h^{p q}}+\frac{1}{2}A_{m} \partial_{n}{A_{p}} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n p}{h_{m q}} h^{p q}+A_{m} A_{p} \partial_{n}{\phi} \partial_{q}{\phi} h^{p q}%
++\frac{1}{2}A_{p} \partial_{n}{A_{m}} \partial_{q}{\phi} \phi h^{p q}+\frac{3}{2}A_{m} \partial_{n}{A_{p}} \partial_{q}{\phi} \phi h^{p q}+\frac{1}{2}\partial_{n}{A_{p}} \partial_{q}{A_{m}} {\phi}^{2} h^{p q}+\frac{1}{2}A_{m} \partial_{n p}{A_{q}} {\phi}^{2} h^{p q} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}A_{n} \partial_{p}{A_{m}} \partial_{q}{h^{p q}} {\phi}^{2} - \frac{1}{2}A_{m} \partial_{p}{A_{n}} \partial_{q}{h^{p q}} {\phi}^{2} - \frac{1}{2}\partial_{p q}{h_{m n}} h^{p q}-A_{m} A_{n} \partial_{p q}{\phi} \phi h^{p q} - \frac{3}{2}A_{n} \partial_{p}{A_{m}} \partial_{q}{\phi} \phi h^{p q} - \frac{3}{2}A_{m} \partial_{p}{A_{n}} \partial_{q}{\phi} \phi h^{p q} - \frac{1}{2}A_{n} \partial_{p q}{A_{m}} {\phi}^{2} h^{p q} - \frac{1}{2}\partial_{p}{A_{m}} \partial_{q}{A_{n}} {\phi}^{2} h^{p q} - \frac{1}{2}A_{m} \partial_{p q}{A_{n}} {\phi}^{2} h^{p q} - \frac{1}{2}\partial_{p}{h_{m q}} \partial_{r}{h_{n s}} h^{p s} h^{q r} - \frac{1}{2}A_{n} \partial_{p}{A_{q}} \partial_{r}{h_{m s}} {\phi}^{2} h^{p s} h^{q r} - \frac{1}{2}A_{m} \partial_{p}{A_{q}} \partial_{r}{h_{n s}} {\phi}^{2} h^{p s} h^{q r} - \frac{1}{2}A_{m} A_{n} \partial_{p}{A_{q}} \partial_{r}{A_{s}} {\phi}^{4} h^{p s} h^{q r}+\frac{1}{2}\partial_{p}{h_{m q}} \partial_{r}{h_{n s}} h^{p r} h^{q s}%
++\frac{1}{2}A_{n} \partial_{p}{A_{q}} \partial_{r}{h_{m s}} {\phi}^{2} h^{p r} h^{q s}+\frac{1}{2}A_{m} \partial_{p}{A_{q}} \partial_{r}{h_{n s}} {\phi}^{2} h^{p r} h^{q s}+\frac{1}{2}A_{m} A_{n} \partial_{p}{A_{q}} \partial_{r}{A_{s}} {\phi}^{4} h^{p r} h^{q s} - \frac{1}{4}\partial_{m}{h_{p q}} \partial_{n}{h_{r s}} h^{p r} h^{q s}+4A_{p} A_{s} \partial_{m}{\phi} \partial_{n}{\phi} h^{p s}+A_{p} \partial_{m}{A_{s}} \partial_{n}{\phi} \phi h^{p s}+A_{p} \partial_{n}{A_{s}} \partial_{m}{\phi} \phi h^{p s}-A_{r} A_{s} \partial_{m}{\phi} \partial_{n}{\phi} h^{r s}+\frac{1}{4}\partial_{m}{h_{n p}} \partial_{q}{h_{r s}} h^{p q} h^{r s}+\frac{1}{4}A_{n} \partial_{m}{A_{p}} \partial_{q}{h_{r s}} {\phi}^{2} h^{p q} h^{r s}+\frac{1}{2}\partial_{p}{\phi} \partial_{m}{h_{n q}} {\phi}^{-1} h^{p q}-A_{n} A_{p} \partial_{m}{\phi} \partial_{s}{\phi} h^{p s} - \frac{1}{2}A_{p} \partial_{m}{A_{n}} \partial_{s}{\phi} \phi h^{p s}+\frac{1}{4}\partial_{n}{h_{m p}} \partial_{q}{h_{r s}} h^{p q} h^{r s}+\frac{1}{4}A_{m} \partial_{n}{A_{p}} \partial_{q}{h_{r s}} {\phi}^{2} h^{p q} h^{r s}+\frac{1}{2}\partial_{p}{\phi} \partial_{n}{h_{m q}} {\phi}^{-1} h^{p q}-A_{m} A_{p} \partial_{n}{\phi} \partial_{s}{\phi} h^{p s} - \frac{1}{2}A_{p} \partial_{n}{A_{m}} \partial_{s}{\phi} \phi h^{p s} - \frac{1}{4}\partial_{p}{h_{m n}} \partial_{q}{h_{r s}} h^{p q} h^{r s} - \frac{1}{2}A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h_{r s}} \phi h^{p q} h^{r s}%
+ - \frac{1}{4}A_{n} \partial_{p}{A_{m}} \partial_{q}{h_{r s}} {\phi}^{2} h^{p q} h^{r s} - \frac{1}{4}A_{m} \partial_{p}{A_{n}} \partial_{q}{h_{r s}} {\phi}^{2} h^{p q} h^{r s} - \frac{1}{2}\partial_{p}{\phi} \partial_{q}{h_{m n}} {\phi}^{-1} h^{p q}$\end{adjustwidth}
+\begin{python}
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+distribute(_)
+sort_product(_)
+canonicalise(_)
+rename_dummies(_)
+eliminate_metric(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m}\,^{q}{h_{n q}}+\frac{3}{2}A_{n} F_{m}\,^{q} \partial_{q}{\phi} \phi - \frac{1}{2}F_{m}\,^{q} F_{n q} {\phi}^{2}+\frac{1}{2}A_{n} \partial_{m}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}} - \frac{1}{2}\partial_{m n}{h^{q}\,_{q}}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} F_{m p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m q}} \partial_{p}{h^{q p}}+\frac{1}{2}A_{m} F_{n p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}\,^{q}{h_{m q}}+\frac{3}{2}A_{m} F_{n}\,^{q} \partial_{q}{\phi} \phi+\frac{1}{2}A_{m} \partial_{n}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}\partial^{q}\,_{q}{h_{m n}}-A_{m} A_{n} \partial^{q}\,_{q}{\phi} \phi - \frac{1}{2}A_{n} \partial^{q}\,_{q}{A_{m}} {\phi}^{2}%
+ - \frac{1}{2}A_{m} \partial^{q}\,_{q}{A_{n}} {\phi}^{2} - \frac{1}{2}\partial^{s}{h_{m r}} \partial_{q}{h_{n s}} h^{r q}+\frac{1}{2}A_{n} F^{r}\,_{q} \partial_{r}{h_{m s}} {\phi}^{2} h^{q s}+\frac{1}{2}A_{m} F^{r}\,_{q} \partial_{r}{h_{n s}} {\phi}^{2} h^{q s}+\frac{1}{4}A_{m} A_{n} F^{r}\,_{q} F_{r s} {\phi}^{4} h^{q s}+\frac{1}{2}\partial^{q}{h_{m r}} \partial_{q}{h_{n s}} h^{r s} - \frac{1}{4}\partial_{m}{h^{r}\,_{q}} \partial_{n}{h_{r s}} h^{q s}+\frac{1}{4}\partial_{m}{h_{n}\,^{p}} \partial_{p}{h_{r s}} h^{r s}+\frac{1}{4}A_{n} F_{m}\,^{q} \partial_{q}{h_{r s}} {\phi}^{2} h^{r s}+\frac{1}{2}\partial^{q}{\phi} \partial_{m}{h_{n q}} {\phi}^{-1}+\frac{1}{4}\partial_{n}{h_{m}\,^{p}} \partial_{p}{h_{r s}} h^{r s}+\frac{1}{4}A_{m} F_{n}\,^{q} \partial_{q}{h_{r s}} {\phi}^{2} h^{r s}+\frac{1}{2}\partial^{q}{\phi} \partial_{n}{h_{m q}} {\phi}^{-1} - \frac{1}{4}\partial^{q}{h_{m n}} \partial_{q}{h_{r s}} h^{r s} - \frac{1}{2}A_{m} A_{n} \partial^{q}{\phi} \partial_{q}{h_{r s}} \phi h^{r s} - \frac{1}{2}\partial^{q}{\phi} \partial_{q}{h_{m n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+eliminate_metric(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m}\,^{p}{h_{n p}}+\frac{3}{2}A_{n} F_{m}\,^{p} \partial_{p}{\phi} \phi - \frac{1}{2}F_{m}\,^{p} F_{n p} {\phi}^{2}+\frac{1}{2}A_{n} \partial_{m}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}} - \frac{1}{2}\partial_{m n}{h^{p}\,_{p}}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} F_{m p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m p}} \partial_{q}{h^{p q}}+\frac{1}{2}A_{m} F_{n p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}\,^{p}{h_{m p}}+\frac{3}{2}A_{m} F_{n}\,^{p} \partial_{p}{\phi} \phi+\frac{1}{2}A_{m} \partial_{n}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}\partial^{p}\,_{p}{h_{m n}}-A_{m} A_{n} \partial^{p}\,_{p}{\phi} \phi - \frac{1}{2}A_{n} \partial^{p}\,_{p}{A_{m}} {\phi}^{2}%
+ - \frac{1}{2}A_{m} \partial^{p}\,_{p}{A_{n}} {\phi}^{2} - \frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{r}{h_{n p}}+\frac{1}{2}A_{n} F^{p r} \partial_{p}{h_{m r}} {\phi}^{2}+\frac{1}{2}A_{m} F^{p r} \partial_{p}{h_{n r}} {\phi}^{2}+\frac{1}{4}A_{m} A_{n} F^{p r} F_{p r} {\phi}^{4}+\frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{p}{h_{n r}} - \frac{1}{4}\partial_{m}{h^{p r}} \partial_{n}{h_{p r}}+\frac{1}{4}\partial_{m}{h_{n}\,^{p}} \partial_{p}{h^{r}\,_{r}}+\frac{1}{4}A_{n} F_{m}\,^{p} \partial_{p}{h^{r}\,_{r}} {\phi}^{2}+\frac{1}{2}\partial^{p}{\phi} \partial_{m}{h_{n p}} {\phi}^{-1}+\frac{1}{4}\partial_{n}{h_{m}\,^{p}} \partial_{p}{h^{r}\,_{r}}+\frac{1}{4}A_{m} F_{n}\,^{p} \partial_{p}{h^{r}\,_{r}} {\phi}^{2}+\frac{1}{2}\partial^{p}{\phi} \partial_{n}{h_{m p}} {\phi}^{-1} - \frac{1}{4}\partial^{p}{h_{m n}} \partial_{p}{h^{r}\,_{r}} - \frac{1}{2}A_{m} A_{n} \partial^{p}{\phi} \partial_{p}{h^{r}\,_{r}} \phi - \frac{1}{2}\partial^{p}{\phi} \partial_{p}{h_{m n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m}\,^{p}{h_{n p}}+\frac{3}{2}A_{n} F_{m}\,^{p} \partial_{p}{\phi} \phi - \frac{1}{2}F_{m}\,^{p} F_{n p} {\phi}^{2}+\frac{1}{2}A_{n} \partial_{m}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}} - \frac{1}{2}\partial_{m n}{h^{p}\,_{p}}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} F_{m p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m p}} \partial_{q}{h^{p q}}+\frac{1}{2}A_{m} F_{n p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}\,^{p}{h_{m p}}+\frac{3}{2}A_{m} F_{n}\,^{p} \partial_{p}{\phi} \phi+\frac{1}{2}A_{m} \partial_{n}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}\partial^{p}\,_{p}{h_{m n}}-A_{m} A_{n} \partial^{p}\,_{p}{\phi} \phi - \frac{1}{2}A_{n} \partial^{p}\,_{p}{A_{m}} {\phi}^{2}%
+ - \frac{1}{2}A_{m} \partial^{p}\,_{p}{A_{n}} {\phi}^{2} - \frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{r}{h_{n p}}+\frac{1}{2}A_{n} F^{p r} \partial_{p}{h_{m r}} {\phi}^{2}+\frac{1}{2}A_{m} F^{p r} \partial_{p}{h_{n r}} {\phi}^{2}+\frac{1}{4}A_{m} A_{n} F^{p r} F_{p r} {\phi}^{4}+\frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{p}{h_{n r}} - \frac{1}{4}\partial_{m}{h^{p r}} \partial_{n}{h_{p r}}+\frac{1}{4}\partial_{m}{h_{n}\,^{p}} \partial_{p}{h^{r}\,_{r}}+\frac{1}{4}A_{n} F_{m}\,^{p} \partial_{p}{h^{r}\,_{r}} {\phi}^{2}+\frac{1}{2}\partial^{p}{\phi} \partial_{m}{h_{n p}} {\phi}^{-1}+\frac{1}{4}\partial_{n}{h_{m}\,^{p}} \partial_{p}{h^{r}\,_{r}}+\frac{1}{4}A_{m} F_{n}\,^{p} \partial_{p}{h^{r}\,_{r}} {\phi}^{2}+\frac{1}{2}\partial^{p}{\phi} \partial_{n}{h_{m p}} {\phi}^{-1} - \frac{1}{4}\partial^{p}{h_{m n}} \partial_{p}{h^{r}\,_{r}} - \frac{1}{2}A_{m} A_{n} \partial^{p}{\phi} \partial_{p}{h^{r}\,_{r}} \phi - \frac{1}{2}\partial^{p}{\phi} \partial_{p}{h_{m n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h^{m1}_{m1} -> \delta^{m1}_{m1}$, repeat=True )
+eliminate_kronecker(_);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m}\,^{p}{h_{n p}} - \frac{1}{2}F_{m}\,^{p} F_{n p} {\phi}^{2}+\frac{1}{2}A_{n} \partial_{m}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} F_{m p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m p}} \partial_{q}{h^{p q}}+\frac{1}{2}A_{m} F_{n p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}\,^{p}{h_{m p}}+\frac{1}{2}A_{m} \partial_{n}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}\partial^{p}\,_{p}{h_{m n}}-A_{m} A_{n} \partial^{p}\,_{p}{\phi} \phi - \frac{1}{2}A_{n} \partial^{p}\,_{p}{A_{m}} {\phi}^{2} - \frac{1}{2}A_{m} \partial^{p}\,_{p}{A_{n}} {\phi}^{2} - \frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{r}{h_{n p}}+\frac{1}{2}A_{n} F^{p r} \partial_{p}{h_{m r}} {\phi}^{2}%
++\frac{1}{2}A_{m} F^{p r} \partial_{p}{h_{n r}} {\phi}^{2}+\frac{1}{4}A_{m} A_{n} F^{p r} F_{p r} {\phi}^{4}+\frac{1}{2}\partial^{p}{h_{m}\,^{r}} \partial_{p}{h_{n r}} - \frac{1}{4}\partial_{m}{h^{p r}} \partial_{n}{h_{p r}}+\frac{1}{2}\partial^{p}{\phi} \partial_{m}{h_{n p}} {\phi}^{-1}+\frac{1}{2}\partial^{p}{\phi} \partial_{n}{h_{m p}} {\phi}^{-1} - \frac{1}{2}\partial^{p}{\phi} \partial_{p}{h_{m n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+rename_dummies(_)
+eliminate_kronecker(_)
+canonicalise(_)
+eliminate_metric(_)
+sort_product(_)
+;
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\frac{1}{2}\partial_{m}\,^{p}{h_{n p}} - \frac{1}{2}F_{m}\,^{p} F_{n p} {\phi}^{2}+\frac{1}{2}A_{n} \partial_{m}\,^{p}{A_{p}} {\phi}^{2} - \frac{3}{4}\partial_{m}{h^{p q}} \partial_{n}{h_{p q}}-\partial_{m n}{\phi} {\phi}^{-1}+\frac{1}{2}\partial_{p}{h^{p q}} \partial_{m}{h_{n q}}+\frac{1}{2}A_{n} F_{m p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}{h_{m p}} \partial_{q}{h^{p q}}+\frac{1}{2}A_{m} F_{n p} \partial_{q}{h^{p q}} {\phi}^{2}+\frac{1}{2}\partial_{n}\,^{p}{h_{m p}}+\frac{1}{2}A_{m} \partial_{n}\,^{p}{A_{p}} {\phi}^{2} - \frac{1}{2}\partial_{p}{h_{m n}} \partial_{q}{h^{p q}}-A_{m} A_{n} \partial_{p}{\phi} \partial_{q}{h^{p q}} \phi - \frac{1}{2}\partial^{p}\,_{p}{h_{m n}}-A_{m} A_{n} \partial^{p}\,_{p}{\phi} \phi - \frac{1}{2}A_{n} \partial^{p}\,_{p}{A_{m}} {\phi}^{2} - \frac{1}{2}A_{m} \partial^{p}\,_{p}{A_{n}} {\phi}^{2} - \frac{1}{2}\partial^{p}{h_{m}\,^{q}} \partial_{q}{h_{n p}}+\frac{1}{2}A_{n} F^{p q} \partial_{p}{h_{m q}} {\phi}^{2}%
++\frac{1}{2}A_{m} F^{p q} \partial_{p}{h_{n q}} {\phi}^{2}+\frac{1}{4}A_{m} A_{n} F^{p q} F_{p q} {\phi}^{4}+\frac{1}{2}\partial^{p}{h_{m}\,^{q}} \partial_{p}{h_{n q}}+\frac{1}{2}\partial^{p}{\phi} \partial_{m}{h_{n p}} {\phi}^{-1}+\frac{1}{2}\partial^{p}{\phi} \partial_{n}{h_{m p}} {\phi}^{-1} - \frac{1}{2}\partial^{p}{\phi} \partial_{p}{h_{m n}} {\phi}^{-1}$\end{adjustwidth}
+\begin{python}
+meld(Ricci4);
+\end{python}
+{\color{red}{RuntimeError: Could not find a suitable element to add to the matrix
+
+At:
+  <string>(2): <module>
+}}
+\begin{python}
+\end{python}
+\end{document}

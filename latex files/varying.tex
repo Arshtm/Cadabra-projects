@@ -1,0 +1,535 @@
+% This is the bit of LaTeX style information that DataCell.cc needs in
+% order to write notebooks out in standalone LaTeX form. It is very
+% similar to ../frontend/common/preamble.tex; keep them in sync.
+
+\documentclass[10pt]{article}
+\usepackage[scale=.8]{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{ytableau}
+\usepackage{listings}
+\usepackage[fleqn]{amsmath}
+\usepackage{color}
+\usepackage{changepage}
+\usepackage[colorlinks=true, urlcolor=black, plainpages=false, pdfpagelabels]{hyperref}
+\usepackage{etoolbox}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+%\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[1ex]
+}
+\newcommand{\algo}[1]{{\tt \detokenize{#1}}}
+\newcommand{\prop}[1]{{\tt \detokenize{#1}}}
+\renewcommand{\author}[1]{{\bfseries #1}}
+\newcommand{\email}[1]{, {\tt #1}}
+%\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+%\ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Math expressions wrapped in \brwrap will get typeset with
+% round brackets around them, which have the appropriate size.
+% The expression itself can still be broken over multiple lines.
+
+\newcommand\brwrap[3]{%
+  \setbox0=\hbox{$#2$}
+  \left#1\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
+  \begingroup #2\endgroup\kern-.15em
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#3
+}
+
+\renewcommand{\arraystretch}{1.2}
+\tolerance=10000
+\relpenalty=10
+\binoppenalty=10
+\hyphenpenalty=10
+\raggedright
+
+\lstnewenvironment{python}[1][]{\lstset{language=python,
+   columns=fullflexible,
+   xleftmargin=1em,
+   belowskip=0pt,
+   tabsize=3,
+   commentstyle={}, % otherwise {#} cadabra arguments look ugly
+   breaklines=true,   
+   basicstyle=\small\ttfamily\color{blue},
+   keywordstyle={}
+}}{}
+  
+
+\everymath{\displaystyle}
+
+% Page numbers
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[LE,RO]{{\small\thepage}}
+\fancyfoot[LO,RE]{{\tiny\href{http://cadabra.science}{{\tt http://cadabra.science}}}}
+
+% \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+% \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Ensure that maths broken over multiple lines has a bit of spacing
+% between lines.
+\lineskiplimit=0mm
+\lineskip=1.5ex
+
+% Typesetting Young tableaux, originally in a separate style
+% file, now included to avoid path searching problems. 
+% Some internals for the typesetting macros below; nothing
+% user-servicable here; please read on.
+
+\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
+\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
+\long\def\ReturnAfterFi#1\fi{\fi#1}
+    \def\tabf@rc#1#2#3{%
+      \def\temp@ty{#2}%
+      \ifx\@empty\temp@ty
+      \else
+        \ReturnAfterFi{%
+          \tabf@@rc#1#2\tabf@@rc{#3}%
+        }%
+      \fi
+    }%
+
+% Sorry, some global registers for sizes and keeping track of
+% measurements.
+    
+\newdimen\ytsize\ytsize=2mm
+\newdimen\ytfsize\ytfsize=4mm
+\newcount\repcnt
+\newdimen\acchspace
+\newdimen\accvspace
+\newdimen\raiseh
+\newdimen\maxw
+
+\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
+
+% Typeset a Young tableau with filled boxes. Takes a single 
+% argument which is a string of symbols for each row,
+% separated by commas. Examples:
+%
+%   \ftableau{abc,de}
+%   \ftableau{ab{d_2},f{g_3}}
+
+\newcommand\ftableau[1]{%
+\def\ctest{,}
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\vbox{\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
+		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
+ \else\ifx\thisel\ctest
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
+     \kern\acchspace\acchspace=0ex
+	  \advance\accvspace by -\ytfsize
+ \else
+     \setbox3=\hbox{$\thisel$}%
+	  \raiseh=\ytfsize%
+	  \advance\raiseh by -1ex%
+	  \divide\raiseh by 2%
+     \advance\acchspace by-\ytfsize%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
+        \ytfsize{\vrule height \ytfsize\hskip.5ex%
+         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
+ \fi\fi}}}}
+
+% Typeset a Young tableau with unlabelled boxes. Takes a single 
+% argument which is a string of numbers, one for the length of
+% each row of the tableau. Example:
+%
+%   \tableau{{10}{8}{3}}
+%
+% typesets a tableau with 10 boxes in the 1st row, 8 in the 2nd
+% and 3 in the 3rd. Curly brackets can be omitted if numbers
+% are less than 10.
+
+\newcommand\tableau[1]{%
+\def\stest{ }
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{}
+ \else
+     \repcnt=\thisel%
+     \loop{}%
+     \advance\acchspace by-\ytsize%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
+			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
+     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
+     \kern\acchspace\acchspace=0ex%
+	  \advance\accvspace by -\ytsize%
+ \fi}\kern-\maxw}}
+ 
+\ytableausetup{centertableaux} % smalltableaux
+\begin{document}
+Here I'm trying to calculate variation of Horndeski theory after Kaluza-Klein reduction
+\begin{python}
+import cdb.core.manip as man
+import functions as fun
+\end{python}
+\begin{python}
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,q,r,s,u,v,w,z#}::Indices(full,values={t,x,y}, position=independent).
+\end{python}
+There are all simmetrises
+\begin{python}
+\partial{#}::PartialDerivative.
+\nabla{#}::Derivative.
+{\nabla{#},\partial{#}}::Commuting.
+h_{m? n?}::Metric.
+h^{m? n?}::InverseMetric.
+h_{m? n?}::Symmetric.
+h^{m? n?}::Symmetric.
+delh_{m? n?}::Symmetric.
+delh^{m? n?}::Symmetric.
+\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2}).
+G3_{m? n?}::Symmetric.
+Dh::Depends(\partial{#}).
+\delta^{m?}_{n?}::KroneckerDelta.
+\delta_{m?}^{n?}::KroneckerDelta.
+F_{m? n?}::AntiSymmetric.
+\end{python}
+Dependencies:
+\begin{python}
+p::Depends(\nabla{#}, \partial{#}).
+X_{m? n?}::Depends(\nabla{#}, \partial{#}).
+\phi::Depends(\nabla{#}, \partial{#}).
+A_{m?}::Depends(\nabla{#}, \partial{#}).
+h_{m n}::Depends(\partial{#}).
+h^{m n}::Depends(\partial{#}).
+deth::Depends(\partial{#}).
+G4::Depends(\nabla{#}, \partial{#}).
+G4p::Depends(\nabla{#}, \partial{#}).
+G4X::Depends(\nabla{#}, \partial{#}).
+G4XX::Depends(\nabla{#}, \partial{#}).
+K::Depends(\nabla{#}, \partial{#}).
+Kp::Depends(\nabla{#}, \partial{#}).
+KX::Depends(\nabla{#}, \partial{#}).
+N::Depends(\nabla{#}, \partial{#}).
+Np::Depends(\nabla{#}, \partial{#}).
+NX::Depends(\nabla{#}, \partial{#}).
+R::Depends(\nabla{#}, \partial{#}).
+F_{m n}::Depends(\nabla{#}, \partial{#}).
+F^{m n}::Depends(\nabla{#}, \partial{#}).
+delphi::Depends(\nabla{#}, \partial{#}).
+delh_{m n}::Depends(\nabla{#}, \partial{#}).
+delh^{m n}::Depends(\nabla{#}, \partial{#}).
+delpi::Depends(\nabla{#}, \partial{#}).
+delp_{m n}::Depends(\nabla{#}, \partial{#}).
+delA_{m}::Depends(\nabla{#}, \partial{#}).
+delF_{m n}::Depends(\nabla{#}, \partial{#}).
+pi2::Depends(\nabla{#}, \partial{#}).
+delpi2::Depends(\nabla{#}, \partial{#}).
+boxpi4::Depends(\nabla{#}, \partial{#}).
+delboxpi4::Depends(\nabla{#}, \partial{#}).
+pi24::Depends(\nabla{#}, \partial{#}).
+delpi24::Depends(\nabla{#}, \partial{#}).
+\end{python}
+And Latex forms:
+\begin{python}
+p::LaTeXForm("\pi").
+G4p::LaTeXForm("G_{4\pi}").
+G4X::LaTeXForm("G_{4X}").
+G4XX::LaTeXForm("G_{4XX}").
+G4Xp::LaTeXForm("G_{4\pi X}").
+Kp::LaTeXForm("K_{\pi}").
+KX::LaTeXForm("K_{X}").
+N::LaTeXForm("F").
+Np::LaTeXForm("F_{\pi}").
+NX::LaTeXForm("F_{X}").
+delphi::LaTeXForm("\delta\phi").
+delh^{m? n?}::LaTeXForm("\delta h^{", m? n?, "}").
+delpi::LaTeXForm("\delta\pi").
+delphi::LaTeXForm("\delta\phi").
+Dh::LaTeXForm("\sqrt{-h}").
+delA_{m?}::LaTeXForm("\delta A_{",m?,"}").
+dCn{#}::LaTeXForm("\delta\Gamma").         
+dR{#}::LaTeXForm("\delta R").	
+pi2::LaTeXForm("\pi^{m n}\pi_{m n}").	
+boxpi4::LaTeXForm("\Box^{(4)}{\pi}").
+delboxpi4::LaTeXForm("\delta\Box^{(4)}{\pi}").
+pi24::LaTeXForm("\pi^{\mu \nu}\pi_{\mu \nu}").
+delpi24::LaTeXForm("\delta\pi^{\mu \nu}\pi_{\mu \nu}").
+delpi2::LaTeXForm("\delta\pi^{m n}\pi_{m n}").
+delp_{m? n?}::LaTeXForm("\delta\pi_{",m? n?,"}").
+delF_{m? n?}::LaTeXForm("\delta F_{",m? n?,"}").
+mathcalG{#}::LaTeXForm("\mathcal{G}").
+mathcalP{#}::LaTeXForm("\mathcal{P}").
+mathcalA{#}::LaTeXForm("\mathcal{A}").
+mathcalphi{#}::LaTeXForm("\Phi").
+{delh^{a b}, delphi, delA_{m}, delpi, h_{a b},h^{a b}, Q??}::SortOrder.
+\end{python}
+There are all parts of Lagrangian which I consider:
+\begin{python}
+ScalarCurvature := R = R3 - \frac{1}{4} F_{a q}F_{m n} h^{m a} h^{n q} {\phi}**{2} -2\phi**{-1} h^{m n}\nabla_{n}{\phi}\nabla_{m}{\phi};
+box3D := \Box{p} = h^{a b}\nabla_{a}{\nabla_{b}{p}};
+box4D := boxpi4 = \Box{p} + {\phi}**{-1} h^{m n} \nabla_{m}{\phi} \nabla_{n}{p};
+sq3D := pi2 = h^{m a} h^{n b} \nabla_{m}{\nabla_{n}{p}}\nabla_{a}{\nabla_{b}{p}};
+sq4D:=  pi24 = pi2 + \frac{{\phi}**{2}}{2}h^{a m} h^{r n}F_{m n} F_{a q}h^{q s}\nabla_{r}{p} \nabla_{s}{p}
+	 +\frac{1}{\phi**2} (h^{a q}\nabla_{q}{\phi}\nabla_{a}{p})**2;
+L2 := N;
+L3:=  -K ( boxpi4);
+L4:= L4 = G4 R + G4X ((boxpi4)**2-pi24);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}R = {R_{3}} - \frac{1}{4}F_{a q} F_{m n} h^{m a} h^{n q} {\phi}^{2}-2{\phi}^{-1} h^{m n} \nabla_{n}{\phi} \nabla_{m}{\phi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\Box\brwrap{(}{\pi}{)} = h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\Box^{(4)}{\pi} = \Box\brwrap{(}{\pi}{)}+{\phi}^{-1} h^{m n} \nabla_{m}{\phi} \nabla_{n}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\pi^{m n}\pi_{m n} = h^{m a} h^{n b} \nabla_{m}\brwrap{(}{\nabla_{n}{\pi}}{)} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\pi^{\mu \nu}\pi_{\mu \nu} = \pi^{m n}\pi_{m n}+\frac{1}{2}{\phi}^{2} h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \nabla_{r}{\pi} \nabla_{s}{\pi}+{\phi}^{-2} {\brwrap{(}{h^{a q} \nabla_{q}{\phi} \nabla_{a}{\pi}}{)}}^{2}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}F$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}-K \Box^{(4)}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}{L_{4}} = {G_{4}} R+G_{4X} \brwrap{(}{{\Box^{(4)}{\pi}}^{2}-\pi^{\mu \nu}\pi_{\mu \nu}}{)}$\end{adjustwidth}
+Some usefull basic variations, part of them calculated in files varyingR and varyingHorndeski:
+\begin{python}
+DelSqrth := \delta(Dh) = - \frac{1}{2}*Dh * h_{a b} delh^{a b};
+DelF:= \delta(N) = Np delpi - \frac{1}{2} NX \nabla_{a}{p}\nabla_{b}{p}  delh^{a b} - h^{a b} NX \nabla_{a}{p} \nabla_{b}{delpi}; 
+DelK:= \delta(K) =Kp delpi - \frac{1}{2} KX \nabla_{a}{p}\nabla_{b}{p}  delh^{a b} - h^{a b} KX \nabla_{a}{p} \nabla_{b}{delpi}; 
+DelG4 := \delta(G4) = G4p delpi - \frac{1}{2} G4X \nabla_{a}{p}\nabla_{b}{p}  delh^{a b} - h^{a b} G4X \nabla_{a}{p} \nabla_{b}{delpi};
+DelG4X := \delta(G4X) = G4Xp delpi - \frac{1}{2} G4XX \nabla_{a}{p}\nabla_{b}{p}  delh^{a b} - h^{a b} G4XX \nabla_{a}{p} \nabla_{b}{delpi};
+deltaChristof := dCn^{a}_{b c} = -\frac{1}{2} * ( h_{l c} \nabla_{b}{delh^{l a}} +  h_{l b}\nabla_{c}{delh^{l a}} - h_{c m} h_{b n} h^{a q}\nabla_{q}{delh^{m n}});
+deltaScalarCurvature3:= \delta(R3) = -\nabla_{m}{\nabla_{n}{delh^{m n}}} + h_{m n}h^{a b} \nabla_{a}{\nabla_{b}{delh^{m n}}} + R_{m n} delh^{m n};
+deltaF := delF_{m n} = 2 \nabla_{m}{delA_{n}};
+deltaBox := \delta(\Box(p)) = delh^{a b} \nabla_{a}(\nabla_{b}(p)) + h^{a b} \nabla_{a}(\nabla_{b}(delpi)) + \nabla_{a}(delh^{a b}) \nabla_{b}(p) -  1/2 h_{a b} h^{c d} \nabla_{c}(delh^{a b}) \nabla_{d}(p);
+deltaSq := delpi2 = 2\nabla_{a}(\nabla_{b}(p)) \nabla_{c}(\nabla_{d}(p)) delh^{a c} h^{b d} + 2\nabla_{a}(\nabla_{b}(delpi)) \nabla_{c}(\nabla_{d}(p)) h^{a c} h^{b d} + \nabla_{a}(\nabla_{b}(p)) \nabla_{c}(delh^{b d}) \nabla_{d}(p) h^{a c} + \nabla_{a}(\nabla_{b}(p)) \nabla_{c}(delh^{a d}) \nabla_{d}(p) h^{b c}-\nabla_{a}(\nabla_{b}(p)) \nabla_{c}(delh^{a b}) \nabla_{d}(p) h^{c d};
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{\sqrt{-h}}{)} =  - \frac{1}{2}\sqrt{-h} h_{a b} \delta h^{a b}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{F}{)} = F_{\pi} \delta\pi - \frac{1}{2}F_{X} \nabla_{a}{\pi} \nabla_{b}{\pi} \delta h^{a b}-h^{a b} F_{X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{K}{)} = K_{\pi} \delta\pi - \frac{1}{2}K_{X} \nabla_{a}{\pi} \nabla_{b}{\pi} \delta h^{a b}-h^{a b} K_{X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{{G_{4}}}{)} = G_{4\pi} \delta\pi - \frac{1}{2}G_{4X} \nabla_{a}{\pi} \nabla_{b}{\pi} \delta h^{a b}-h^{a b} G_{4X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{G_{4X}}{)} = G_{4\pi X} \delta\pi - \frac{1}{2}G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} \delta h^{a b}-h^{a b} G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\Gamma^{a}\,_{b c} =  - \frac{1}{2}h_{l c} \nabla_{b}{\delta h^{l a}} - \frac{1}{2}h_{l b} \nabla_{c}{\delta h^{l a}}+\frac{1}{2}h_{c m} h_{b n} h^{a q} \nabla_{q}{\delta h^{m n}}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{{R_{3}}}{)} = -\nabla_{m}\brwrap{(}{\nabla_{n}{\delta h^{m n}}}{)}+h_{m n} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\delta h^{m n}}}{)}+R_{m n} \delta h^{m n}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta F_{m n} = 2\nabla_{m}{\delta A_{n}}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{\Box\brwrap{(}{\pi}{)}}{)} = \delta h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)}+h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\delta\pi}}{)}+\nabla_{a}{\delta h^{a b}} \nabla_{b}{\pi} - \frac{1}{2}h_{a b} h^{c d} \nabla_{c}{\delta h^{a b}} \nabla_{d}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\pi^{m n}\pi_{m n} = 2\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} \delta h^{a c} h^{b d}+2\nabla_{a}\brwrap{(}{\nabla_{b}{\delta\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{a c} h^{b d}+\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{b d}} \nabla_{d}{\pi} h^{a c}+\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{a d}} \nabla_{d}{\pi} h^{b c}-\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{a b}} \nabla_{d}{\pi} h^{c d}$\end{adjustwidth}
+Variation of 4D Scallar Curvature:
+\begin{python}
+deltaScalarCurvature:= @(ScalarCurvature);
+vary(deltaScalarCurvature, $R-> \delta(R), R3 -> \delta(R3), F_{m? n?} -> delF_{m? n?}, h^{m? n?} -> delh^{m? n?}, \phi -> delphi$)
+substitute(deltaScalarCurvature, deltaF)
+substitute(deltaScalarCurvature, deltaScalarCurvature3)
+sort_product(deltaScalarCurvature)
+rename_dummies(deltaScalarCurvature)
+canonicalise(deltaScalarCurvature);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}R = {R_{3}} - \frac{1}{4}F_{a q} F_{m n} h^{m a} h^{n q} {\phi}^{2}-2{\phi}^{-1} h^{m n} \nabla_{n}{\phi} \nabla_{m}{\phi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\brwrap{(}{R}{)} = -\nabla_{a}\brwrap{(}{\nabla_{b}{\delta h^{a b}}}{)}+\nabla_{a}\brwrap{(}{\nabla_{b}{\delta h^{c d}}}{)} h_{c d} h^{a b}+R_{a b} \delta h^{a b}-F_{a b} \nabla_{c}{\delta A_{d}} {\phi}^{2} h^{a c} h^{b d} - \frac{1}{2}F_{a b} F_{c d} {\phi}^{2} \delta h^{a c} h^{b d} - \frac{1}{2}F_{a b} F_{c d} \phi \delta\phi h^{a c} h^{b d}+2\nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-2} \delta\phi h^{a b}-2\nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-1} \delta h^{a b}-4\nabla_{a}{\phi} \nabla_{b}{\delta\phi} {\phi}^{-1} h^{a b}$\end{adjustwidth}
+Variation of 4D Dalambertian:
+\begin{python}
+deltaBox4D := @(box4D);
+vary(deltaBox4D, $boxpi4 -> delboxpi4, h^{m? n?} -> delh^{m? n?}, \phi -> delphi, p -> delpi, \Box{p} -> \delta(\Box{p})$)
+substitute(deltaBox4D, deltaBox)
+sort_product(deltaBox4D)
+rename_dummies(deltaBox4D)
+canonicalise(deltaBox4D);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\Box^{(4)}{\pi} = \Box\brwrap{(}{\pi}{)}+{\phi}^{-1} h^{m n} \nabla_{m}{\phi} \nabla_{n}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\Box^{(4)}{\pi} = \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \delta h^{a b}+\nabla_{a}\brwrap{(}{\nabla_{b}{\delta\pi}}{)} h^{a b}+\nabla_{a}{\delta h^{a b}} \nabla_{b}{\pi} - \frac{1}{2}\nabla_{a}{\delta h^{b c}} \nabla_{d}{\pi} h_{b c} h^{a d}-\nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-2} \delta\phi h^{a b}+\nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1} \delta h^{a b}+\nabla_{a}{\delta\phi} \nabla_{b}{\pi} {\phi}^{-1} h^{a b}+\nabla_{a}{\phi} \nabla_{b}{\delta\pi} {\phi}^{-1} h^{a b}$\end{adjustwidth}
+Variation of 4D square of second derivative:
+\begin{python}
+deltaSq4D := @(sq4D);
+vary(deltaSq4D, $pi24 -> delpi24, pi2 -> delpi2, \phi -> delphi, pi -> delpi, h^{a? b?} -> delh^{a? b?}, F_{m? n?} -> delF_{m? n?}$)
+substitute(deltaSq4D, deltaSq)
+substitute(deltaSq4D, deltaF)
+distribute(deltaSq4D)
+sort_product(deltaSq4D)
+rename_dummies(deltaSq4D)
+canonicalise(deltaSq4D);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\pi^{\mu \nu}\pi_{\mu \nu} = \pi^{m n}\pi_{m n}+\frac{1}{2}{\phi}^{2} h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \nabla_{r}{\pi} \nabla_{s}{\pi}+{\phi}^{-2} {\brwrap{(}{h^{a q} \nabla_{q}{\phi} \nabla_{a}{\pi}}{)}}^{2}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\delta\pi^{\mu \nu}\pi_{\mu \nu} = 2\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} \delta h^{a c} h^{b d}+2\nabla_{a}\brwrap{(}{\nabla_{b}{\delta\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{a c} h^{b d}+\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{b d}} \nabla_{d}{\pi} h^{a c}+\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{a d}} \nabla_{d}{\pi} h^{b c}-\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\delta h^{a b}} \nabla_{d}{\pi} h^{c d}+F_{a b} F_{c d} \nabla_{e}{\pi} \nabla_{f}{\pi} \phi \delta\phi h^{a c} h^{b e} h^{d f}+\frac{1}{2}F_{a b} F_{c d} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} \delta h^{a c} h^{b e} h^{d f}-F_{a b} F_{c d} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} \delta h^{a e} h^{b c} h^{d f}+2F_{a b} \nabla_{c}{\delta A_{d}} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} h^{a c} h^{b e} h^{d f}-2{\phi}^{-3} {\brwrap{(}{\nabla_{a}{\phi} \nabla_{b}{\pi} h^{a b}}{)}}^{2} \delta\phi+2\nabla_{a}{\phi} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-2} \delta h^{a c} h^{b d}+2\nabla_{a}{\phi} \nabla_{b}{\delta\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-2} h^{a c} h^{b d}$\end{adjustwidth}
+Variation of $S_{2}$:
+\begin{python}
+S2 :=  \int{Dh @(L2)}{x};
+vary(S2, $Dh ->  \delta{Dh}, N -> \delta{N}$)
+substitute(S2, DelSqrth)
+substitute(S2, DelF)
+distribute(S2)
+integrate_by_parts(S2, $delpi$)
+unwrap(S2)
+factor_out(S2, $delh^{m? n?}, delpi, Dh$);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\int \sqrt{-h} F\,\,{\rm d}x$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\int \brwrap{(}{\sqrt{-h} \delta h^{a b} \brwrap{(}{ - \frac{1}{2}h_{a b} F - \frac{1}{2}F_{X} \nabla_{a}{\pi} \nabla_{b}{\pi}}{)}+\sqrt{-h} \delta\pi \brwrap{(}{F_{\pi}+h^{a b} \nabla_{b}\brwrap{(}{F_{X} \nabla_{a}{\pi}}{)}}{)}}{)}\,\,{\rm d}x$\end{adjustwidth}
+Variation of $S_3$:
+\begin{python}
+S3 := \int{Dh @(L3)}{x};
+vary(S3, $Dh ->  \delta{Dh}, K -> \delta{K}, p -> delpi, boxpi4 -> delboxpi4, \phi -> delphi, h^{m? n?} -> delh^{m? n?}$ )
+substitute(S3, DelSqrth)
+substitute(S3, DelK)
+substitute(S3, deltaBox4D)
+substitute(S3, box4D)
+substitute(S3, box3D)
+distribute(S3)
+rename_dummies(S3)
+factor_out(S3, $delpi, \nabla_{a?}{delpi}, \nabla_{a?}{delh^{a? b?}}, delh^{a? b?}, delphi, \nabla_{a?}{delphi}$)
+integrate_by_parts(S3, $\nabla_{n}{delpi}$)
+integrate_by_parts(S3, $delpi$)
+integrate_by_parts(S3, $delh^{a? b?}$)
+integrate_by_parts(S3, $delphi$)
+rename_dummies(S3)
+distribute(S3)
+unwrap(S3)
+sort_product(S3)
+rename_dummies(S3)
+canonicalise(S3)
+factor_out(S3, $delh^{a? b?}, delpi, Dh, delphi$);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}-\int \sqrt{-h} K \Box^{(4)}{\pi}\,\,{\rm d}x$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}-\int \brwrap{(}{\sqrt{-h} \delta\pi \brwrap{(}{\nabla_{a}\brwrap{(}{\nabla_{b}{K}}{)} h^{a b}+K_{\pi} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} h^{a b}+K_{\pi} \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1} h^{a b}+\nabla_{a}\brwrap{(}{K_{X} \nabla_{b}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{a d} h^{b c}+\nabla_{a}\brwrap{(}{K_{X} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-1}}{)} h^{a c} h^{b d}-\nabla_{a}\brwrap{(}{K \nabla_{b}{\phi} {\phi}^{-1}}{)} h^{a b}}{)}+\sqrt{-h} \delta h^{c d} \brwrap{(}{ - \frac{1}{2}K \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} h_{c d} h^{a b} - \frac{1}{2}K \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1} h_{c d} h^{a b} - \frac{1}{2}K_{X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}{\pi} \nabla_{d}{\pi} h^{a b}+\frac{1}{2}\nabla_{a}\brwrap{(}{K \nabla_{b}{\pi}}{)} h_{c d} h^{a b}}{)} - \frac{1}{2}\sqrt{-h} \delta h^{b c} K_{X} \nabla_{a}{\phi} \nabla_{b}{\pi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-1} h^{a d}+\sqrt{-h} \delta h^{a b} \brwrap{(}{K \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)}+K \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1}-\nabla_{a}\brwrap{(}{K \nabla_{b}{\pi}}{)}}{)}+\sqrt{-h} \delta\phi \brwrap{(}{-K \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-2} h^{a b}-\nabla_{a}\brwrap{(}{K \nabla_{b}{\pi} {\phi}^{-1}}{)} h^{a b}}{)}}{)}\,\,{\rm d}x$\end{adjustwidth}
+Variation of the first part of $S_4$:
+\begin{python}
+S41 := \int{Dh G4 R}{x};
+vary(S41, $Dh -> \delta{Dh}, G4 -> \delta{G4}, R -> \delta(R)$)
+substitute(S41, DelSqrth)
+substitute(S41, DelG4)
+substitute(S41, deltaScalarCurvature)
+distribute(S41)
+rename_dummies(S41)
+factor_out(S41, $delpi, \nabla_{a?}{delpi}, \nabla_{a?}{\nabla_{b?}{delh^{c? d?}}},\nabla_{a?}{delh^{c? b?}}, delh^{a? b?}, delphi, \nabla_{a?}{delphi}, \nabla_{a?}{delA_{b?}}$)
+integrate_by_parts(S41, $\nabla_{n}{delpi}$)
+integrate_by_parts(S41, $delpi$)
+integrate_by_parts(S41, $\nabla_{c?}{delh^{a? b?}}$)
+integrate_by_parts(S41, $delh^{a? b?}$)
+integrate_by_parts(S41, $delphi$)
+integrate_by_parts(S41, $delA_{a?}$)
+rename_dummies(S41)
+distribute(S41)
+unwrap(S41)
+sort_product(S41)
+rename_dummies(S41)
+canonicalise(S41)
+factor_out(S41, $delh^{a? b?}, delpi, Dh, delphi, delA_{a?}$);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\int \sqrt{-h} {G_{4}} R\,\,{\rm d}x$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\int \brwrap{(}{\sqrt{-h} \delta h^{a b} \brwrap{(}{ - \frac{1}{2}{G_{4}} R h_{a b} - \frac{1}{2}G_{4X} R \nabla_{a}{\pi} \nabla_{b}{\pi}+{G_{4}} R_{a b}-2{G_{4}} \nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-1}-\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)}}{)}+\sqrt{-h} \delta\pi \brwrap{(}{G_{4\pi} R+\nabla_{a}\brwrap{(}{G_{4X} R \nabla_{b}{\pi}}{)} h^{a b}}{)}+\sqrt{-h} \delta h^{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)} h_{c d} h^{a b}+\sqrt{-h} \delta A_{d} \nabla_{a}\brwrap{(}{F_{b c} {G_{4}} {\phi}^{2}}{)} h^{a b} h^{c d} - \frac{1}{2}\sqrt{-h} \delta h^{a c} F_{a b} F_{c d} {G_{4}} {\phi}^{2} h^{b d}+\sqrt{-h} \delta\phi \brwrap{(}{ - \frac{1}{2}F_{a b} F_{c d} {G_{4}} \phi h^{a c} h^{b d}+2{G_{4}} \nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-2} h^{a b}+4\nabla_{a}\brwrap{(}{{G_{4}} \nabla_{b}{\phi} {\phi}^{-1}}{)} h^{a b}}{)}}{)}\,\,{\rm d}x$\end{adjustwidth}
+And second part of $S_4$:
+\begin{python}
+S42 := \int{Dh G4X (boxpi4**2 - pi24)}{x};
+vary(S42, $Dh ->  \delta{Dh}, G4X -> \delta{G4X}, pi24 -> delpi24, boxpi4 -> delboxpi4$ )
+#substitute(S42, box4D);
+#substitute(S42, box3D);
+#substitute(S42, sq4D);
+substitute(S42, DelSqrth)
+substitute(S42, DelG4X)
+substitute(S42, deltaSq4D)
+substitute(S42, deltaBox4D)
+distribute(S42)
+rename_dummies(S42)
+factor_out(S42, $delpi, \nabla_{a?}{delpi},\nabla_{b?}{\nabla_{a?}{delpi}}, \nabla_{a?}{\nabla_{b?}{delh^{c? d?}}},\nabla_{a?}{delh^{c? b?}}, delh^{a? b?}, delphi, \nabla_{a?}{delphi}, \nabla_{a?}{delA_{b?}}$)
+integrate_by_parts(S42, $\nabla_{n}{delpi}$)
+integrate_by_parts(S42, $delpi$)
+integrate_by_parts(S42, $\nabla_{c?}{delh^{a? b?}}$)
+integrate_by_parts(S42, $delh^{a? b?}$)
+integrate_by_parts(S42, $delphi$)
+integrate_by_parts(S42, $delA_{a?}$)
+distribute(S42)
+unwrap(S42)
+sort_product(S42)
+rename_dummies(S42)
+canonicalise(S42)
+factor_out(S42, $delh^{a? b?}, delpi, Dh, delphi, delA_{a?}$);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\int \sqrt{-h} G_{4X} \brwrap{(}{{\Box^{(4)}{\pi}}^{2}-\pi^{\mu \nu}\pi_{\mu \nu}}{)}\,\,{\rm d}x$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\int \brwrap{(}{\sqrt{-h} \delta h^{a b} \brwrap{(}{ - \frac{1}{2}G_{4X} {\Box^{(4)}{\pi}}^{2} h_{a b}+\frac{1}{2}G_{4X} h_{a b} \pi^{\mu \nu}\pi_{\mu \nu} - \frac{1}{2}G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} {\Box^{(4)}{\pi}}^{2}+\frac{1}{2}G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} \pi^{\mu \nu}\pi_{\mu \nu}+2G_{4X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \Box^{(4)}{\pi}+2G_{4X} \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1} \Box^{(4)}{\pi}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\pi} \Box^{(4)}{\pi}}{)}}{)}+\sqrt{-h} \delta\pi \brwrap{(}{G_{4\pi X} {\Box^{(4)}{\pi}}^{2}-G_{4\pi X} \pi^{\mu \nu}\pi_{\mu \nu}+\nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi} {\Box^{(4)}{\pi}}^{2}}{)} h^{a b}-\nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi} \pi^{\mu \nu}\pi_{\mu \nu}}{)} h^{a b}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\phi} {\phi}^{-1} \Box^{(4)}{\pi}}{)} h^{a b}+2\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} \Box^{(4)}{\pi}}{)}}{)} h^{a b}-2\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}}{)}}{)} h^{a d} h^{b c}}{)}+\sqrt{-h} \delta h^{c d} \brwrap{(}{\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\pi} \Box^{(4)}{\pi}}{)} h_{c d} h^{a b}+\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{a b}}{)}+\sqrt{-h} \delta\phi \brwrap{(}{-2G_{4X} \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-2} \Box^{(4)}{\pi} h^{a b}-F_{a b} F_{c d} G_{4X} \nabla_{e}{\pi} \nabla_{f}{\pi} \phi h^{a c} h^{b e} h^{d f}+2G_{4X} {\phi}^{-3} {\brwrap{(}{\nabla_{a}{\phi} \nabla_{b}{\pi} h^{a b}}{)}}^{2}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\pi} {\phi}^{-1} \Box^{(4)}{\pi}}{)} h^{a b}+2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-2}}{)} h^{a d} h^{b c}}{)}+\sqrt{-h} \delta h^{a c} \brwrap{(}{-2G_{4X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{b d} - \frac{1}{2}F_{a b} F_{c d} G_{4X} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} h^{b e} h^{d f}-2G_{4X} \nabla_{a}{\phi} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-2} h^{b d}}{)}+\sqrt{-h} \delta h^{b d} \nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{a c}-\sqrt{-h} \delta h^{b c} \nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{a d}+\sqrt{-h} \delta h^{a e} F_{a b} F_{c d} G_{4X} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} h^{b c} h^{d f}+2\sqrt{-h} \delta A_{f} \nabla_{a}\brwrap{(}{F_{b c} G_{4X} \nabla_{d}{\pi} \nabla_{e}{\pi} {\phi}^{2}}{)} h^{a b} h^{c d} h^{e f}}{)}\,\,{\rm d}x$\end{adjustwidth}
+There are some clean up of equations of motion:
+\begin{python}
+mathcalG2 = S2[0][0][2]
+mathcalP2 = S2[0][1][2]
+mathcalP3 = S3[0][0][2]
+mathcalG3 = S3[0][1] + S3[0][2] + S3[0][3]
+mathcalphi3 = S3[0][4][2]
+mathcalG3 := @(mathcalG3) * Dh**(-1).
+product_rule(mathcalG3)
+distribute(mathcalG3)
+collect_factors(mathcalG3)
+sort_product(mathcalG3)
+substitute(mathcalG3, $h^{a? b?} \nabla_{a?}{\nabla_{b?}{Q??}} -> \Box{Q??}$)
+substitute(mathcalG3, $\nabla_{a?}{p}\nabla_{b?}{p} -> X_{a? b?}$)
+substitute(mathcalG3, $\nabla_{a?}{\phi}\nabla_{b?}{p} \phi**(-1) h^{a? b?} -> Z$)
+rename_dummies(mathcalG3)
+canonicalise(mathcalG3)
+substitute(mathcalG3, $\nabla_{a}{K}\nabla_{b}{p}delh^{c d}h_{c d}h^{a b} -> \nabla_{c}{K}\nabla_{d}{p}delh^{a b}h_{a b}h^{c d}$)
+factor_out(mathcalG3, $delh^{a b}$)
+mathcalG3 = mathcalG3[1]
+\end{python}
+\begin{python}
+mathcalP41 = S41[0][1][2]
+mathcalG41 = S41[0][0] + S41[0][2] + S41[0][4]
+mathcalA41 = S41[0][3]
+mathcalphi41 = S41[0][5][2]
+substitute(mathcalG41, $delh^{c d} \nabla_{a}{\nabla_{b}{G4}}h_{c d} h^{a b} -> delh^{a b} \nabla_{c}{\nabla_{d}{G4}}h^{c d} h_{a b}$)
+substitute(mathcalG41, $delh^{a c} F_{a b} F_{c d} G4 \phi**2 h^{b d} -> delh^{a b} F_{a c} F_{b d} G4 \phi**2 h^{c d}$)
+factor_out(mathcalG41, $delh^{a b}, Dh$)
+mathcalG41 = mathcalG41[2]
+\end{python}
+\begin{python}
+mathcalG42 = S42[0][0] + S42[0][2] + S42[0][4] + S42[0][5] + S42[0][6] + S42[0][7]
+mathcalP42 = S42[0][1][2]
+mathcalphi42 = S42[0][3][2]
+mathcalA42 = S42[0][8]
+mathcalG42:= @(mathcalG42) * Dh**(-1).
+distribute(mathcalG42)
+sort_product(mathcalG42)
+collect_factors(mathcalG42)
+rename_dummies(mathcalG42)
+canonicalise(mathcalG42)
+factor_out(mathcalG42, $delh^{a? b?}$)
+rename_dummies(mathcalG42)
+substitute(mathcalG42, $delh^{c d} (\nabla_{a}{G4X \nabla_{b}{p} boxpi4} h_{c d} h^{a b} + \nabla_{a}{G4X \nabla_{b}{\nabla_{c}{p}} \nabla_{d}{p}} h^{a b}) -> delh^{a b} (\nabla_{c}{G4X \nabla_{d}{p} boxpi4} h_{a b} h^{c d} + \nabla_{c}{G4X \nabla_{d}{\nabla_{a}{p}} \nabla_{b}{p}} h^{c d})$)
+substitute(mathcalG42, $delh^{a c} * (-2G4X \nabla_{a}{\nabla_{b}{p}} \nabla_{c}{\nabla_{d}{p}} h^{b d} -  1/2 F_{a b} F_{c d} G4X \nabla_{e}{p} \nabla_{f}{p} * ((\phi)**2) * h^{b e} h^{d f}-2G4X \nabla_{a}{\phi} \nabla_{b}{\phi} \nabla_{c}{p} \nabla_{d}{p} * ((\phi)**(-2)) * h^{b d}) -> delh^{a b} * (-2G4X \nabla_{a}{\nabla_{c}{p}} \nabla_{b}{\nabla_{d}{p}} h^{c d} -  1/2 F_{a c} F_{b d} G4X \nabla_{e}{p} \nabla_{f}{p}* ((\phi)**2) * h^{c e} h^{d f}-2G4X \nabla_{a}{\phi} \nabla_{c}{\phi} \nabla_{b}{p} \nabla_{d}{p} * ((\phi)**(-2)) * h^{c d})$)
+substitute(mathcalG42, $delh^{b d} \nabla_{a}(G4X \nabla_{b}(\nabla_{c}(p)) \nabla_{d}(p)) h^{a c} -> delh^{a b} \nabla_{d}(G4X \nabla_{a}(\nabla_{c}(p)) \nabla_{b}(p)) h^{d c}$)
+substitute(mathcalG42, $delh^{b c} \nabla_{a}(G4X \nabla_{b}(\nabla_{c}(p)) \nabla_{d}(p)) h^{a d} -> delh^{a b} \nabla_{c}(G4X \nabla_{a}(\nabla_{b}(p)) \nabla_{d}(p)) h^{c d}$)
+substitute(mathcalG42, $delh^{a e} F_{a b} F_{c d} G4X \nabla_{e}(p) \nabla_{f}(p) (\phi)**2 h^{b c} h^{d f} -> delh^{a b} F_{a e} F_{c d} G4X \nabla_{b}(p) \nabla_{f}(p) (\phi)**2 h^{e c} h^{d f}$)
+factor_out(mathcalG42, $delh^{a? b?}$)
+mathcalG42 = mathcalG42[1]
+factor_out(mathcalG42, $\frac{1}{2}, G4X, boxpi4, pi42, G4XX$)
+factor_out(mathcalG42, $\nabla_{a}{p}\nabla_{b}{p}$)
+mathcalA4 := @(mathcalA41) + @(mathcalA42).
+rename_dummies(mathcalA4)
+substitute(mathcalA4, $delA_{d}\nabla_{c}{F_{a b} G4 *((\phi)**2)}h^{c a} h^{b d} -> delA_{f}\nabla_{c}{F_{a b} G4 *((\phi)**2)}h^{c a} h^{b f}$)
+factor_out(mathcalA4, $Dh, delA_{f}$)
+mathcalA4 = mathcalA4[2]
+\end{python}
+We denote by $\mathcal{G}_{a b}$ the terms before the variation with respect to the metric, by $\mathcal{P}$ terms before the variation with respect to the field $\pi$, by $\mathcal{A}^{m}$ terms before the variation with respect to the vector field $A_{m}$, 
+by $\Phi$ terms before the variation with respect to the dilaton field $\phi$, and $Z = h^{a b}\nabla_{a}{\phi}\nabla_{b}{\pi} \phi^{-1}$, then:
+\begin{python}
+mathcalG2 := mathcalG^{(2)}_{a b} = @(mathcalG2);
+mathcalP2:= mathcalP^{(2)} = @(mathcalP2); 
+mathcalG3 := mathcalG^{(3)}_{a b} = -@(mathcalG3);
+mathcalP3 := mathcalP^{(3)} = -@(mathcalP3);
+mathcalphi3 := mathcalphi^{(3)} = -@(mathcalphi3);
+mathcalG4 := mathcalG^{(4)}_{a b} = @(mathcalG41) + @(mathcalG42);
+mathcalP4 := mathcalP^{(4)} = @(mathcalP41) + @(mathcalP42);
+mathcalphi4 := mathcalphi^{(4)} = @(mathcalphi41) + @(mathcalphi42);
+mathcalA4 := mathcalA^{(4)}^{f} = @(mathcalA4);
+\end{python}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{G}^{2}\,_{a b} =  - \frac{1}{2}h_{a b} F - \frac{1}{2}F_{X} \nabla_{a}{\pi} \nabla_{b}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{P}^{2} = F_{\pi}+h^{a b} \nabla_{b}\brwrap{(}{F_{X} \nabla_{a}{\pi}}{)}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{G}^{3}\,_{a b} = \frac{1}{2}K Z h_{a b}+\frac{1}{2}K_{X} X_{a b} \Box\brwrap{(}{\pi}{)} - \frac{1}{2}\nabla_{c}{K} \nabla_{d}{\pi} h_{a b} h^{c d}+\frac{1}{2}K_{X} Z X_{a b}-K \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1}+\nabla_{a}{K} \nabla_{b}{\pi}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{P}^{3} = -\nabla_{a}\brwrap{(}{\nabla_{b}{K}}{)} h^{a b}-K_{\pi} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} h^{a b}-K_{\pi} \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1} h^{a b}-\nabla_{a}\brwrap{(}{K_{X} \nabla_{b}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{a d} h^{b c}-\nabla_{a}\brwrap{(}{K_{X} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-1}}{)} h^{a c} h^{b d}+\nabla_{a}\brwrap{(}{K \nabla_{b}{\phi} {\phi}^{-1}}{)} h^{a b}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\Phi^{3} = K \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-2} h^{a b}+\nabla_{a}\brwrap{(}{K \nabla_{b}{\pi} {\phi}^{-1}}{)} h^{a b}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{G}^{4}\,_{a b} =  - \frac{1}{2}{G_{4}} R h_{a b} - \frac{1}{2}G_{4X} R \nabla_{a}{\pi} \nabla_{b}{\pi}+{G_{4}} R_{a b}-2{G_{4}} \nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-1}-\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)}+\nabla_{c}\brwrap{(}{\nabla_{d}\brwrap{(}{{G_{4}}}{)}}{)} h^{c d} h_{a b} - \frac{1}{2}F_{a c} F_{b d} {G_{4}} {\phi}^{2} h^{c d}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\pi} \Box^{(4)}{\pi}}{)}+\nabla_{c}\brwrap{(}{G_{4X} \nabla_{d}{\pi} \Box^{(4)}{\pi}}{)} h_{a b} h^{c d}+\nabla_{c}\brwrap{(}{G_{4X} \nabla_{d}\brwrap{(}{\nabla_{a}{\pi}}{)} \nabla_{b}{\pi}}{)} h^{c d}+\nabla_{d}\brwrap{(}{G_{4X} \nabla_{a}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{b}{\pi}}{)} h^{d c}-\nabla_{c}\brwrap{(}{G_{4X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{d}{\pi}}{)} h^{c d}+G_{4X} \brwrap{(}{ - \frac{1}{2}{\Box^{(4)}{\pi}}^{2} h_{a b}+\frac{1}{2}h_{a b} \pi^{\mu \nu}\pi_{\mu \nu}-2\nabla_{a}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{b}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{c d} - \frac{1}{2}F_{a c} F_{b d} \nabla_{e}{\pi} \nabla_{f}{\pi} {\phi}^{2} h^{c e} h^{d f}-2\nabla_{a}{\phi} \nabla_{c}{\phi} \nabla_{b}{\pi} \nabla_{d}{\pi} {\phi}^{-2} h^{c d}+F_{a e} F_{c d} \nabla_{b}{\pi} \nabla_{f}{\pi} {\phi}^{2} h^{e c} h^{d f}}{)}+G_{4XX} \brwrap{(}{ - \frac{1}{2}\nabla_{a}{\pi} \nabla_{b}{\pi} {\Box^{(4)}{\pi}}^{2}+\frac{1}{2}\nabla_{a}{\pi} \nabla_{b}{\pi} \pi^{\mu \nu}\pi_{\mu \nu}}{)}+G_{4X} \Box^{(4)}{\pi} \brwrap{(}{2\nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)}+2\nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-1}}{)}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{P}^{4} = G_{4\pi} R+\nabla_{a}\brwrap{(}{G_{4X} R \nabla_{b}{\pi}}{)} h^{a b}+G_{4\pi X} {\Box^{(4)}{\pi}}^{2}-G_{4\pi X} \pi^{\mu \nu}\pi_{\mu \nu}+\nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi} {\Box^{(4)}{\pi}}^{2}}{)} h^{a b}-\nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi} \pi^{\mu \nu}\pi_{\mu \nu}}{)} h^{a b}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\phi} {\phi}^{-1} \Box^{(4)}{\pi}}{)} h^{a b}+2\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} \Box^{(4)}{\pi}}{)}}{)} h^{a b}-2\nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}}{)}}{)} h^{a d} h^{b c}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\Phi^{4} =  - \frac{1}{2}F_{a b} F_{c d} {G_{4}} \phi h^{a c} h^{b d}+2{G_{4}} \nabla_{a}{\phi} \nabla_{b}{\phi} {\phi}^{-2} h^{a b}+4\nabla_{a}\brwrap{(}{{G_{4}} \nabla_{b}{\phi} {\phi}^{-1}}{)} h^{a b}-2G_{4X} \nabla_{a}{\phi} \nabla_{b}{\pi} {\phi}^{-2} \Box^{(4)}{\pi} h^{a b}-F_{a b} F_{c d} G_{4X} \nabla_{e}{\pi} \nabla_{f}{\pi} \phi h^{a c} h^{b e} h^{d f}+2G_{4X} {\phi}^{-3} {\brwrap{(}{\nabla_{a}{\phi} \nabla_{b}{\pi} h^{a b}}{)}}^{2}-2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\pi} {\phi}^{-1} \Box^{(4)}{\pi}}{)} h^{a b}+2\nabla_{a}\brwrap{(}{G_{4X} \nabla_{b}{\phi} \nabla_{c}{\pi} \nabla_{d}{\pi} {\phi}^{-2}}{)} h^{a d} h^{b c}$\end{adjustwidth}
+\begin{adjustwidth}{1em}{0cm}${}\mathcal{A}^{4 f} = \nabla_{c}\brwrap{(}{F_{a b} {G_{4}} {\phi}^{2}}{)} h^{c a} h^{b f}+2\nabla_{c}\brwrap{(}{F_{a b} G_{4X} \nabla_{d}{\pi} \nabla_{e}{\pi} {\phi}^{2}}{)} h^{c a} h^{b d} h^{e f}$\end{adjustwidth}
+\begin{python}
+\end{python}
+\end{document}

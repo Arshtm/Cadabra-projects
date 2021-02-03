@@ -1,0 +1,189 @@
+\documentclass[12pt,a4paper,svgnames]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amsmath, amsthm, amsfonts, amssymb,amscd}
+\usepackage{esdiff}
+\usepackage{changepage}
+\usepackage[all]{xy}
+\ifx\pdfoutput\undefined
+\usepackage{graphicx}
+\else
+\usepackage[pdftex]{graphicx}
+\fi
+\usepackage{multirow}
+\usepackage{cellspace}
+\usepackage{colortbl}
+\usepackage{bbm}
+\usepackage[table]{xcolor}
+\usepackage{mathrsfs}
+\usepackage{dsfont}
+\usepackage{floatrow}
+\textheight 24cm
+\textwidth 15.9cm
+\topmargin -.5in
+\oddsidemargin 0in
+\graphicspath{{pic/}}
+\newcommand\brwrap[3]{%
+  \setbox0=\hbox{$#2$}
+  \left#1\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
+  \begingroup #2\endgroup\kern-.15em
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#3
+}
+\begin{document}
+\section{Редукция Калуцы-Клейна}
+Рассматриваем теорию с действием
+\begin{equation}
+	S = \int d^4x\sqrt{-g}\left(\mathcal{L}_{2}+\mathcal{L}_{3}+\mathcal{L}_{4}+\mathcal{L}_{5}\right)
+\end{equation}
+, где
+\begin{align}
+	& \mathcal{L}_{2} = F\left(\pi, X\right)\\
+	& \mathcal{L}_{3} = K\left(\pi, X\right) \Box\pi\\
+	& \mathcal{L}_{4} = -G_4(\pi,X)R + 2G_{4X}\left(\pi, X\right)\left[\left(\Box\pi\right)^2 - \pi_{;\mu\nu}\pi^{;\mu\nu}\right]\\
+	&\mathcal{L}_{5} = G_5\left(\pi, X\right) G^{\mu\nu}\pi_{;\mu\nu} + \frac{1}{3} G_{5X}\left[\left(\Box\pi\right)^{3} - 3\Box\pi\pi_{;\mu\nu}\pi^{;\mu\nu}+2\pi_{;\mu\nu}\pi^{;\mu\rho}\pi^{\nu}_{;\rho}\right]
+\end{align}
+и метрикой Калуцы-Кляйна:
+\begin{equation}
+	g_{\mu\nu} = \begin{pmatrix}
+		h_{mn}+\phi^2A_{m}A_{n}&\phi^2A_{m}\\
+		\phi^2A_{n}&\phi^2
+	\end{pmatrix}
+\end{equation}
+и обратной метрикой:
+	\begin{equation}
+	g^{\mu\nu} = \begin{pmatrix}
+		h^{mn}&-A^{m}\\
+		-A^{n}&h_{pq}A^{p}A^{q}+\frac{1}{\phi^2}
+	\end{pmatrix}
+\end{equation}
+При редукции считаем, что все производные по $x^4$ равны 0.\\
+Латинские значки отвечают 3-мерному пространству, греческие - 4-мерному. Величины с пометкой ${}^{(3)}$ - полные аналоги 4-мерных.
+Тогда 
+\begin{align}
+	&X= g^{\mu \nu} \partial_{\mu}{\pi} \partial_{\nu}{\pi} = h^{mn} \partial_{m}{\pi} \partial_{n}{\pi}\equiv X^{(3)}\\
+	&\Box\pi = g^{\mu \nu} \nabla_{\mu}\nabla_{\nu}\pi = \partial_{m}({\partial_{n}{\pi}}) h^{m n}-\partial_{m}{\pi} \Gamma^{m q}\,_{q}+\partial_{m}{\phi} \partial_{n}{\pi} {\phi}^{-1} h^{m n} =\nonumber\\
+	&= \nabla^m\nabla_m\pi + \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}
+\end{align}
+Тогда 
+\begin{align}
+	& \mathcal{L}_{2} = F\left(\pi, X^{(3)}\right)\\
+	& \mathcal{L}_{3} = K\left(\pi, X^{(3)}\right) \left(\Box^{(3)}\pi+ \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}\right)
+\end{align}
+\begin{align}
+	& G_{4X}\left(\pi,X\right) = G_{4X^{(3)}}\left(\pi,X^{(3)}\right)\\
+	&R = R^{(3)}-\frac{1}{4}F^{mn}F_{mn}{\phi}^{2}-\frac{2}{\phi}\partial^{m}{\phi}\partial_{m}{\phi} \\
+	& \pi_{;\mu\nu} = \begin{cases}
+		\nabla_{m}(\partial_{n}\pi)+\frac{{\phi}^{2}}{2}\partial_{p}{\pi}\left(A_{m} F_{q n}+A_{n} F_{q m}\right)h^{q p} + \frac{1}{2}A_{m} A_{n} \partial^{p}{(\phi^2)} \partial_{p}{\pi} , \mu=m, \nu=n\\
+		 \frac{1}{2}A_{m} \partial^{p}{(\phi^2)} \partial_{p}{\pi} - \frac{1}{2} {\phi}^{2}\partial_{n}{\pi} F_{m p} h^{n p}, \mu=m, \nu=4\\
+		 \frac{1}{2}\partial^{m}{{\phi}^{2}} \partial_{m}{\pi}, \mu=4,\nu=4
+	\end{cases}\\
+	&\pi_{;\mu\nu}\pi^{;\mu\nu} = \nabla^{p}({\partial_{n}{\pi}}) \nabla_{p}({\partial_{q}{\pi}}) h^{n q}+\frac{{\phi}^{2}}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} +\frac{1}{\phi^2}\partial^{p}{\phi} \partial^{q}{\phi} \partial_{p}{\pi} \partial_{q}{\pi}\\
+	&\pi_{;\mu\nu}\pi^{;\mu\rho}\pi^{\nu}_{;\rho} = \nabla^{p}({\partial_{n}{\pi}}) \nabla_{p}({\partial_{q}{\pi}}) \nabla^{n}({\partial_{s}{\pi}}) h^{q s}+\frac{3}{4}F^{r t} F^{s u} \nabla_{r}({\partial_{s}{\pi}}) \partial_{t}{\pi} \partial_{u}{\pi} {\phi}^{2}+\nonumber\\
+	&+\frac{3}{4}F^{p s} F_{p}\,^{t} \partial_{r}{\phi} \partial_{s}{\pi} \partial_{t}{\pi} \partial_{u}{\pi} \phi h^{r u}+\partial_{m}{\phi} \partial_{n}{\phi} \partial_{p}{\phi} \partial_{q}{\pi} \partial_{r}{\pi} \partial_{s}{\pi} {\phi}^{-3} h^{m q} h^{n r} h^{p s}
+\end{align}
+\begin{align}
+	\mathcal{L}_{4} = -G_4(\pi,X^{(3)})R + 2G_{4X^{(3)}}(\pi,X^{(3)})\left[\left(\Box^{(3)}\pi+ \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}\right)^2 - \pi_{;mn}\pi^{;mn} -\right. \nonumber\\
+	\left.- \frac{{\phi}^{2}}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} -\frac{1}{\phi^2}\left(\partial^{p}{\phi} \partial_{p}{\pi}\right)^2 \right]
+\end{align}
+\begin{align}
+	& G_{44} = \frac{3}{8}\phi^4 F_{m n}F^{m n}-\frac{1}{2}\phi^2R^{3}\\
+	& G_{4 n} = A_{n}G_{44}+\frac{1}{2}\phi^2 h^{pq}\nabla_{q}F_{np}+\frac{3}{4}F_{np}\partial^{p}\phi^2\\
+	& G_{m n} = G^{(3)}_{m n}- \frac{1}{\phi} \left(\nabla_{m}\partial_{n}\phi - h_{m n}\Box\phi\right) - \frac{1}{2}\phi^2\left(h^{pq}F_{m p}F_{n q} - \frac{1}{4}h_{mn}F_{pq}F^{pq}\right)+\\\nonumber
+	&+A_{m}A_{n}G_{44}+A_{m}\left(G_{n4} - A_{n}G_{44}\right)+ A_{n}\left(G_{m4}-A_{m}G_{44}\right)
+\end{align}
+И четвертое слагаемое:
+\begin{align}
+	&\mathcal{L}_{5} = G_5\left(\pi, X^{(3)}\right) G^{\mu \nu}\pi_{;\mu\nu} + \frac{1}{3} G_{5X^{(3)}}\left[\left(\Box^{(3)}\pi+ \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}\right)^{3}-\right.\nonumber\\
+	& - 3\left(\Box^{(3)}\pi+ \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}\right)\left(\pi_{;mn}\pi^{;mn} + \frac{{\phi}^{2}}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} +\frac{1}{\phi^2}\left(\partial^{p}{\phi} \partial_{p}{\pi}\right)^2\right)+\nonumber\\
+	&\left. + 2\left(\pi_{;n}^p\pi_{;pq}\pi^{;nq}+\frac{3}{4}{\phi}^{2}F^{r t} F^{s u}\pi_{;rs} \partial_{t}{\pi} \partial_{u}{\pi} +\frac{3}{4}\phi F^{p s} F_{p t} \partial^{u}{\phi} \partial_{s}{\pi} \partial^{t}{\pi} \partial_{u}{\pi} +\frac{1}{\phi^3}\left(\partial^{m}{\phi}\partial_{m}{\pi}\right)^{3}\right)\right]
+\end{align}
+\newpage
+\section{Уравнения движения:}
+Уравнения движения обычного Хорндески:
+\begin{align*}
+\mathcal{E}_{\alpha \beta}=&-\frac{g_{\alpha \beta}}{2} G_{2}+G_{2 \mathrm{X}} X_{\alpha \beta}-\left[G_{3 \mathrm{X}} X_{\alpha \beta} \square \pi+\frac{1}{2} g_{\alpha \beta} G_{3 \mu} \pi^{\mu}-G_{3(\alpha} \pi_{\beta)}\right]+G_{\alpha \beta} G_{4}+G_{4 \mathrm{X}} X_{\alpha \beta} R \\
+&+G_{4 \mu}{ }^{\mu} g_{\alpha \beta}-G_{4 \alpha \beta}+\left[G_{4 \mathrm{XX}} X_{\alpha \beta}-\frac{1}{2} G_{4 \mathrm{X}} g_{\alpha \beta}\right]\left(\square \pi^{2}-\pi_{\mu \nu}^{2}\right)+2 \square \pi G_{4 \mathrm{X}} \pi_{\alpha \beta}-2 \nabla_{(\alpha}\left[G_{4 \mathrm{X}} \pi_{\beta)} \square \pi\right] \\
+&+\nabla_{\mu}\left[G_{4 \mathrm{X}} \pi^{\mu} \square \pi\right] g_{\alpha \beta}+2 \nabla_{\mu}\left[G_{4 \mathrm{X}} \pi_{(\alpha} \pi_{\beta}^{\mu}\right]-\nabla_{\mu}\left[G_{4 \mathrm{X}} \pi^{\mu} \pi_{\alpha \beta}\right]-2 G_{4 \mathrm{X}} \pi_{\beta \nu} \pi_{\alpha}^{\nu}+G_{\mu \nu} \pi^{\mu \nu}\left(G_{5 \mathrm{X}} X_{\alpha \beta}\right.\\
+&\left.-\frac{1}{2} G_{5} g_{\alpha \beta}\right)+2 G_{5} \pi_{(\beta}^{\mu} G_{\alpha) \mu}-\nabla^{\mu}\left[G_{5} \pi_{(\alpha} G_{\beta) \mu}\right]+\frac{1}{2} \nabla^{\mu}\left[G_{5} \pi_{\mu} G_{\alpha \beta}\right]+\frac{1}{2}\left\{R G_{5} \pi_{\alpha \beta}-R_{\alpha \beta} G_{5} \pi_{\mu}^{\mu}\right.\\
+&\left.\left.+\square\left(G_{5} \pi_{\alpha \beta}\right)+\nabla_{\alpha} \nabla_{\beta}\left(G_{5} \pi_{\mu}^{\mu}\right)-2 \nabla_{\mu} \nabla_{(\alpha}\left[G_{5} \pi_{\beta}\right)^{\mu}\right]+g_{\alpha \beta}\left[\nabla_{\mu} \nabla_{\nu}\left(G_{5} \pi^{\mu \nu}\right)-\square\left(G_{5} \pi_{\nu}^{\nu}\right)\right]\right\} \\
+&-\frac{1}{6}\left(G_{5 \mathrm{X}} X_{\alpha \beta}-\frac{1}{2} g_{\alpha \beta} G_{5 \mathrm{X}}\right)\left[(\square \pi)^{3}+2 \pi_{\mu \nu}^{3}-3 \pi_{\mu \nu}^{2} \square \pi\right]-\frac{1}{2}\left\{G_{5 \mathrm{X}}(\square \pi)^{2} \pi_{\alpha \beta}-2 \nabla_{(\alpha}\left[G_{5 \mathrm{X}}(\square \pi)^{2} \pi_{\beta}\right]\right.\\
+&\left.+\frac{1}{2} g_{\alpha \beta} \nabla^{\mu}\left[G_{5 \mathrm{X}}(\square \pi)^{2} \pi_{\mu}\right]\right\}-\left\{G_{5 \mathrm{X}} \pi_{\mu \alpha} \pi_{\beta \sigma} \pi^{\sigma \mu}-\nabla^{\sigma}\left[G_{5 \mathrm{X}} \pi_{(\alpha} \pi_{\mu \sigma} \pi_{\beta)}^{\mu}\right]+\frac{1}{2} \nabla^{\sigma}\left[G_{5 \mathrm{X}} \pi_{\sigma} \pi_{\mu \alpha} \pi_{\beta}^{\mu}\right]\right\} \\
+&+\frac{1}{2}\left\{G_{5 \mathrm{X}}\left(\pi_{\mu \nu}^{2} \pi_{\alpha \beta}+2 \square \pi \pi_{\alpha \mu} \pi_{\beta}^{\mu}\right)-\nabla_{(\beta}\left[G_{5 \mathrm{X}} \pi_{\alpha)} \pi_{\mu \sigma} \pi^{\mu \sigma}\right]+\frac{1}{2} g_{\alpha \beta} \nabla^{\sigma}\left[G_{5 \mathrm{X}} \pi_{\sigma} \pi_{\mu \nu} \pi^{\mu \nu}\right]\right.\\
+&\left.-2 \nabla^{\mu}\left[G_{5 \mathrm{X}} \square \pi \pi_{(\alpha} \pi_{\beta) \mu}\right]+\nabla^{\mu}\left[G_{5 \mathrm{X}} \square \pi \pi_{\mu} \pi_{\alpha \beta}\right]\right\}
+\end{align*}
+и 
+\begin{align*}
+\mathcal{E}_{\pi}=& G_{2 \pi}+\nabla_{\alpha}\left(G_{2 \mathrm{X}} \pi^{\alpha}\right)-G_{3 \alpha}^{\alpha}-\nabla_{\alpha}\left(G_{3 \mathrm{X}} \pi^{\alpha} \square \pi\right)-\square \pi G_{3 \pi}+G_{4 \pi} R+\left(\square \pi^{2}-\pi_{\mu \nu}^{2}\right) G_{4 \mathrm{X} \pi} \\
+&+\nabla^{\alpha}\left[G_{4 \mathrm{XX}} \pi_{\alpha}\left(\square \pi^{2}-\pi_{\mu \nu}^{2}\right)\right]+\nabla^{\alpha}\left(G_{4 \mathrm{X}} \pi_{\alpha} R\right)+2 \square\left(G_{4 \mathrm{X}} \square \pi\right)-2 \nabla^{\alpha} \nabla^{\beta}\left(G_{4 \mathrm{X}} \pi_{\alpha \beta}\right)+G_{5 \pi} G_{\alpha \beta} \pi^{\alpha \beta} \\
+&+G_{5}^{\alpha \beta} G_{\alpha \beta}-\frac{1}{6} G_{5 \mathrm{X} \pi}\left[(\square \pi)^{3}+2 \pi_{\mu \nu}^{3}-3 \pi_{\mu \nu}^{2} \square \pi\right]+\nabla^{\alpha}\left[G_{5 \mathrm{X}} \pi_{\alpha} \pi_{\mu \nu} G^{\mu \nu}\right]-\frac{1}{6} \nabla^{\alpha}\left\{G_{5 \mathrm{XX}} \pi_{\alpha}\left[(\square \pi)^{3}\right.\right.\\
+&\left.\left.+2 \pi_{\mu \nu}^{3}-3 \pi_{\mu \nu}^{2} \square \pi\right]\right\}-\frac{1}{2} \square\left[G_{5 \mathrm{X}}(\square \pi)^{2}\right]-\nabla^{\alpha} \nabla^{\beta}\left[G_{5 \mathrm{X}} \pi_{\alpha}^{\mu} \pi_{\mu \beta}\right]+\frac{1}{2} \square\left(G_{5 \mathrm{X}} \pi_{\mu \nu}^{2}\right)+\nabla^{\alpha} \nabla^{\beta}\left(G_{5 \mathrm{X}} \pi_{\alpha \beta} \square \pi\right)
+\end{align*}
+\newpage
+\begin{align*}
+	& \delta S = \int dx \sqrt{-g} \left(\delta \mathcal{L}_{2} + \delta \mathcal{L}_{3} + \delta \mathcal{L}_{4} + \delta \mathcal{L}_{5}\right)
+\end{align*}
+Полезные Вариации:
+\begin{align*}
+&\delta{\sqrt{-h}} =  - \frac{1}{2}\sqrt{-h} h_{m n} \delta h^{m n}\\
+&\delta{F(\pi, X)} = F_{\pi} \delta\pi+F_{X} X_{m n} \delta h^{m n}+2h^{a b} F_{X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}\\
+&\delta{K(\pi, X)} = K_{\pi} \delta\pi+K_{X} X_{m n} \delta h^{m n}+2h^{a b} K_{X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}\\
+&\delta G_{4}(\pi, X) = G_{4\pi} \delta\pi+G_{4X} X_{m n} \delta h^{m n}+2h^{a b} G_{4X} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}\\
+&\delta{G_{4X}(\pi, X)} = G_{4\pi X} \delta\pi+G_{4XX} X_{m n} \delta h^{m n}+2h^{a b} G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\delta\pi}\\
+&\delta{F_{m n}} = 2\nabla_{m}{\delta A_{n}}\\
+&\delta{R} = -h_{b n} \nabla_{r}({\nabla_{s}{\delta h^{r b}}}) h^{n s}+\frac{1}{2}h_{b n} \nabla_{r}({\nabla_{s}{\delta h^{s b}}}) h^{n r}+\frac{1}{2}h_{b n} \nabla_{r}({\nabla_{s}{\delta h^{b n}}}) h^{r s}+R_{n s} \delta h^{n s}
+\end{align*}
+
+Первое слагаемое:
+\begin{align*}
+	 \delta S_{2} = \int{\rm d}x\,\, \sqrt{-h} \left( \left({ - \frac{1}{2}h_{m n} F+F_{X} X_{m n}}\right)\delta h^{m n}+  \left(F_{\pi}-2h^{a b} \nabla_{b}(F_{X} \nabla_{a}{\pi})\right)\delta\pi\right)
+\end{align*}
+Второе слагаемое:
+\begin{align*}
+	\delta S_{3} &= \int {\rm d}x\,\, \sqrt{-h}\left[\left( - \frac{1}{2}h_{a b} K \Box{\pi}- \frac{1}{2}h_{a b} K {\phi}^{-1}\Box{\pi} +K_{X} X_{a b} \Box{\pi}+ \frac{1}{\phi}K_{X} X_{a b}   \nabla^{d}{\phi} \nabla_{d}{\pi}\right)\delta{h^{a b}}+\right.\\
+	& +\left(K_{\pi} \left(\Box^{(3)}\pi+ \frac{1}{\phi}\nabla^{m}{\phi} \nabla_{m}{\pi}\right) - 2 K_{X} \left((\Box{\pi})^2-h^{a b}\nabla_{a}{\pi}\nabla_{b}(\Box{\pi}) - \Box{\pi}\frac{\nabla^{d}{\phi} \nabla_{d}{\pi}}{\phi}+ \left(\frac{\nabla^{d}{\phi} \nabla_{d}{\pi}}{\phi}\right)^{2}\right.\right. \\
+	&\left.\left.-h^{a b} \nabla_{a}{\pi} \frac{\nabla_{b}\left(\nabla^{d}{\phi}\nabla_{d}{\pi}\right)}{\phi}\right) -2h^{a b} \nabla_{a}{K_{X}} \nabla_{b}{\pi} \frac{\nabla^{d}{\phi} \nabla_{d}{\pi}}{\phi} + \Box{K} -\frac{\nabla^{a}{K}\nabla_{a}{\phi}}{\phi}+K \frac{\nabla^{a}{\phi} \nabla_{a}{\phi}}{{\phi}^{2}} - K \frac{\Box{\phi}}{\phi} \right)\delta{\pi} +\\
+	&\left.  \left(- \frac{\nabla^{d}{K}\nabla_{d}{\pi}}{\phi} - K \frac{\Box{\pi}}{\phi}\right)\delta\phi\right]
+\end{align*}
+
+третье слагаемое:
+\begin{align}
+	\mathcal{L}_{4} = -G_4(\pi,X^{(3)})R + 2G_{4X^{(3)}}(\pi,X^{(3)})\left[\left(\Box^{(3)}\pi+ \frac{1}{\phi}\partial^{m}{\phi} \partial_{m}{\pi}\right)^2 - \pi_{;mn}\pi^{;mn} -\right. \nonumber\\
+	\left.- \frac{{\phi}^{2}}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} -\frac{1}{\phi^2}\left(\partial^{p}{\phi} \partial_{p}{\pi}\right)^2 \right]
+\end{align}
+\begin{adjustwidth}{1em}{0cm}${}-\int \brwrap{(}{{G_{4}} \sqrt{-h} \delta h^{a b} \brwrap{(}{ - \frac{1}{2}h_{a b} R+R_{a b}-2{\phi}^{-1} \nabla_{a}{\phi} \nabla_{b}{\phi}}{)}+\frac{1}{8}{G_{4}} \sqrt{-h} \delta h^{e f} h_{e f} F_{a b} F_{c d} h^{a c} h^{b d} {\phi}^{2}+{G_{4}} \sqrt{-h} \delta h^{c d} h_{c d} {\phi}^{-1} h^{a b} \partial_{a}{\phi} \partial_{b}{\phi}+\sqrt{-h} \delta\pi \brwrap{(}{G_{4\pi} R - \frac{1}{4}G_{4\pi} F_{a b} F_{c d} h^{a c} h^{b d} {\phi}^{2}-2G_{4\pi} {\phi}^{-1} h^{a b} \partial_{a}{\phi} \partial_{b}{\phi}-2h^{a b} \nabla_{a}{G_{4X}} \nabla_{b}{\pi} R-2h^{a b} G_{4X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} R-2h^{a b} G_{4X} \nabla_{a}{\pi} \nabla_{b}{R}+\frac{1}{2}h^{e f} \nabla_{e}{G_{4X}} \nabla_{f}{\pi} F_{a b} F_{c d} h^{a c} h^{b d} {\phi}^{2}+\frac{1}{2}h^{e f} G_{4X} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)} F_{a b} F_{c d} h^{a c} h^{b d} {\phi}^{2}+\frac{1}{2}h^{e f} G_{4X} \nabla_{e}{\pi} h^{a c} h^{b d} \nabla_{f}{F_{a b}} F_{c d} {\phi}^{2}+\frac{1}{2}h^{e f} G_{4X} \nabla_{e}{\pi} h^{a c} h^{b d} F_{a b} \nabla_{f}{F_{c d}} {\phi}^{2}+h^{e f} G_{4X} \nabla_{e}{\pi} h^{a c} h^{b d} F_{a b} F_{c d} \phi \nabla_{f}{\phi}+4h^{a b} \nabla_{a}{G_{4X}} \nabla_{b}{\pi} {\phi}^{-1} h^{c d} \partial_{c}{\phi} \partial_{d}{\phi}+4h^{a b} G_{4X} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} {\phi}^{-1} h^{c d} \partial_{c}{\phi} \partial_{d}{\phi}-4h^{a b} G_{4X} \nabla_{a}{\pi} h^{c d} {\phi}^{-2} \nabla_{b}{\phi} \partial_{c}{\phi} \partial_{d}{\phi}+4h^{a b} G_{4X} \nabla_{a}{\pi} h^{c d} {\phi}^{-1} \nabla_{b}\brwrap{(}{\partial_{c}{\phi}}{)} \partial_{d}{\phi}+4h^{a b} G_{4X} \nabla_{a}{\pi} h^{c d} {\phi}^{-1} \partial_{c}{\phi} \nabla_{b}\brwrap{(}{\partial_{d}{\phi}}{)}}{)}+\sqrt{-h} \delta h^{a b} \brwrap{(}{G_{4X} \nabla_{a}{\pi} \nabla_{b}{\pi} R-2G_{4X} \nabla_{a}{\pi} \nabla_{b}{\pi} {\phi}^{-1} h^{c d} \partial_{c}{\phi} \partial_{d}{\phi}}{)} - \frac{1}{4}\sqrt{-h} \delta h^{e f} G_{4X} \nabla_{e}{\pi} \nabla_{f}{\pi} F_{a b} F_{c d} h^{a c} h^{b d} {\phi}^{2}-\sqrt{-h} \delta h^{c b} h_{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)} h^{d a}+\frac{1}{2}\sqrt{-h} \delta h^{c a} h_{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)} h^{d b}+\frac{1}{2}\sqrt{-h} \delta h^{c d} h_{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{{G_{4}}}{)}}{)} h^{a b}+\sqrt{-h} \delta A_{d} \brwrap{(}{\frac{1}{2}\nabla_{c}\brwrap{(}{{G_{4}}}{)} F_{a b} h^{c a} h^{d b} {\phi}^{2}+\frac{1}{2}\nabla_{c}\brwrap{(}{{G_{4}}}{)} F_{a b} h^{c a} h^{b d} {\phi}^{2}}{)}+{G_{4}} \sqrt{-h} \delta A_{d} \brwrap{(}{ - \frac{1}{2}h^{d a} h^{c b} \nabla_{c}{F_{a b}} {\phi}^{2}-h^{d a} h^{b c} F_{a b} \phi \nabla_{c}{\phi}+\frac{1}{2}\nabla_{c}{F_{a b}} h^{c a} h^{b d} {\phi}^{2}-F_{a b} h^{a d} h^{b c} \phi \nabla_{c}{\phi}}{)} - \frac{1}{4}{G_{4}} \sqrt{-h} \delta h^{a c} F_{a b} F_{c d} h^{b d} {\phi}^{2} - \frac{1}{4}{G_{4}} \sqrt{-h} \delta h^{b d} F_{a b} F_{c d} h^{a c} {\phi}^{2}+{G_{4}} \sqrt{-h} \delta\phi \brwrap{(}{ - \frac{1}{2}F_{a b} F_{c d} h^{a c} h^{b d} \phi+2{\phi}^{-2} h^{a b} \nabla_{a}{\phi} \nabla_{b}{\phi}-4h^{a b} {\phi}^{-2} \nabla_{a}{\phi} \nabla_{b}{\phi}+2{\phi}^{-1} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\phi}}{)}+2h^{a b} {\phi}^{-1} \nabla_{a}\brwrap{(}{\nabla_{b}{\phi}}{)}}{)}+4\sqrt{-h} \delta\phi h^{a b} \nabla_{a}\brwrap{(}{{G_{4}}}{)} {\phi}^{-1} \nabla_{b}{\phi}}{)}\,\,{\rm d}x$\end{adjustwidth}
+
+\begin{adjustwidth}{1em}{0cm}${}2\int \brwrap{(}{\sqrt{-h} \delta h^{a b} \brwrap{(}{ - \frac{1}{2}h_{a b} G_{4X} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)} - \frac{1}{2}h_{a b} G_{4X} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1} h^{e f} \nabla_{e}{\phi} \nabla_{f}{\pi} - \frac{1}{2}h_{a b} G_{4X} {\phi}^{-1} h^{c d} \nabla_{c}{\phi} \nabla_{d}{\pi} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}+\frac{1}{2}h_{a b} G_{4X} h^{c d} h^{e f} \nabla_{c}\brwrap{(}{\nabla_{e}{\pi}}{)} \nabla_{d}\brwrap{(}{\nabla_{f}{\pi}}{)}+\frac{1}{4}h_{a b} G_{4X} {\phi}^{2} h^{c d} h^{e f} F_{c e} F_{d g} h^{g h} \nabla_{f}{\pi} \nabla_{h}{\pi}+G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}+G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1} h^{e f} \nabla_{e}{\phi} \nabla_{f}{\pi}+G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} {\phi}^{-1} h^{c d} \nabla_{c}{\phi} \nabla_{d}{\pi} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}-G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} h^{c d} h^{e f} \nabla_{c}\brwrap{(}{\nabla_{e}{\pi}}{)} \nabla_{d}\brwrap{(}{\nabla_{f}{\pi}}{)} - \frac{1}{2}G_{4XX} \nabla_{a}{\pi} \nabla_{b}{\pi} {\phi}^{2} h^{c d} h^{e f} F_{c e} F_{d g} h^{g h} \nabla_{f}{\pi} \nabla_{h}{\pi}-G_{4X} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{b}\brwrap{(}{\nabla_{d}{\pi}}{)} - \frac{1}{2}G_{4X} {\phi}^{2} h^{c d} F_{a c} F_{b e} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}}{)}+\sqrt{-h} \delta\pi \brwrap{(}{G_{4\pi X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}+G_{4\pi X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} {\phi}^{-1} h^{c d} \nabla_{c}{\phi} \nabla_{d}{\pi}+G_{4\pi X} {\phi}^{-1} h^{a b} \nabla_{a}{\phi} \nabla_{b}{\pi} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}-G_{4\pi X} h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{b}\brwrap{(}{\nabla_{d}{\pi}}{)} - \frac{1}{2}G_{4\pi X} {\phi}^{2} h^{a b} h^{c d} F_{a c} F_{b e} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}-2h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}-2h^{a b} G_{4XX} \nabla_{a}{\pi} h^{c d} h^{e f} \nabla_{b}\brwrap{(}{\nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}}{)}-2h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1} h^{e f} \nabla_{e}{\phi} \nabla_{f}{\pi}-2h^{a b} G_{4XX} \nabla_{a}{\pi} h^{c d} h^{e f} \nabla_{b}\brwrap{(}{\nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1} \nabla_{e}{\phi} \nabla_{f}{\pi}}{)}-2h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} {\phi}^{-1} h^{c d} \nabla_{c}{\phi} \nabla_{d}{\pi} h^{e f} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}-2h^{a b} G_{4XX} \nabla_{a}{\pi} h^{c d} h^{e f} \nabla_{b}\brwrap{(}{{\phi}^{-1} \nabla_{c}{\phi} \nabla_{d}{\pi} \nabla_{e}\brwrap{(}{\nabla_{f}{\pi}}{)}}{)}+2h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} h^{c d} h^{e f} \nabla_{c}\brwrap{(}{\nabla_{e}{\pi}}{)} \nabla_{d}\brwrap{(}{\nabla_{f}{\pi}}{)}+2h^{a b} G_{4XX} \nabla_{a}{\pi} h^{c d} h^{e f} \nabla_{b}\brwrap{(}{\nabla_{c}\brwrap{(}{\nabla_{e}{\pi}}{)} \nabla_{d}\brwrap{(}{\nabla_{f}{\pi}}{)}}{)}+h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} {\phi}^{2} h^{c d} h^{e f} F_{c e} F_{d g} h^{g h} \nabla_{f}{\pi} \nabla_{h}{\pi}+h^{a b} G_{4XX} \nabla_{a}{\pi} h^{c d} h^{e f} h^{g h} \nabla_{b}\brwrap{(}{{\phi}^{2} F_{c e} F_{d g} \nabla_{f}{\pi} \nabla_{h}{\pi}}{)}+2h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}}{)}}{)}-2h^{a b} h^{c d} \nabla_{a}\brwrap{(}{G_{4X} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1} \nabla_{b}{\phi}}{)}+2h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{b}\brwrap{(}{G_{4X} {\phi}^{-1} \nabla_{c}{\phi} \nabla_{d}{\pi}}{)}}{)}-h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{c}{G_{4X}}}{)} \nabla_{d}\brwrap{(}{\nabla_{b}{\pi}}{)}%
+-h^{a b} h^{c d} \nabla_{a}{G_{4X}} \nabla_{c}\brwrap{(}{\nabla_{b}\brwrap{(}{\nabla_{d}{\pi}}{)}}{)}-h^{a b} h^{c d} \nabla_{a}{G_{4X}} \nabla_{c}\brwrap{(}{\nabla_{d}\brwrap{(}{\nabla_{b}{\pi}}{)}}{)}-G_{4X} h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{c}\brwrap{(}{\nabla_{d}\brwrap{(}{\nabla_{b}{\pi}}{)}}{)}}{)}-h^{a b} h^{c d} \nabla_{a}\brwrap{(}{\nabla_{c}\brwrap{(}{G_{4X} \nabla_{d}\brwrap{(}{\nabla_{b}{\pi}}{)}}{)}}{)}+\frac{1}{2}h^{a b} h^{c d} h^{e f} \nabla_{a}\brwrap{(}{G_{4X} {\phi}^{2} F_{b c} F_{e d}}{)} \nabla_{f}{\pi}+\frac{1}{2}G_{4X} {\phi}^{2} h^{a b} h^{c d} F_{a c} F_{b e} h^{e f} \nabla_{d}\brwrap{(}{\nabla_{f}{\pi}}{)} - \frac{1}{2}h^{a b} h^{c d} h^{e f} \nabla_{a}\brwrap{(}{G_{4X} {\phi}^{2} F_{b c} F_{d e} \nabla_{f}{\pi}}{)}}{)}+\sqrt{-h} \delta h^{c d} \brwrap{(}{2G_{4X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}+2G_{4X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} {\phi}^{-1} \nabla_{c}{\phi} \nabla_{d}{\pi}+2G_{4X} {\phi}^{-1} h^{a b} \nabla_{a}{\phi} \nabla_{b}{\pi} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}-G_{4X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{c}{\pi}}{)} \nabla_{b}\brwrap{(}{\nabla_{d}{\pi}}{)} - \frac{1}{2}G_{4X} {\phi}^{2} h^{a b} F_{a c} F_{b e} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}}{)}+\sqrt{-h} \delta\phi \brwrap{(}{-2G_{4X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} {\phi}^{-2} h^{c d} \nabla_{c}{\phi} \nabla_{d}{\pi}-2h^{a b} h^{c d} \nabla_{a}\brwrap{(}{G_{4X} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)} {\phi}^{-1}}{)} \nabla_{b}{\pi}-2G_{4X} h^{a b} \nabla_{a}\brwrap{(}{\nabla_{b}{\pi}}{)} {\phi}^{-1} h^{c d} \nabla_{c}\brwrap{(}{\nabla_{d}{\pi}}{)}-G_{4X} \phi h^{a b} h^{c d} F_{a c} F_{b e} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}}{)}+\sqrt{-h} \delta A_{c} h^{a b} h^{c d} \nabla_{a}\brwrap{(}{G_{4X} {\phi}^{2}}{)} F_{b e} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}+\sqrt{-h} \delta A_{a} G_{4X} {\phi}^{2} h^{a b} h^{c d} h^{e f} \nabla_{c}\brwrap{(}{F_{d e} \nabla_{b}{\pi} \nabla_{f}{\pi}}{)}+\sqrt{-h} \delta A_{e} \brwrap{(}{h^{a b} h^{c d} \nabla_{a}\brwrap{(}{G_{4X} {\phi}^{2} F_{b c}}{)} h^{e f} \nabla_{d}{\pi} \nabla_{f}{\pi}+G_{4X} {\phi}^{2} h^{a b} h^{c d} F_{a c} h^{e f} \nabla_{b}\brwrap{(}{\nabla_{d}{\pi} \nabla_{f}{\pi}}{)}}{)} - \frac{1}{2}\sqrt{-h} \delta h^{e f} G_{4X} {\phi}^{2} h^{a b} h^{c d} F_{a c} F_{b e} \nabla_{d}{\pi} \nabla_{f}{\pi}}{)}\,\,{\rm d}x$\end{adjustwidth}
+
+\newpage
+\section{Фиксация калибровки}
+Зафиксируем $\phi = 1$, тогда действие перепишется в виде:
+\begin{align*}
+	& \mathcal{L}_{2} = F\left(\pi, X^{(3)}\right)\\
+	& \mathcal{L}_{3} = K\left(\pi, X^{(3)}\right)\Box^{(3)}\pi\\
+	& \mathcal{L}_{4} = -G_4(\pi,X^{(3)})\left( R^{(3)}-\frac{1}{4}F^{mn}F_{mn}\right) + 2G_{4X^{(3)}}(\pi,X^{(3)})\left[\left(\Box^{(3)}\pi\right)^2 - \pi_{;mn}\pi^{;mn} -\right.\\
+	&\left.- \frac{1}{2}F^{p r} F_{p}\,^{s} \partial_{r}{\pi} \partial_{s}{\pi} \right]
+\end{align*}
+Первая вариация действия тогда:
+\begin{footnotesize}
+	\begin{align*}
+	 \delta S_{2}& = \int{\rm d}x\,\, \sqrt{-h} \left( \left({ - \frac{1}{2}h_{m n} F+F_{X} X_{m n}}\right)\delta h^{m n}+  \left(F_{\pi}-2h^{a b} \nabla_{b}(F_{X} \nabla_{a}{\pi})\right)\delta\pi\right)\\
+	 \delta S_{3} &= \int {\rm d}x\,\, \sqrt{-h}\left[\left( -\frac{1}{2}h_{a b} K + K_{X} X_{a b} \right)\Box{\pi}\delta{h^{a b}}+\right.\\
+	& \left.+\left(K_{\pi} \Box\pi -2 h^{a b}\nabla_{a}{K_{X}}\nabla_{b}{\pi}\Box{\pi} - 2 K_{X} \left((\Box{\pi})^2-h^{a b}\nabla_{a}{\pi}\nabla_{b}(\Box{\pi}) \right) + \Box{K} \right)\delta{\pi} \right]\\
+	\delta S_{4}& = -\int {\rm d}x\,\, \sqrt{-h}\left[\delta h^{m n} \left(G_{m n}G_{4} +\frac{1}{8}{G_{4}}  h_{m n} F^{a b} F_{a b} + G_{4X} X_{m n} R - \frac{1}{4}G_{4X} X_{m n} F^{a b} F_{a b} - \right.\right.\\
+	&-\left. \frac{1}{2}\nabla_{m}\nabla_{n}G_{4} + \frac{1}{2} h_{m n} \Box{G_{4}} - \frac{1}{2}{G_{4}}h^{b d}F_{m b} F_{n d} \right) + \\
+	&+ \delta{\pi}\left(G_{4\pi} R - \frac{1}{4}G_{4\pi} F^{a b} F_{a b} -2h^{a b} \nabla_{a}{G_{4X}} \nabla_{b}{\pi} R-2 G_{4X} \Box{\pi} R -2h^{a b} G_{4X} \nabla_{a}{\pi} \nabla_{b}{R}\right.\\
+	& \left.+\frac{1}{2}h^{a b} \nabla_{a}{G_{4X}} \nabla_{b}{\pi} F^{a b} F_{a b} +\frac{1}{2} G_{4X} \Box{\pi} F^{a b} F_{a b} +h^{m n} G_{4X} \nabla_{m}{(\pi)} F_{a b}\nabla_{n}{(F^{a b})}\right)+\\
+	& \left.+ \delta{A_{d}}\left(\nabla_{c}(G_{4}F^{c d})\right) \right] +\\
+	&+ 2 \int {\rm d}x\,\, \sqrt{-h}\left[\delta h^{m n}\left(\left(- \frac{1}{2}h_{m n} G_{4X} + G_{4XX} X_{m n}\right)\left(\left(\Box{\pi}\right)^{2} - \pi_{;a b}\pi^{;a b} - \frac{1}{2} F^{a c} F_{a}\,^{d}X_{c d} \right) \right.\right.\\
+	&\left.  -G_{4X} \left(\pi_{;m}\,^{c}\pi_{;n c}  + \frac{1}{2}  F_{m}\,^{c} F_{n}^{d} X_{c d} + 2\Box{\pi} \pi_{;m n} - h^{a b} \pi_{;a m}\pi_{;b n} -  F^{b d}F_{b m}   X_{n d}\right)\right) +\\
+	& +\delta\pi \left(G_{4\pi X} \left(\left(\Box{\pi}\right)^{2} -\pi_{;a b}\pi^{;a b}- \frac{1}{2} F^{a d} F_{a}\,^{c} X_{c d}\right) -2h^{a b} \nabla_{a}(G_{4XX} \nabla_{b}{\pi}) \left(\Box{\pi}\right)^{2} -2h^{a b} G_{4XX} \nabla_{a}{\pi} \nabla_{b}({\Box{\pi}})\Box{\pi}+\right.\\
+	&+2h^{a b} \nabla_{a}\brwrap{(}{G_{4XX} \nabla_{b}{\pi}}{)} \pi_{;a b}\pi^{;a b} +2h^{a b} G_{4XX} \nabla_{a}{\pi}\nabla_{b}\left(\pi_{;a b}\pi^{;a b}\right) +h^{a b} \nabla_{a}(G_{4XX} \nabla_{b}{\pi}) F^{b c} F_{b}\,^{d} X_{c d} +\\
+	&  +h^{a b} G_{4XX} \nabla_{a}{\pi} \nabla_{b}\left(F^{b c} F_{b}\,^{d} X_{c d}\right) +2 \Box\left(G_{4X} \Box{\pi}\right) -\nabla^{c}(\nabla^{d}{G_{4X}}) \pi_{;c d} -2h^{a b}\nabla_{a}{G_{4X}} \nabla_{b}{\Box{\pi}}\\
+	& \left. -G_{4X} \Box(\Box{\pi}) - \nabla^{b}\brwrap{(}{\nabla^{d}\brwrap{(}{G_{4X} \nabla_{d}\brwrap{(}{\nabla_{b}{\pi}}{)}}{)}}{)} -\frac{1}{2} \nabla_{a}\brwrap{(}{G_{4X} F^{a d} F_{d}\,^{f}}{)} \nabla_{f}{\pi} +\frac{1}{2}G_{4X} F^{b d} F_{b}\,^{f} \pi_{;d f}  \right.\\
+	&\left.\left.- \frac{1}{2} \nabla_{a}\brwrap{(}{G_{4X} F^{a d} F_{d}\,^{f} \nabla_{f}{\pi}})\right) +2\left( h^{c d} \nabla_{a}{(G_{4X}} F^{a f} X_{d f})\right)\delta A_{c}  \right]  
+\end{align*}
+\end{footnotesize}
+
+
+\end{document}
