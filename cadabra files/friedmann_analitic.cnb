@@ -1,0 +1,529 @@
+{
+	"cell_id": 1780532779877659050,
+	"cells": [
+		{
+			"cell_id": 6036684404344440215,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 5257586254987939993,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here I expand all the conventions in the equations of motion from the file \"varying\" to then substitute the Friedman metric into them."
+				}
+			],
+			"hidden": true,
+			"source": "Here I expand all the conventions in the equations of motion from the file \"varying\" to then substitute the Friedman metric into them."
+		},
+		{
+			"cell_id": 16890704849064514905,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import sympy\nimport cdb.core.manip as man\nimport functions as fun\nimport varying as var"
+		},
+		{
+			"cell_id": 1718827776701936888,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,q,r,s,u,v,w,x,y,z#}::Indices(full,values={t,x,y}, position=independent).\n\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting."
+		},
+		{
+			"cell_id": 12988027899932518811,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "h_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\n\\delta^{m?}_{n?}::KroneckerDelta.\n\\delta_{m?}^{n?}::KroneckerDelta.\nF_{m? n?}::AntiSymmetric.\nG3_{m? n?}::Symmetric.\ndelh_{m n}::Symmetric.\ndelh^{m n}::Symmetric.\n\\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2})."
+		},
+		{
+			"cell_id": 17946806952774102588,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::Depends(\\nabla{#}, \\partial{#}).\nX::Depends(\\nabla{#}, \\partial{#}).\n\\phi::Depends(\\nabla{#}, \\partial{#}).\nA_{m?}::Depends(\\nabla{#}, \\partial{#}).\nh_{m n}::Depends(\\partial{#}).\nh^{m n}::Depends(\\partial{#}).\nG4::Depends(\\nabla{#}, \\partial{#}).\nG4p::Depends(\\nabla{#}, \\partial{#}).\nG4X::Depends(\\nabla{#}, \\partial{#}).\nG4XX::Depends(\\nabla{#}, \\partial{#}).\nK::Depends(\\nabla{#}, \\partial{#}).\nKp::Depends(\\nabla{#}, \\partial{#}).\nKX::Depends(\\nabla{#}, \\partial{#}).\nN::Depends(\\nabla{#}, \\partial{#}).\nNp::Depends(\\nabla{#}, \\partial{#}).\nNX::Depends(\\nabla{#}, \\partial{#}).\nF_{m n}::Depends(\\nabla{#}, \\partial{#}).\nF^{m n}::Depends(\\nabla{#}, \\partial{#})."
+		},
+		{
+			"cell_id": 1761020093182745260,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::LaTeXForm(\"\\pi\").\nG4p::LaTeXForm(\"G_{4\\pi}\").\nG4X::LaTeXForm(\"G_{4X}\").\nG4XX::LaTeXForm(\"G_{4XX}\").\nG4Xp::LaTeXForm(\"G_{4\\pi X}\").\nKp::LaTeXForm(\"K_{\\pi}\").\nKX::LaTeXForm(\"K_{X}\").\nN::LaTeXForm(\"F\").\nNp::LaTeXForm(\"F_{\\pi}\").\nNX::LaTeXForm(\"F_{X}\").\npi2::LaTeXForm(\"\\pi^{m n}\\pi_{m n}\").\t\nboxpi4::LaTeXForm(\"\\Box^{(4)}{\\pi}\").\ndelboxpi4::LaTeXForm(\"\\delta\\Box^{(4)}{\\pi}\").\npi24::LaTeXForm(\"\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\").\nmathcalG{#}::LaTeXForm(\"\\mathcal{G}\").\nmathcalP{#}::LaTeXForm(\"\\mathcal{P}\").\nmathcalA{#}::LaTeXForm(\"\\mathcal{A}\").\nmathcalphi{#}::LaTeXForm(\"\\Phi\")."
+		},
+		{
+			"cell_id": 6962164687534787648,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17934877480346956091,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Now I should substitute all notations and expand all nabla-operators as covariant derivatives:"
+				}
+			],
+			"hidden": true,
+			"source": "Now I should substitute all notations and expand all nabla-operators as covariant derivatives:"
+		},
+		{
+			"cell_id": 5603966370616495866,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4475882507436715495,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18332937536545310231,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = R3 -  1/4 F_{a q} F_{m n} h^{m a} h^{n q} (\\phi)**2-2(\\phi)**(-1) h^{m n} \\partial_{n}(\\phi) \\partial_{m}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = {R_{3}} - \\frac{1}{4}F_{a q} F_{m n} h^{m a} h^{n q} {\\phi}^{2}-2{\\phi}^{-1} h^{m n} \\partial_{n}{\\phi} \\partial_{m}{\\phi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 13839766512639986935,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4665011858111044995,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = R3 -  1/4 F_{a b} F_{c d} h^{c a} h^{d b} (\\phi)**2-2(\\phi)**(-1) h^{b a} \\partial_{a}(\\phi) \\partial_{b}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = {R_{3}} - \\frac{1}{4}F_{a b} F_{c d} h^{c a} h^{d b} {\\phi}^{2}-2{\\phi}^{-1} h^{b a} \\partial_{a}{\\phi} \\partial_{b}{\\phi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8105077924522660170,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8281648769432087299,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = R3 -  1/4 F_{a b} F_{c d} h^{a c} h^{b d} (\\phi)**2-2(\\phi)**(-1) h^{a b} \\partial_{a}(\\phi) \\partial_{b}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = {R_{3}} - \\frac{1}{4}F_{a b} F_{c d} h^{a c} h^{b d} {\\phi}^{2}-2{\\phi}^{-1} h^{a b} \\partial_{a}{\\phi} \\partial_{b}{\\phi}\\end{dmath*}"
+				}
+			],
+			"source": "ScalarCurvature = fun.expand_nabla((var.ScalarCurvature));\nrename_dummies(ScalarCurvature);\ncanonicalise(ScalarCurvature);"
+		},
+		{
+			"cell_id": 2653720273293959893,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13492084972504510469,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8079325208286820764,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Box(p) = h^{a b} (\\partial_{a}(\\partial_{b}(p))-\\Gamma^{y}_{a b} \\partial_{y}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box\\left(\\pi\\right) = h^{a b} \\left(\\partial_{a}\\left(\\partial_{b}{\\pi}\\right)-\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 4663192178100040167,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4539205423278945749,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "boxpi4 = h^{a b} (\\partial_{a b}(p)-\\Gamma^{y}_{a b} \\partial_{y}(p)) + (\\phi)**(-1) h^{m n} \\partial_{m}(\\phi) \\partial_{n}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box^{(4)}{\\pi} = h^{a b} \\left(\\partial_{a b}{\\pi}-\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}\\right)+{\\phi}^{-1} h^{m n} \\partial_{m}{\\phi} \\partial_{n}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8645496980990275161,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15589755541444928446,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi2 = h^{m a} h^{n b} (\\partial_{m}(\\partial_{n}(p))-\\Gamma^{y}_{m n} \\partial_{y}(p)) (\\partial_{a}(\\partial_{b}(p))-\\Gamma^{w}_{a b} \\partial_{w}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{m n}\\pi_{m n} = h^{m a} h^{n b} \\left(\\partial_{m}\\left(\\partial_{n}{\\pi}\\right)-\\Gamma^{y}\\,_{m n} \\partial_{y}{\\pi}\\right) \\left(\\partial_{a}\\left(\\partial_{b}{\\pi}\\right)-\\Gamma^{w}\\,_{a b} \\partial_{w}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 11790595252601923394,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15934432581621079085,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi24 = h^{m a} h^{n b} (\\partial_{m n}(p)-\\Gamma^{y}_{m n} \\partial_{y}(p)) (\\partial_{a b}(p)-\\Gamma^{w}_{a b} \\partial_{w}(p)) +  1/2 (\\phi)**2 h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\partial_{r}(p) \\partial_{s}(p) + (\\phi)**(-2) (h^{a q} \\partial_{q}(\\phi) \\partial_{a}(p))**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{\\mu \\nu}\\pi_{\\mu \\nu} = h^{m a} h^{n b} \\left(\\partial_{m n}{\\pi}-\\Gamma^{y}\\,_{m n} \\partial_{y}{\\pi}\\right) \\left(\\partial_{a b}{\\pi}-\\Gamma^{w}\\,_{a b} \\partial_{w}{\\pi}\\right)+\\frac{1}{2}{\\phi}^{2} h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\partial_{r}{\\pi} \\partial_{s}{\\pi}+{\\phi}^{-2} {\\left(h^{a q} \\partial_{q}{\\phi} \\partial_{a}{\\pi}\\right)}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 7251589453816645873,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13701053747641270748,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "X_{a b} = \\partial_{a}(p) \\partial_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}X_{a b} = \\partial_{a}{\\pi} \\partial_{b}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8195931671514029649,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6125923417090779308,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Z = h^{a b} \\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}Z = h^{a b} \\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "box3D = fun.expand_nabla((var.box3D));\nbox4D = fun.expand_nabla((var.box4D))\nsubstitute(box4D, box3D);\nsq3D = fun.expand_nabla((var.sq3D));\nsq4D = fun.expand_nabla((var.sq4D))\nsubstitute(sq4D, sq3D);\nX := X_{a b} = \\nabla_{a}{p}\\nabla_{b}{p}.\nfun.expand_nabla(X);\nZ:= Z = h^{a b} \\nabla_{a}{\\phi}\\nabla_{b}{p} \\phi **(-1).\nfun.expand_nabla(Z);"
+		},
+		{
+			"cell_id": 8253873911931069223,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4068371737565666301,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12642300390310606066,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "boxpi4 = h^{b c} (\\partial_{b c}(p)-\\Gamma^{a}_{b c} \\partial_{a}(p)) + (\\phi)**(-1) h^{a b} \\partial_{a}(\\phi) \\partial_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box^{(4)}{\\pi} = h^{b c} \\left(\\partial_{b c}{\\pi}-\\Gamma^{a}\\,_{b c} \\partial_{a}{\\pi}\\right)+{\\phi}^{-1} h^{a b} \\partial_{a}{\\phi} \\partial_{b}{\\pi}\\end{dmath*}"
+				}
+			],
+			"source": "rename_dummies(box4D);"
+		},
+		{
+			"cell_id": 10499162885660080941,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10632212125332651192,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14632992027707274431,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi24 = h^{b e} h^{c f} (\\partial_{b c}(p)-\\Gamma^{a}_{b c} \\partial_{a}(p)) (\\partial_{e f}(p)-\\Gamma^{d}_{e f} \\partial_{d}(p)) +  1/2 (\\phi)**2 h^{c a} h^{e b} F_{a b} F_{c d} h^{d f} \\partial_{e}(p) \\partial_{f}(p) + (\\phi)**(-2) (h^{b a} \\partial_{a}(\\phi) \\partial_{b}(p))**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{\\mu \\nu}\\pi_{\\mu \\nu} = h^{b e} h^{c f} \\left(\\partial_{b c}{\\pi}-\\Gamma^{a}\\,_{b c} \\partial_{a}{\\pi}\\right) \\left(\\partial_{e f}{\\pi}-\\Gamma^{d}\\,_{e f} \\partial_{d}{\\pi}\\right)+\\frac{1}{2}{\\phi}^{2} h^{c a} h^{e b} F_{a b} F_{c d} h^{d f} \\partial_{e}{\\pi} \\partial_{f}{\\pi}+{\\phi}^{-2} {\\left(h^{b a} \\partial_{a}{\\phi} \\partial_{b}{\\pi}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source": "rename_dummies(sq4D);"
+		},
+		{
+			"cell_id": 1130333969817579052,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15022695807447982389,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5373075312022731435,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{2}_{a b} =  -  1/2 h_{a b} N -  1/2 NX \\partial_{a}(p) \\partial_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{2}\\,_{a b} =  - \\frac{1}{2}h_{a b} F - \\frac{1}{2}F_{X} \\partial_{a}{\\pi} \\partial_{b}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 17641150450352463280,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10556648382773401378,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{2} = Np + h^{a b} (\\partial_{b}(NX \\partial_{a}(p))-\\Gamma^{y}_{b a} NX \\partial_{y}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{2} = F_{\\pi}+h^{a b} \\left(\\partial_{b}\\left(F_{X} \\partial_{a}{\\pi}\\right)-\\Gamma^{y}\\,_{b a} F_{X} \\partial_{y}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 13269618180949173351,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3617905563427060541,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{3}_{a b} =  1/2 K h^{c d} \\partial_{c}(\\phi) \\partial_{d}(p) (\\phi)**(-1) h_{a b} +  1/2 KX \\partial_{a}(p) \\partial_{b}(p) h^{c d} (\\partial_{c d}(p)-\\Gamma^{y}_{c d} \\partial_{y}(p)) -  1/2 \\partial_{c}(K) \\partial_{d}(p) h_{a b} h^{c d} +  1/2 KX h^{c d} \\partial_{c}(\\phi) \\partial_{d}(p) (\\phi)**(-1) \\partial_{a}(p) \\partial_{b}(p)-K \\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1) + \\partial_{a}(K) \\partial_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{3}\\,_{a b} = \\frac{1}{2}K h^{c d} \\partial_{c}{\\phi} \\partial_{d}{\\pi} {\\phi}^{-1} h_{a b}+\\frac{1}{2}K_{X} \\partial_{a}{\\pi} \\partial_{b}{\\pi} h^{c d} \\left(\\partial_{c d}{\\pi}-\\Gamma^{y}\\,_{c d} \\partial_{y}{\\pi}\\right) - \\frac{1}{2}\\partial_{c}{K} \\partial_{d}{\\pi} h_{a b} h^{c d}+\\frac{1}{2}K_{X} h^{c d} \\partial_{c}{\\phi} \\partial_{d}{\\pi} {\\phi}^{-1} \\partial_{a}{\\pi} \\partial_{b}{\\pi}-K \\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1}+\\partial_{a}{K} \\partial_{b}{\\pi}\\end{dmath*}"
+				}
+			],
+			"source": "G2 = fun.expand_nabla(var.mathcalG2);\nP2 = fun.expand_nabla(var.mathcalP2);\nG3 = substitute(var.mathcalG3, box3D)\nsubstitute(G3, X)\nsubstitute(G3, Z)\nfun.expand_nabla(G3)\nG3 := @[G3];"
+		},
+		{
+			"cell_id": 11060377372695411014,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17736835392302602772,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4802831321424021973,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{3} = -(\\partial_{b c}(K)-\\Gamma^{a}_{b c} \\partial_{a}(K)) h^{b c}-Kp (\\partial_{b c}(p)-\\Gamma^{a}_{b c} \\partial_{a}(p)) h^{b c}-Kp \\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1) h^{a b}-(\\partial_{d}(KX (\\partial_{b c}(p)-\\Gamma^{a}_{b c} \\partial_{a}(p)) \\partial_{f}(p))-\\Gamma^{a}_{d c} KX (\\partial_{a b}(p)-\\Gamma^{e}_{a b} \\partial_{e}(p)) \\partial_{f}(p)-\\Gamma^{a}_{d f} KX (\\partial_{b c}(p)-\\Gamma^{e}_{b c} \\partial_{e}(p)) \\partial_{a}(p)-\\Gamma^{a}_{d b} KX (\\partial_{a c}(p)-\\Gamma^{e}_{a c} \\partial_{e}(p)) \\partial_{f}(p)) h^{d f} h^{b c}-(\\partial_{b}(KX \\partial_{e}(\\phi) \\partial_{c}(p) \\partial_{d}(p) (\\phi)**(-1))-\\Gamma^{a}_{b c} KX \\partial_{e}(\\phi) \\partial_{d}(p) \\partial_{a}(p) (\\phi)**(-1)-\\Gamma^{a}_{b d} KX \\partial_{e}(\\phi) \\partial_{c}(p) \\partial_{a}(p) (\\phi)**(-1)-\\Gamma^{a}_{b e} KX \\partial_{a}(\\phi) \\partial_{c}(p) \\partial_{d}(p) (\\phi)**(-1)) h^{b c} h^{e d} + (\\partial_{b}(K \\partial_{c}(\\phi) (\\phi)**(-1))-\\Gamma^{a}_{b c} K \\partial_{a}(\\phi) (\\phi)**(-1)) h^{b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{3} = -\\left(\\partial_{b c}{K}-\\Gamma^{a}\\,_{b c} \\partial_{a}{K}\\right) h^{b c}-K_{\\pi} \\left(\\partial_{b c}{\\pi}-\\Gamma^{a}\\,_{b c} \\partial_{a}{\\pi}\\right) h^{b c}-K_{\\pi} \\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1} h^{a b}-\\left(\\partial_{d}\\left(K_{X} \\left(\\partial_{b c}{\\pi}-\\Gamma^{a}\\,_{b c} \\partial_{a}{\\pi}\\right) \\partial_{f}{\\pi}\\right)-\\Gamma^{a}\\,_{d c} K_{X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{e}\\,_{a b} \\partial_{e}{\\pi}\\right) \\partial_{f}{\\pi}-\\Gamma^{a}\\,_{d f} K_{X} \\left(\\partial_{b c}{\\pi}-\\Gamma^{e}\\,_{b c} \\partial_{e}{\\pi}\\right) \\partial_{a}{\\pi}-\\Gamma^{a}\\,_{d b} K_{X} \\left(\\partial_{a c}{\\pi}-\\Gamma^{e}\\,_{a c} \\partial_{e}{\\pi}\\right) \\partial_{f}{\\pi}\\right) h^{d f} h^{b c}-\\left(\\partial_{b}\\left(K_{X} \\partial_{e}{\\phi} \\partial_{c}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-1}\\right)-\\Gamma^{a}\\,_{b c} K_{X} \\partial_{e}{\\phi} \\partial_{d}{\\pi} \\partial_{a}{\\pi} {\\phi}^{-1}-\\Gamma^{a}\\,_{b d} K_{X} \\partial_{e}{\\phi} \\partial_{c}{\\pi} \\partial_{a}{\\pi} {\\phi}^{-1}-\\Gamma^{a}\\,_{b e} K_{X} \\partial_{a}{\\phi} \\partial_{c}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-1}\\right) h^{b c} h^{e d}+\\left(\\partial_{b}\\left(K \\partial_{c}{\\phi} {\\phi}^{-1}\\right)-\\Gamma^{a}\\,_{b c} K \\partial_{a}{\\phi} {\\phi}^{-1}\\right) h^{b c}\\end{dmath*}"
+				}
+			],
+			"source": "P3 = fun.expand_nabla(var.mathcalP3)\nrename_dummies(P3)\ncanonicalise(P3)\nP3 := @[P3];"
+		},
+		{
+			"cell_id": 8702584295029873676,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17497673672614702526,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3400290750256593923,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalphi^{3} = K \\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-2) h^{a b} + (\\partial_{a}(K \\partial_{b}(p) (\\phi)**(-1))-\\Gamma^{y}_{a b} K \\partial_{y}(p) (\\phi)**(-1)) h^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Phi^{3} = K \\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-2} h^{a b}+\\left(\\partial_{a}\\left(K \\partial_{b}{\\pi} {\\phi}^{-1}\\right)-\\Gamma^{y}\\,_{a b} K \\partial_{y}{\\pi} {\\phi}^{-1}\\right) h^{a b}\\end{dmath*}"
+				}
+			],
+			"source": "phi3 = fun.expand_nabla(var.mathcalphi3);"
+		},
+		{
+			"cell_id": 12573400221653314242,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7346581725991173251,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16192463509304223799,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = G4 R_{a b}-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1)-\\nabla_{a}(\\nabla_{b}(G4)) + \\nabla_{c}(\\nabla_{d}(G4)) h^{c d} h_{a b} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\nabla_{a}(G4X \\nabla_{b}(p) boxpi4) + \\nabla_{c}(G4X \\nabla_{d}(p) boxpi4) h_{a b} h^{c d} + \\nabla_{c}(G4X \\nabla_{d}(\\nabla_{a}(p)) \\nabla_{b}(p)) h^{c d} + \\nabla_{d}(G4X \\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(p)) h^{d c}-\\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2\\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(\\nabla_{d}(p)) h^{c d} -  1/2 F_{a c} F_{b d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\nabla_{a}(\\phi) \\nabla_{c}(\\phi) \\nabla_{b}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{c d} + F_{a e} F_{c d} \\nabla_{b}(p) \\nabla_{f}(p) (\\phi)**2 h^{e c} h^{d f}) + G4XX ( -  1/2 \\nabla_{a}(p) \\nabla_{b}(p) (boxpi4)**2 +  1/2 \\nabla_{a}(p) \\nabla_{b}(p) pi24) + G4X boxpi4 (2\\nabla_{a}(\\nabla_{b}(p)) + 2\\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1)) + R ( -  1/2 G4 h_{a b} -  1/2 G4X \\nabla_{a}(p) \\nabla_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = {G_{4}} R_{a b}-2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1}-\\nabla_{a}\\left(\\nabla_{b}\\left({G_{4}}\\right)\\right)+\\nabla_{c}\\left(\\nabla_{d}\\left({G_{4}}\\right)\\right) h^{c d} h_{a b} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+\\nabla_{c}\\left(G_{4X} \\nabla_{d}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{c d}+\\nabla_{c}\\left(G_{4X} \\nabla_{d}\\left(\\nabla_{a}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{c d}+\\nabla_{d}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{d c}-\\nabla_{c}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{c d}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}\\left(\\nabla_{d}{\\pi}\\right) h^{c d} - \\frac{1}{2}F_{a c} F_{b d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\nabla_{a}{\\phi} \\nabla_{c}{\\phi} \\nabla_{b}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a e} F_{c d} \\nabla_{b}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{e c} h^{d f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\Box^{(4)}{\\pi} \\left(2\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)+2\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1}\\right)+R \\left( - \\frac{1}{2}{G_{4}} h_{a b} - \\frac{1}{2}G_{4X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "G4 = factor_out(var.mathcalG4, $R$);"
+		},
+		{
+			"cell_id": 15914844774136910068,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5525327509900271592,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18404249162866541268,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = G4 R_{a b}-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1)-\\nabla_{a}(\\nabla_{b}(G4)) + \\nabla_{c}(\\nabla_{d}(G4)) h_{a b} h^{c d} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\nabla_{a}(G4X \\nabla_{b}(p) boxpi4) + \\nabla_{c}(G4X \\nabla_{d}(p) boxpi4) h_{a b} h^{c d} + \\nabla_{c}(G4X \\nabla_{d}(\\nabla_{a}(p)) \\nabla_{b}(p)) h^{c d} + \\nabla_{c}(G4X \\nabla_{a}(\\nabla_{d}(p)) \\nabla_{b}(p)) h^{c d}-\\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2\\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(\\nabla_{d}(p)) h^{c d} -  1/2 F_{a c} F_{b d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\nabla_{a}(\\phi) \\nabla_{c}(\\phi) \\nabla_{b}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{c d} + F_{a c} F_{d e} \\nabla_{b}(p) \\nabla_{f}(p) (\\phi)**2 h^{c d} h^{e f}) + G4XX ( -  1/2 \\nabla_{a}(p) \\nabla_{b}(p) (boxpi4)**2 +  1/2 \\nabla_{a}(p) \\nabla_{b}(p) pi24) + G4X (2\\nabla_{a}(\\nabla_{b}(p)) + 2\\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1)) boxpi4 + R ( -  1/2 G4 h_{a b} -  1/2 G4X \\nabla_{a}(p) \\nabla_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = {G_{4}} R_{a b}-2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1}-\\nabla_{a}\\left(\\nabla_{b}\\left({G_{4}}\\right)\\right)+\\nabla_{c}\\left(\\nabla_{d}\\left({G_{4}}\\right)\\right) h_{a b} h^{c d} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+\\nabla_{c}\\left(G_{4X} \\nabla_{d}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{c d}+\\nabla_{c}\\left(G_{4X} \\nabla_{d}\\left(\\nabla_{a}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{c d}+\\nabla_{c}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{d}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{c d}-\\nabla_{c}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{c d}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}\\left(\\nabla_{d}{\\pi}\\right) h^{c d} - \\frac{1}{2}F_{a c} F_{b d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\nabla_{a}{\\phi} \\nabla_{c}{\\phi} \\nabla_{b}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a c} F_{d e} \\nabla_{b}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{c d} h^{e f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\left(2\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)+2\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1}\\right) \\Box^{(4)}{\\pi}+R \\left( - \\frac{1}{2}{G_{4}} h_{a b} - \\frac{1}{2}G_{4X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "rename_dummies(G4)\ncanonicalise(G4)\nsort_product(G4);"
+		},
+		{
+			"cell_id": 5450721751036825202,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16858692485416865336,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2826561769127737870,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = G4 R_{a b}-2G4 \\partial_{a}(\\phi) \\partial_{b}(\\phi) (\\phi)**(-1)-\\partial_{a}(\\partial_{b}(G4)) + \\Gamma^{y}_{a b} \\partial_{y}(G4) + (\\partial_{c}(\\partial_{d}(G4))-\\Gamma^{y}_{c d} \\partial_{y}(G4)) h_{a b} h^{c d} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\partial_{a}(G4X \\partial_{b}(p) boxpi4) + 2\\Gamma^{y}_{a b} G4X \\partial_{y}(p) boxpi4 + (\\partial_{c}(G4X \\partial_{d}(p) boxpi4)-\\Gamma^{y}_{c d} G4X \\partial_{y}(p) boxpi4) h_{a b} h^{c d} + (\\partial_{c}(G4X (\\partial_{d a}(p)-\\Gamma^{y}_{d a} \\partial_{y}(p)) \\partial_{b}(p))-\\Gamma^{w}_{c d} G4X (\\partial_{w a}(p)-\\Gamma^{y}_{w a} \\partial_{y}(p)) \\partial_{b}(p)-\\Gamma^{w}_{c a} G4X (\\partial_{d w}(p)-\\Gamma^{y}_{d w} \\partial_{y}(p)) \\partial_{b}(p)-\\Gamma^{w}_{c b} G4X (\\partial_{d a}(p)-\\Gamma^{y}_{d a} \\partial_{y}(p)) \\partial_{w}(p)) h^{c d} + (\\partial_{c}(G4X (\\partial_{a d}(p)-\\Gamma^{y}_{a d} \\partial_{y}(p)) \\partial_{b}(p))-\\Gamma^{w}_{c d} G4X (\\partial_{a w}(p)-\\Gamma^{y}_{a w} \\partial_{y}(p)) \\partial_{b}(p)-\\Gamma^{w}_{c a} G4X (\\partial_{w d}(p)-\\Gamma^{y}_{w d} \\partial_{y}(p)) \\partial_{b}(p)-\\Gamma^{w}_{c b} G4X (\\partial_{a d}(p)-\\Gamma^{y}_{a d} \\partial_{y}(p)) \\partial_{w}(p)) h^{c d}-(\\partial_{c}(G4X (\\partial_{a b}(p)-\\Gamma^{y}_{a b} \\partial_{y}(p)) \\partial_{d}(p))-\\Gamma^{w}_{c d} G4X (\\partial_{a b}(p)-\\Gamma^{y}_{a b} \\partial_{y}(p)) \\partial_{w}(p)-\\Gamma^{w}_{c b} G4X (\\partial_{a w}(p)-\\Gamma^{y}_{a w} \\partial_{y}(p)) \\partial_{d}(p)-\\Gamma^{w}_{c a} G4X (\\partial_{w b}(p)-\\Gamma^{y}_{w b} \\partial_{y}(p)) \\partial_{d}(p)) h^{c d} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2(\\partial_{a}(\\partial_{c}(p))-\\Gamma^{y}_{a c} \\partial_{y}(p)) (\\partial_{b}(\\partial_{d}(p))-\\Gamma^{w}_{b d} \\partial_{w}(p)) h^{c d} -  1/2 F_{a c} F_{b d} \\partial_{e}(p) \\partial_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\partial_{a}(\\phi) \\partial_{c}(\\phi) \\partial_{b}(p) \\partial_{d}(p) (\\phi)**(-2) h^{c d} + F_{a c} F_{d e} \\partial_{b}(p) \\partial_{f}(p) (\\phi)**2 h^{c d} h^{e f}) + G4XX ( -  1/2 \\partial_{a}(p) \\partial_{b}(p) (boxpi4)**2 +  1/2 \\partial_{a}(p) \\partial_{b}(p) pi24) + G4X (2\\partial_{a}(\\partial_{b}(p))-2\\Gamma^{y}_{a b} \\partial_{y}(p) + 2\\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1)) boxpi4 + R ( -  1/2 G4 h_{a b} -  1/2 G4X \\partial_{a}(p) \\partial_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = {G_{4}} R_{a b}-2{G_{4}} \\partial_{a}{\\phi} \\partial_{b}{\\phi} {\\phi}^{-1}-\\partial_{a}\\left(\\partial_{b}\\left({G_{4}}\\right)\\right)+\\Gamma^{y}\\,_{a b} \\partial_{y}\\left({G_{4}}\\right)+\\left(\\partial_{c}\\left(\\partial_{d}\\left({G_{4}}\\right)\\right)-\\Gamma^{y}\\,_{c d} \\partial_{y}\\left({G_{4}}\\right)\\right) h_{a b} h^{c d} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\partial_{a}\\left(G_{4X} \\partial_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+2\\Gamma^{y}\\,_{a b} G_{4X} \\partial_{y}{\\pi} \\Box^{(4)}{\\pi}+\\left(\\partial_{c}\\left(G_{4X} \\partial_{d}{\\pi} \\Box^{(4)}{\\pi}\\right)-\\Gamma^{y}\\,_{c d} G_{4X} \\partial_{y}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{c d}+\\left(\\partial_{c}\\left(G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{y}\\,_{d a} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{w}\\,_{c d} G_{4X} \\left(\\partial_{w a}{\\pi}-\\Gamma^{y}\\,_{w a} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{w}\\,_{c a} G_{4X} \\left(\\partial_{d w}{\\pi}-\\Gamma^{y}\\,_{d w} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{w}\\,_{c b} G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{y}\\,_{d a} \\partial_{y}{\\pi}\\right) \\partial_{w}{\\pi}\\right) h^{c d}+\\left(\\partial_{c}\\left(G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{y}\\,_{a d} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{w}\\,_{c d} G_{4X} \\left(\\partial_{a w}{\\pi}-\\Gamma^{y}\\,_{a w} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{w}\\,_{c a} G_{4X} \\left(\\partial_{w d}{\\pi}-\\Gamma^{y}\\,_{w d} \\partial_{y}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{w}\\,_{c b} G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{y}\\,_{a d} \\partial_{y}{\\pi}\\right) \\partial_{w}{\\pi}\\right) h^{c d}-\\left(\\partial_{c}\\left(G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}\\right) \\partial_{d}{\\pi}\\right)-\\Gamma^{w}\\,_{c d} G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}\\right) \\partial_{w}{\\pi}-\\Gamma^{w}\\,_{c b} G_{4X} \\left(\\partial_{a w}{\\pi}-\\Gamma^{y}\\,_{a w} \\partial_{y}{\\pi}\\right) \\partial_{d}{\\pi}-\\Gamma^{w}\\,_{c a} G_{4X} \\left(\\partial_{w b}{\\pi}-\\Gamma^{y}\\,_{w b} \\partial_{y}{\\pi}\\right) \\partial_{d}{\\pi}\\right) h^{c d}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\left(\\partial_{a}\\left(\\partial_{c}{\\pi}\\right)-\\Gamma^{y}\\,_{a c} \\partial_{y}{\\pi}\\right) \\left(\\partial_{b}\\left(\\partial_{d}{\\pi}\\right)-\\Gamma^{w}\\,_{b d} \\partial_{w}{\\pi}\\right) h^{c d} - \\frac{1}{2}F_{a c} F_{b d} \\partial_{e}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\partial_{a}{\\phi} \\partial_{c}{\\phi} \\partial_{b}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a c} F_{d e} \\partial_{b}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c d} h^{e f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\left(2\\partial_{a}\\left(\\partial_{b}{\\pi}\\right)-2\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}+2\\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1}\\right) \\Box^{(4)}{\\pi}+R \\left( - \\frac{1}{2}{G_{4}} h_{a b} - \\frac{1}{2}G_{4X} \\partial_{a}{\\pi} \\partial_{b}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "fun.expand_nabla(G4);"
+		},
+		{
+			"cell_id": 6157682605165009488,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13304367240017354661,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 870557603062216273,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = G4 R_{a b}-2G4 \\partial_{a}(\\phi) \\partial_{b}(\\phi) (\\phi)**(-1)-\\partial_{a}(\\partial_{b}(G4)) + \\Gamma^{c}_{a b} \\partial_{c}(G4) + (\\partial_{d}(\\partial_{e}(G4))-\\Gamma^{c}_{d e} \\partial_{c}(G4)) h_{a b} h^{d e} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\partial_{a}(G4X \\partial_{b}(p) boxpi4) + 2\\Gamma^{c}_{a b} G4X \\partial_{c}(p) boxpi4 + (\\partial_{d}(G4X \\partial_{e}(p) boxpi4)-\\Gamma^{c}_{d e} G4X \\partial_{c}(p) boxpi4) h_{a b} h^{d e} + (\\partial_{e}(G4X (\\partial_{d a}(p)-\\Gamma^{c}_{d a} \\partial_{c}(p)) \\partial_{b}(p))-\\Gamma^{c}_{e d} G4X (\\partial_{c a}(p)-\\Gamma^{f}_{c a} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e a} G4X (\\partial_{d c}(p)-\\Gamma^{f}_{d c} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e b} G4X (\\partial_{d a}(p)-\\Gamma^{f}_{d a} \\partial_{f}(p)) \\partial_{c}(p)) h^{e d} + (\\partial_{e}(G4X (\\partial_{a d}(p)-\\Gamma^{c}_{a d} \\partial_{c}(p)) \\partial_{b}(p))-\\Gamma^{c}_{e d} G4X (\\partial_{a c}(p)-\\Gamma^{f}_{a c} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e a} G4X (\\partial_{c d}(p)-\\Gamma^{f}_{c d} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e b} G4X (\\partial_{a d}(p)-\\Gamma^{f}_{a d} \\partial_{f}(p)) \\partial_{c}(p)) h^{e d}-(\\partial_{d}(G4X (\\partial_{a b}(p)-\\Gamma^{c}_{a b} \\partial_{c}(p)) \\partial_{e}(p))-\\Gamma^{c}_{d e} G4X (\\partial_{a b}(p)-\\Gamma^{f}_{a b} \\partial_{f}(p)) \\partial_{c}(p)-\\Gamma^{c}_{d b} G4X (\\partial_{a c}(p)-\\Gamma^{f}_{a c} \\partial_{f}(p)) \\partial_{e}(p)-\\Gamma^{c}_{d a} G4X (\\partial_{c b}(p)-\\Gamma^{f}_{c b} \\partial_{f}(p)) \\partial_{e}(p)) h^{d e} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2(\\partial_{a}(\\partial_{d}(p))-\\Gamma^{c}_{a d} \\partial_{c}(p)) (\\partial_{b}(\\partial_{f}(p))-\\Gamma^{e}_{b f} \\partial_{e}(p)) h^{d f} -  1/2 F_{a c} F_{b d} \\partial_{e}(p) \\partial_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\partial_{a}(\\phi) \\partial_{c}(\\phi) \\partial_{b}(p) \\partial_{d}(p) (\\phi)**(-2) h^{c d} + F_{a c} F_{d e} \\partial_{b}(p) \\partial_{f}(p) (\\phi)**2 h^{c d} h^{e f}) + G4XX ( -  1/2 \\partial_{a}(p) \\partial_{b}(p) (boxpi4)**2 +  1/2 \\partial_{a}(p) \\partial_{b}(p) pi24) + G4X (2\\partial_{a}(\\partial_{b}(p))-2\\Gamma^{c}_{a b} \\partial_{c}(p) + 2\\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1)) boxpi4 + R ( -  1/2 G4 h_{a b} -  1/2 G4X \\partial_{a}(p) \\partial_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = {G_{4}} R_{a b}-2{G_{4}} \\partial_{a}{\\phi} \\partial_{b}{\\phi} {\\phi}^{-1}-\\partial_{a}\\left(\\partial_{b}\\left({G_{4}}\\right)\\right)+\\Gamma^{c}\\,_{a b} \\partial_{c}\\left({G_{4}}\\right)+\\left(\\partial_{d}\\left(\\partial_{e}\\left({G_{4}}\\right)\\right)-\\Gamma^{c}\\,_{d e} \\partial_{c}\\left({G_{4}}\\right)\\right) h_{a b} h^{d e} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\partial_{a}\\left(G_{4X} \\partial_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+2\\Gamma^{c}\\,_{a b} G_{4X} \\partial_{c}{\\pi} \\Box^{(4)}{\\pi}+\\left(\\partial_{d}\\left(G_{4X} \\partial_{e}{\\pi} \\Box^{(4)}{\\pi}\\right)-\\Gamma^{c}\\,_{d e} G_{4X} \\partial_{c}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{d e}+\\left(\\partial_{e}\\left(G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{c}\\,_{d a} \\partial_{c}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{c}\\,_{e d} G_{4X} \\left(\\partial_{c a}{\\pi}-\\Gamma^{f}\\,_{c a} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e a} G_{4X} \\left(\\partial_{d c}{\\pi}-\\Gamma^{f}\\,_{d c} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e b} G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{f}\\,_{d a} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}\\right) h^{e d}+\\left(\\partial_{e}\\left(G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{c}\\,_{a d} \\partial_{c}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{c}\\,_{e d} G_{4X} \\left(\\partial_{a c}{\\pi}-\\Gamma^{f}\\,_{a c} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e a} G_{4X} \\left(\\partial_{c d}{\\pi}-\\Gamma^{f}\\,_{c d} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e b} G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{f}\\,_{a d} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}\\right) h^{e d}-\\left(\\partial_{d}\\left(G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{c}\\,_{a b} \\partial_{c}{\\pi}\\right) \\partial_{e}{\\pi}\\right)-\\Gamma^{c}\\,_{d e} G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{f}\\,_{a b} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}-\\Gamma^{c}\\,_{d b} G_{4X} \\left(\\partial_{a c}{\\pi}-\\Gamma^{f}\\,_{a c} \\partial_{f}{\\pi}\\right) \\partial_{e}{\\pi}-\\Gamma^{c}\\,_{d a} G_{4X} \\left(\\partial_{c b}{\\pi}-\\Gamma^{f}\\,_{c b} \\partial_{f}{\\pi}\\right) \\partial_{e}{\\pi}\\right) h^{d e}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\left(\\partial_{a}\\left(\\partial_{d}{\\pi}\\right)-\\Gamma^{c}\\,_{a d} \\partial_{c}{\\pi}\\right) \\left(\\partial_{b}\\left(\\partial_{f}{\\pi}\\right)-\\Gamma^{e}\\,_{b f} \\partial_{e}{\\pi}\\right) h^{d f} - \\frac{1}{2}F_{a c} F_{b d} \\partial_{e}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\partial_{a}{\\phi} \\partial_{c}{\\phi} \\partial_{b}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a c} F_{d e} \\partial_{b}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c d} h^{e f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\left(2\\partial_{a}\\left(\\partial_{b}{\\pi}\\right)-2\\Gamma^{c}\\,_{a b} \\partial_{c}{\\pi}+2\\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1}\\right) \\Box^{(4)}{\\pi}+R \\left( - \\frac{1}{2}{G_{4}} h_{a b} - \\frac{1}{2}G_{4X} \\partial_{a}{\\pi} \\partial_{b}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "rename_dummies(G4);"
+		},
+		{
+			"cell_id": 11681812989145300116,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5527795039909551951,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4109223992342579370,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = G4 R_{a b}-2G4 \\partial_{a}(\\phi) \\partial_{b}(\\phi) (\\phi)**(-1)-\\partial_{a b}(G4) + \\Gamma^{c}_{a b} \\partial_{c}(G4) + (\\partial_{d e}(G4)-\\Gamma^{c}_{d e} \\partial_{c}(G4)) h_{a b} h^{d e} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\partial_{a}(G4X \\partial_{b}(p) boxpi4) + 2\\Gamma^{c}_{a b} G4X \\partial_{c}(p) boxpi4 + (\\partial_{d}(G4X \\partial_{e}(p) boxpi4)-\\Gamma^{c}_{d e} G4X \\partial_{c}(p) boxpi4) h_{a b} h^{d e} + (\\partial_{e}(G4X (\\partial_{d a}(p)-\\Gamma^{c}_{d a} \\partial_{c}(p)) \\partial_{b}(p))-\\Gamma^{c}_{e d} G4X (\\partial_{c a}(p)-\\Gamma^{f}_{c a} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e a} G4X (\\partial_{d c}(p)-\\Gamma^{f}_{d c} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e b} G4X (\\partial_{d a}(p)-\\Gamma^{f}_{d a} \\partial_{f}(p)) \\partial_{c}(p)) h^{e d} + (\\partial_{e}(G4X (\\partial_{a d}(p)-\\Gamma^{c}_{a d} \\partial_{c}(p)) \\partial_{b}(p))-\\Gamma^{c}_{e d} G4X (\\partial_{a c}(p)-\\Gamma^{f}_{a c} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e a} G4X (\\partial_{c d}(p)-\\Gamma^{f}_{c d} \\partial_{f}(p)) \\partial_{b}(p)-\\Gamma^{c}_{e b} G4X (\\partial_{a d}(p)-\\Gamma^{f}_{a d} \\partial_{f}(p)) \\partial_{c}(p)) h^{e d}-(\\partial_{d}(G4X (\\partial_{a b}(p)-\\Gamma^{c}_{a b} \\partial_{c}(p)) \\partial_{e}(p))-\\Gamma^{c}_{d e} G4X (\\partial_{a b}(p)-\\Gamma^{f}_{a b} \\partial_{f}(p)) \\partial_{c}(p)-\\Gamma^{c}_{d b} G4X (\\partial_{a c}(p)-\\Gamma^{f}_{a c} \\partial_{f}(p)) \\partial_{e}(p)-\\Gamma^{c}_{d a} G4X (\\partial_{c b}(p)-\\Gamma^{f}_{c b} \\partial_{f}(p)) \\partial_{e}(p)) h^{d e} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2(\\partial_{a d}(p)-\\Gamma^{c}_{a d} \\partial_{c}(p)) (\\partial_{b f}(p)-\\Gamma^{e}_{b f} \\partial_{e}(p)) h^{d f} -  1/2 F_{a c} F_{b d} \\partial_{e}(p) \\partial_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\partial_{a}(\\phi) \\partial_{c}(\\phi) \\partial_{b}(p) \\partial_{d}(p) (\\phi)**(-2) h^{c d} + F_{a c} F_{d e} \\partial_{b}(p) \\partial_{f}(p) (\\phi)**2 h^{c d} h^{e f}) + G4XX ( -  1/2 \\partial_{a}(p) \\partial_{b}(p) (boxpi4)**2 +  1/2 \\partial_{a}(p) \\partial_{b}(p) pi24) + G4X (2\\partial_{a b}(p)-2\\Gamma^{c}_{a b} \\partial_{c}(p) + 2\\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-1)) boxpi4 + R ( -  1/2 G4 h_{a b} -  1/2 G4X \\partial_{a}(p) \\partial_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = {G_{4}} R_{a b}-2{G_{4}} \\partial_{a}{\\phi} \\partial_{b}{\\phi} {\\phi}^{-1}-\\partial_{a b}\\left({G_{4}}\\right)+\\Gamma^{c}\\,_{a b} \\partial_{c}\\left({G_{4}}\\right)+\\left(\\partial_{d e}\\left({G_{4}}\\right)-\\Gamma^{c}\\,_{d e} \\partial_{c}\\left({G_{4}}\\right)\\right) h_{a b} h^{d e} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\partial_{a}\\left(G_{4X} \\partial_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+2\\Gamma^{c}\\,_{a b} G_{4X} \\partial_{c}{\\pi} \\Box^{(4)}{\\pi}+\\left(\\partial_{d}\\left(G_{4X} \\partial_{e}{\\pi} \\Box^{(4)}{\\pi}\\right)-\\Gamma^{c}\\,_{d e} G_{4X} \\partial_{c}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{d e}+\\left(\\partial_{e}\\left(G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{c}\\,_{d a} \\partial_{c}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{c}\\,_{e d} G_{4X} \\left(\\partial_{c a}{\\pi}-\\Gamma^{f}\\,_{c a} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e a} G_{4X} \\left(\\partial_{d c}{\\pi}-\\Gamma^{f}\\,_{d c} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e b} G_{4X} \\left(\\partial_{d a}{\\pi}-\\Gamma^{f}\\,_{d a} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}\\right) h^{e d}+\\left(\\partial_{e}\\left(G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{c}\\,_{a d} \\partial_{c}{\\pi}\\right) \\partial_{b}{\\pi}\\right)-\\Gamma^{c}\\,_{e d} G_{4X} \\left(\\partial_{a c}{\\pi}-\\Gamma^{f}\\,_{a c} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e a} G_{4X} \\left(\\partial_{c d}{\\pi}-\\Gamma^{f}\\,_{c d} \\partial_{f}{\\pi}\\right) \\partial_{b}{\\pi}-\\Gamma^{c}\\,_{e b} G_{4X} \\left(\\partial_{a d}{\\pi}-\\Gamma^{f}\\,_{a d} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}\\right) h^{e d}-\\left(\\partial_{d}\\left(G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{c}\\,_{a b} \\partial_{c}{\\pi}\\right) \\partial_{e}{\\pi}\\right)-\\Gamma^{c}\\,_{d e} G_{4X} \\left(\\partial_{a b}{\\pi}-\\Gamma^{f}\\,_{a b} \\partial_{f}{\\pi}\\right) \\partial_{c}{\\pi}-\\Gamma^{c}\\,_{d b} G_{4X} \\left(\\partial_{a c}{\\pi}-\\Gamma^{f}\\,_{a c} \\partial_{f}{\\pi}\\right) \\partial_{e}{\\pi}-\\Gamma^{c}\\,_{d a} G_{4X} \\left(\\partial_{c b}{\\pi}-\\Gamma^{f}\\,_{c b} \\partial_{f}{\\pi}\\right) \\partial_{e}{\\pi}\\right) h^{d e}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\left(\\partial_{a d}{\\pi}-\\Gamma^{c}\\,_{a d} \\partial_{c}{\\pi}\\right) \\left(\\partial_{b f}{\\pi}-\\Gamma^{e}\\,_{b f} \\partial_{e}{\\pi}\\right) h^{d f} - \\frac{1}{2}F_{a c} F_{b d} \\partial_{e}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\partial_{a}{\\phi} \\partial_{c}{\\phi} \\partial_{b}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a c} F_{d e} \\partial_{b}{\\pi} \\partial_{f}{\\pi} {\\phi}^{2} h^{c d} h^{e f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\partial_{a}{\\pi} \\partial_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\left(2\\partial_{a b}{\\pi}-2\\Gamma^{c}\\,_{a b} \\partial_{c}{\\pi}+2\\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-1}\\right) \\Box^{(4)}{\\pi}+R \\left( - \\frac{1}{2}{G_{4}} h_{a b} - \\frac{1}{2}G_{4X} \\partial_{a}{\\pi} \\partial_{b}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "G4:= @[G4];"
+		},
+		{
+			"cell_id": 212575617544715262,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 18423314454143436765,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10920502860215086916,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{4} = G4p R + (\\partial_{a}(G4X R \\partial_{b}(p))-\\Gamma^{y}_{a b} G4X R \\partial_{y}(p)) h^{a b} + G4Xp (boxpi4)**2-G4Xp pi24 + (\\partial_{a}(G4XX \\partial_{b}(p) (boxpi4)**2)-\\Gamma^{y}_{a b} G4XX \\partial_{y}(p) (boxpi4)**2) h^{a b}-(\\partial_{a}(G4XX \\partial_{b}(p) pi24)-\\Gamma^{y}_{a b} G4XX \\partial_{y}(p) pi24) h^{a b}-2(\\partial_{a}(G4X \\partial_{b}(\\phi) (\\phi)**(-1) boxpi4)-\\Gamma^{y}_{a b} G4X \\partial_{y}(\\phi) (\\phi)**(-1) boxpi4) h^{a b} + 2(\\partial_{a b}(G4X boxpi4)-\\Gamma^{y}_{a b} \\partial_{y}(G4X boxpi4)) h^{a b}-2(\\partial_{a}((\\partial_{b}(G4X (\\partial_{c d}(p)-\\Gamma^{y}_{c d} \\partial_{y}(p)))-\\Gamma^{x}_{b c} G4X (\\partial_{x d}(p)-\\Gamma^{y}_{x d} \\partial_{y}(p))-\\Gamma^{x}_{b d} G4X (\\partial_{c x}(p)-\\Gamma^{y}_{c x} \\partial_{y}(p))))-\\Gamma^{w}_{a c} (\\partial_{b}(G4X (\\partial_{w d}(p)-\\Gamma^{y}_{w d} \\partial_{y}(p)))-\\Gamma^{x}_{b w} G4X (\\partial_{x d}(p)-\\Gamma^{y}_{x d} \\partial_{y}(p))-\\Gamma^{x}_{b d} G4X (\\partial_{w x}(p)-\\Gamma^{y}_{w x} \\partial_{y}(p)))-\\Gamma^{w}_{a d} (\\partial_{b}(G4X (\\partial_{c w}(p)-\\Gamma^{y}_{c w} \\partial_{y}(p)))-\\Gamma^{x}_{b c} G4X (\\partial_{x w}(p)-\\Gamma^{y}_{x w} \\partial_{y}(p))-\\Gamma^{x}_{b w} G4X (\\partial_{c x}(p)-\\Gamma^{y}_{c x} \\partial_{y}(p)))-\\Gamma^{w}_{a b} (\\partial_{w}(G4X (\\partial_{c d}(p)-\\Gamma^{y}_{c d} \\partial_{y}(p)))-\\Gamma^{x}_{w c} G4X (\\partial_{x d}(p)-\\Gamma^{y}_{x d} \\partial_{y}(p))-\\Gamma^{x}_{w d} G4X (\\partial_{c x}(p)-\\Gamma^{y}_{c x} \\partial_{y}(p)))) h^{a d} h^{b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{4} = G_{4\\pi} R+\\left(\\partial_{a}\\left(G_{4X} R \\partial_{b}{\\pi}\\right)-\\Gamma^{y}\\,_{a b} G_{4X} R \\partial_{y}{\\pi}\\right) h^{a b}+G_{4\\pi X} {\\Box^{(4)}{\\pi}}^{2}-G_{4\\pi X} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}+\\left(\\partial_{a}\\left(G_{4XX} \\partial_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}\\right)-\\Gamma^{y}\\,_{a b} G_{4XX} \\partial_{y}{\\pi} {\\Box^{(4)}{\\pi}}^{2}\\right) h^{a b}-\\left(\\partial_{a}\\left(G_{4XX} \\partial_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)-\\Gamma^{y}\\,_{a b} G_{4XX} \\partial_{y}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right) h^{a b}-2\\left(\\partial_{a}\\left(G_{4X} \\partial_{b}{\\phi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right)-\\Gamma^{y}\\,_{a b} G_{4X} \\partial_{y}{\\phi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right) h^{a b}+2\\left(\\partial_{a b}\\left(G_{4X} \\Box^{(4)}{\\pi}\\right)-\\Gamma^{y}\\,_{a b} \\partial_{y}\\left(G_{4X} \\Box^{(4)}{\\pi}\\right)\\right) h^{a b}-2\\left(\\partial_{a}\\left(\\partial_{b}\\left(G_{4X} \\left(\\partial_{c d}{\\pi}-\\Gamma^{y}\\,_{c d} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{x}\\,_{b c} G_{4X} \\left(\\partial_{x d}{\\pi}-\\Gamma^{y}\\,_{x d} \\partial_{y}{\\pi}\\right)-\\Gamma^{x}\\,_{b d} G_{4X} \\left(\\partial_{c x}{\\pi}-\\Gamma^{y}\\,_{c x} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{w}\\,_{a c} \\left(\\partial_{b}\\left(G_{4X} \\left(\\partial_{w d}{\\pi}-\\Gamma^{y}\\,_{w d} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{x}\\,_{b w} G_{4X} \\left(\\partial_{x d}{\\pi}-\\Gamma^{y}\\,_{x d} \\partial_{y}{\\pi}\\right)-\\Gamma^{x}\\,_{b d} G_{4X} \\left(\\partial_{w x}{\\pi}-\\Gamma^{y}\\,_{w x} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{w}\\,_{a d} \\left(\\partial_{b}\\left(G_{4X} \\left(\\partial_{c w}{\\pi}-\\Gamma^{y}\\,_{c w} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{x}\\,_{b c} G_{4X} \\left(\\partial_{x w}{\\pi}-\\Gamma^{y}\\,_{x w} \\partial_{y}{\\pi}\\right)-\\Gamma^{x}\\,_{b w} G_{4X} \\left(\\partial_{c x}{\\pi}-\\Gamma^{y}\\,_{c x} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{w}\\,_{a b} \\left(\\partial_{w}\\left(G_{4X} \\left(\\partial_{c d}{\\pi}-\\Gamma^{y}\\,_{c d} \\partial_{y}{\\pi}\\right)\\right)-\\Gamma^{x}\\,_{w c} G_{4X} \\left(\\partial_{x d}{\\pi}-\\Gamma^{y}\\,_{x d} \\partial_{y}{\\pi}\\right)-\\Gamma^{x}\\,_{w d} G_{4X} \\left(\\partial_{c x}{\\pi}-\\Gamma^{y}\\,_{c x} \\partial_{y}{\\pi}\\right)\\right)\\right) h^{a d} h^{b c}\\end{dmath*}"
+				}
+			],
+			"source": "P4 = fun.expand_nabla(var.mathcalP4)\nP4 := @[P4];"
+		},
+		{
+			"cell_id": 18375656125806223190,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15972567632508863063,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7327501191855875108,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalphi^{4} =  -  1/2 F_{a b} F_{c d} G4 \\phi h^{a c} h^{b d} + 2G4 \\partial_{a}(\\phi) \\partial_{b}(\\phi) (\\phi)**(-2) h^{a b} + 4(\\partial_{a}(G4 \\partial_{b}(\\phi) (\\phi)**(-1))-\\Gamma^{y}_{a b} G4 \\partial_{y}(\\phi) (\\phi)**(-1)) h^{a b}-2G4X \\partial_{a}(\\phi) \\partial_{b}(p) (\\phi)**(-2) (h^{e c} (\\partial_{e c}(p)-\\Gamma^{d}_{e c} \\partial_{d}(p)) + (\\phi)**(-1) h^{d e} \\partial_{d}(\\phi) \\partial_{e}(p)) h^{a b}-F_{a b} F_{c d} G4X \\partial_{e}(p) \\partial_{f}(p) \\phi h^{a c} h^{b e} h^{d f} + 2G4X (\\phi)**(-3) (\\partial_{a}(\\phi) \\partial_{b}(p) h^{a b})**2-2(\\partial_{a}(G4X \\partial_{b}(p) (\\phi)**(-1) (h^{e c} (\\partial_{e c}(p)-\\Gamma^{d}_{e c} \\partial_{d}(p)) + (\\phi)**(-1) h^{d e} \\partial_{d}(\\phi) \\partial_{e}(p)))-\\Gamma^{y}_{a b} G4X \\partial_{y}(p) (\\phi)**(-1) (h^{e c} (\\partial_{e c}(p)-\\Gamma^{d}_{e c} \\partial_{d}(p)) + (\\phi)**(-1) h^{d e} \\partial_{d}(\\phi) \\partial_{e}(p))) h^{a b} + 2(\\partial_{a}(G4X \\partial_{b}(\\phi) \\partial_{c}(p) \\partial_{d}(p) (\\phi)**(-2))-\\Gamma^{w}_{a c} G4X \\partial_{b}(\\phi) \\partial_{w}(p) \\partial_{d}(p) (\\phi)**(-2)-\\Gamma^{w}_{a d} G4X \\partial_{b}(\\phi) \\partial_{c}(p) \\partial_{w}(p) (\\phi)**(-2)-\\Gamma^{w}_{a b} G4X \\partial_{w}(\\phi) \\partial_{c}(p) \\partial_{d}(p) (\\phi)**(-2)) h^{a d} h^{b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Phi^{4} =  - \\frac{1}{2}F_{a b} F_{c d} {G_{4}} \\phi h^{a c} h^{b d}+2{G_{4}} \\partial_{a}{\\phi} \\partial_{b}{\\phi} {\\phi}^{-2} h^{a b}+4\\left(\\partial_{a}\\left({G_{4}} \\partial_{b}{\\phi} {\\phi}^{-1}\\right)-\\Gamma^{y}\\,_{a b} {G_{4}} \\partial_{y}{\\phi} {\\phi}^{-1}\\right) h^{a b}-2G_{4X} \\partial_{a}{\\phi} \\partial_{b}{\\pi} {\\phi}^{-2} \\left(h^{e c} \\left(\\partial_{e c}{\\pi}-\\Gamma^{d}\\,_{e c} \\partial_{d}{\\pi}\\right)+{\\phi}^{-1} h^{d e} \\partial_{d}{\\phi} \\partial_{e}{\\pi}\\right) h^{a b}-F_{a b} F_{c d} G_{4X} \\partial_{e}{\\pi} \\partial_{f}{\\pi} \\phi h^{a c} h^{b e} h^{d f}+2G_{4X} {\\phi}^{-3} {\\left(\\partial_{a}{\\phi} \\partial_{b}{\\pi} h^{a b}\\right)}^{2}-2\\left(\\partial_{a}\\left(G_{4X} \\partial_{b}{\\pi} {\\phi}^{-1} \\left(h^{e c} \\left(\\partial_{e c}{\\pi}-\\Gamma^{d}\\,_{e c} \\partial_{d}{\\pi}\\right)+{\\phi}^{-1} h^{d e} \\partial_{d}{\\phi} \\partial_{e}{\\pi}\\right)\\right)-\\Gamma^{y}\\,_{a b} G_{4X} \\partial_{y}{\\pi} {\\phi}^{-1} \\left(h^{e c} \\left(\\partial_{e c}{\\pi}-\\Gamma^{d}\\,_{e c} \\partial_{d}{\\pi}\\right)+{\\phi}^{-1} h^{d e} \\partial_{d}{\\phi} \\partial_{e}{\\pi}\\right)\\right) h^{a b}+2\\left(\\partial_{a}\\left(G_{4X} \\partial_{b}{\\phi} \\partial_{c}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2}\\right)-\\Gamma^{w}\\,_{a c} G_{4X} \\partial_{b}{\\phi} \\partial_{w}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2}-\\Gamma^{w}\\,_{a d} G_{4X} \\partial_{b}{\\phi} \\partial_{c}{\\pi} \\partial_{w}{\\pi} {\\phi}^{-2}-\\Gamma^{w}\\,_{a b} G_{4X} \\partial_{w}{\\phi} \\partial_{c}{\\pi} \\partial_{d}{\\pi} {\\phi}^{-2}\\right) h^{a d} h^{b c}\\end{dmath*}"
+				}
+			],
+			"source": "phi4 = fun.expand_nabla(var.mathcalphi4)\nsubstitute(phi4, box4D)\nsubstitute(phi4, sq4D);"
+		},
+		{
+			"cell_id": 2115411480648165307,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 16364521338574265520,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16787674102201895310,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalA^{4 f} = (\\partial_{c}(F_{a b} G4 (\\phi)**2)-\\Gamma^{z}_{c b} F_{a z} G4 (\\phi)**2-\\Gamma^{z}_{c a} F_{z b} G4 (\\phi)**2) h^{c a} h^{b f} + 2(\\partial_{c}(F_{a b} G4X \\partial_{d}(p) \\partial_{e}(p) (\\phi)**2)-\\Gamma^{x}_{c d} F_{a b} G4X \\partial_{x}(p) \\partial_{e}(p) (\\phi)**2-\\Gamma^{x}_{c e} F_{a b} G4X \\partial_{d}(p) \\partial_{x}(p) (\\phi)**2-\\Gamma^{x}_{c b} F_{a x} G4X \\partial_{d}(p) \\partial_{e}(p) (\\phi)**2-\\Gamma^{x}_{c a} F_{x b} G4X \\partial_{d}(p) \\partial_{e}(p) (\\phi)**2) h^{c a} h^{b d} h^{e f}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{A}^{4 f} = \\left(\\partial_{c}\\left(F_{a b} {G_{4}} {\\phi}^{2}\\right)-\\Gamma^{z}\\,_{c b} F_{a z} {G_{4}} {\\phi}^{2}-\\Gamma^{z}\\,_{c a} F_{z b} {G_{4}} {\\phi}^{2}\\right) h^{c a} h^{b f}+2\\left(\\partial_{c}\\left(F_{a b} G_{4X} \\partial_{d}{\\pi} \\partial_{e}{\\pi} {\\phi}^{2}\\right)-\\Gamma^{x}\\,_{c d} F_{a b} G_{4X} \\partial_{x}{\\pi} \\partial_{e}{\\pi} {\\phi}^{2}-\\Gamma^{x}\\,_{c e} F_{a b} G_{4X} \\partial_{d}{\\pi} \\partial_{x}{\\pi} {\\phi}^{2}-\\Gamma^{x}\\,_{c b} F_{a x} G_{4X} \\partial_{d}{\\pi} \\partial_{e}{\\pi} {\\phi}^{2}-\\Gamma^{x}\\,_{c a} F_{x b} G_{4X} \\partial_{d}{\\pi} \\partial_{e}{\\pi} {\\phi}^{2}\\right) h^{c a} h^{b d} h^{e f}\\end{dmath*}"
+				}
+			],
+			"source": "A4 = fun.expand_nabla(var.mathcalA4);"
+		},
+		{
+			"cell_id": 11050164806530120244,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

@@ -1,0 +1,714 @@
+{
+	"cell_id": 13911618438836069751,
+	"cells": [
+		{
+			"cell_id": 2939823557826835226,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7195493664632182486,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here I continue to work with derivatives of $\\pi$, and consider square and cub of derivative"
+				}
+			],
+			"hidden": true,
+			"source": "Here I continue to work with derivatives of $\\pi$, and consider square and cub of derivative"
+		},
+		{
+			"cell_id": 1718827776701936888,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7664513277115231589,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=independent) attached to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\eta,~\\discretionary{}{}{} \\chi\\#\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 17030488395005992052,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Indices(position=independent) attached to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s,~\\discretionary{}{}{} t,~\\discretionary{}{}{} u,~\\discretionary{}{}{} v,~\\discretionary{}{}{} w,~\\discretionary{}{}{} x,~\\discretionary{}{}{} y,~\\discretionary{}{}{} z,~\\discretionary{}{}{} m\\#\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 17298407507281049646,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Integer attached to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\eta,~\\discretionary{}{}{} \\chi\\#\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id": 15807182814450905370,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"source": "\\begin{dmath*}{}\\text{Property Integer attached to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s,~\\discretionary{}{}{} t,~\\discretionary{}{}{} u,~\\discretionary{}{}{} v,~\\discretionary{}{}{} w,~\\discretionary{}{}{} x,~\\discretionary{}{}{} y,~\\discretionary{}{}{} z,~\\discretionary{}{}{} m\\#\\right].\\end{dmath*}"
+				}
+			],
+			"source": "{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\eta,\\chi#}::Indices(full, position=independent);\n{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Indices(subspace, position=independent, parent=full);\n{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\eta,\\chi#}::Integer(1..4);\n{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Integer(1..3);"
+		},
+		{
+			"cell_id": 12988027899932518811,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting.\ng_{\\mu?\\nu?}::Metric.\ng^{\\mu?\\nu?}::InverseMetric.\ng_{\\mu? \\nu?}::Symmetric.\ng^{\\mu? \\nu?}::Symmetric.\nh_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\n\\delta^{\\mu?}_{\\nu?}::KroneckerDelta.\n\\delta_{\\mu?}^{\\nu?}::KroneckerDelta.\n\\delta^{m?}_{n?}::KroneckerDelta.\n\\delta_{m?}^{n?}::KroneckerDelta.\n\\delta^{\\mu?}_{n?}::KroneckerDelta.\n\\delta_{\\mu?}^{n?}::KroneckerDelta.\nF_{m? n?}::AntiSymmetric.\n\\pi::Depends(\\nabla{#}, \\partial{#}).\n\\phi::Depends(\\nabla{#}, \\partial{#}).\nA_{m?}::Depends(\\nabla{#}, \\partial{#}).\nh_{m n}::Depends(\\partial{#}).\nh^{m n}::Depends(\\partial{#}).\ng_{\\mu\\nu}::Depends(\\partial{#}).\ng^{\\mu\\nu}::Depends(\\partial{#}).\n\\psi::Depends(\\nabla{#}, \\partial{#}).\ndelA_{m}::Depends(\\nabla{#}, \\partial{#}).\ndelphi::Depends(\\nabla{#}, \\partial{#}).\ndelh_{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelh^{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelpi::Depends(\\nabla{#}, \\partial{#}).\n\\Gamma^{\\alpha}_{\\mu\\nu}::TableauSymmetry(shape={2}, indices={1,2}).\n\\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2}).\nG_{\\mu\\nu}::Symmetric.\nG3_{m? n?}::Symmetric.\ndelh_{m n}::Symmetric.\ndelh^{m n}::Symmetric."
+		},
+		{
+			"cell_id": 12865507769665094275,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def tidy (expr):\n   converge(expr):\n       distribute(expr)\n       product_rule(expr)\n       canonicalise(expr)\n   return expr"
+		},
+		{
+			"cell_id": 8122226354943683683,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def split(ex):\n\tsplit_index(ex, $\\mu, m1, 4$, repeat=True)\n\tsubstitute(ex, $\\partial_{4}{A??} -> 0$, repeat=True)\n\tsubstitute(ex, $\\partial_{4 m?}{A??} -> 0$, repeat=True)\n\tsubstitute(ex, $\\partial_{m? 4}{A??} -> 0$, repeat=True)\n\tcanonicalise(ex)\n\treturn ex"
+		},
+		{
+			"cell_id": 10499913561649541338,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def expand_nabla(ex):\n\tindeces = r'\\omega \\psi \\chi \\phi \\tau \\sigma \\mu \\nu \\rho \\epsilon \\delta \\gamma \\beta \\alpha \\eta \\lambda'.split()\n\tfor nabla in ex[r'\\nabla']:\n\t\tnabla.name=r'\\partial'\n\t\tdindex = nabla.indices().__next__() \n\t\tupindex = Ex(indeces[0])\n\t\ti = 0\n\t\tfor qind in nabla.indices():\n\t\t\t\t\tt0:= @(qind);\n\t\t\t\t\tt3:= @(upindex);\n\t\t\t\t\tif t0 == t3:\n\t\t\t\t\t\ti += 1\n\t\t\t\t\t\tupindex = Ex(indeces[i])\n\t\tfor arg in nabla.args():             \n\t\t\tret:=0;\n\t\t\tfor index in arg.free_indices():\n\t\t\t\tt2:= @(arg);\n\t\t\t\tif index.parent_rel==sub:\n\t\t\t\t\tt1:= -\\Gamma^{@(upindex)}_{@(dindex) @(index)};\n\t\t\t\t\tt2[index]:= _{@(upindex)};\n\t\t\t\telse:\n\t\t\t\t\tt1:=  \\Gamma^{@(index)}_{@(dindex) @(upindex)};\n\t\t\t\t\tt2[index]:= ^{@(upindex)};\n\t\t\t\tret += Ex(str(nabla.multiplier)) * t1 * t2\n\t\t\tnabla += ret\n\treturn ex"
+		},
+		{
+			"cell_id": 9344678215281450379,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "def kaluza(ex):\n\tsubstitute(ex, $g_{4 4} -> \\phi**{2}$ )\n\tsubstitute(ex, $g_{m 4} -> \\phi**{2} A_{m}$ )\n\tsubstitute(ex, $g_{4 m} -> \\phi**{2} A_{m}$ )\n\tsubstitute(ex, $g_{m n} -> h_{m n} + \\phi**{2} A_{m} A_{n}$ )\n\tsubstitute(ex, $g^{4 4} -> \\phi**{-2} +  A_{m} h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{m 4} -> - h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{4 m} -> - h^{m n} A_{n}$ )\n\tsubstitute(ex, $g^{m n} -> h^{m n}$ )\n\treturn ex"
+		},
+		{
+			"cell_id": 11702306974121429189,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14800338168853225262,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17191793623309669304,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{\\lambda?}_{\\mu? \\nu?} ->  1/2 g^{\\lambda? \\kappa} (\\partial_{\\nu?}(g_{\\kappa \\mu?}) + \\partial_{\\mu?}(g_{\\kappa \\nu?})-\\partial_{\\kappa}(g_{\\mu? \\nu?}))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Gamma^{\\lambda?}\\,_{\\mu? \\nu?} \\rightarrow \\frac{1}{2}g^{\\lambda? \\kappa} \\left(\\partial_{\\nu?}{g_{\\kappa \\mu?}}+\\partial_{\\mu?}{g_{\\kappa \\nu?}}-\\partial_{\\kappa}{g_{\\mu? \\nu?}}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "Gtog:= \\Gamma^{\\lambda?}_{\\mu?\\nu?} ->\n  (1/2) * g^{\\lambda?\\kappa} ( \n        \\partial_{\\nu?}{ g_{\\kappa\\mu?} } + \\partial_{\\mu?}{ g_{\\kappa\\nu?} } - \\partial_{\\kappa}{ g_{\\mu?\\nu?} } );"
+		},
+		{
+			"cell_id": 5565772250685938253,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 269178933153207659,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5780162186209222481,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m?}(\\nabla_{n?}(\\pi)) -> \\nabla_{m?}(\\partial_{n?}(\\pi)) -  1/2 A_{m?} \\partial_{p}(\\pi) (\\phi)**2 F_{n? q} h^{q p} -  1/2 A_{n?} \\partial_{p}(\\pi) (\\phi)**2 F_{m? q} h^{q p} + A_{m?} A_{n?} \\partial_{p}(\\phi) \\partial_{q}(\\pi) \\phi h^{p q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m?}\\left(\\nabla_{n?}{\\pi}\\right) \\rightarrow \\nabla_{m?}\\left(\\partial_{n?}{\\pi}\\right) - \\frac{1}{2}A_{m?} \\partial_{p}{\\pi} {\\phi}^{2} F_{n? q} h^{q p} - \\frac{1}{2}A_{n?} \\partial_{p}{\\pi} {\\phi}^{2} F_{m? q} h^{q p}+A_{m?} A_{n?} \\partial_{p}{\\phi} \\partial_{q}{\\pi} \\phi h^{p q}\\end{dmath*}"
+				}
+			],
+			"source": "second:= \\nabla_{m?}{\\nabla_{n?}{\\pi}} -> \\nabla_{m?}{\\partial_{n?}{\\pi}}-\\frac{1}{2}A_{m?}\\partial_{p}{\\pi} {\\phi}**{2} F_{n? q}h^{q p} - \\frac{1}{2}A_{n?} \\partial_{p}{\\pi} {\\phi}**{2} F_{m? q}h^{q p}+A_{m?}A_{n?}\\partial_{p}{\\phi}\\partial_{q}{\\pi} \\phi h^{p q};"
+		},
+		{
+			"cell_id": 14078811117750504233,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10068700597686916417,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1287060877519242351,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{4}(\\nabla_{m?}(\\pi)) ->  -  1/2 \\partial_{n}(\\pi) (\\phi)**2 F_{m? p} h^{n p} + A_{m?} \\partial_{n}(\\phi) \\partial_{p}(\\pi) \\phi h^{n p}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{4}\\left(\\nabla_{m?}{\\pi}\\right) \\rightarrow  - \\frac{1}{2}\\partial_{n}{\\pi} {\\phi}^{2} F_{m? p} h^{n p}+A_{m?} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\phi h^{n p}\\end{dmath*}"
+				},
+				{
+					"cell_id": 4369597597935606293,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 305238022999194915,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m?}(\\nabla_{4}(\\pi)) ->  -  1/2 \\partial_{n}(\\pi) (\\phi)**2 F_{m? p} h^{n p} + A_{m?} \\partial_{n}(\\phi) \\partial_{p}(\\pi) \\phi h^{n p}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m?}\\left(\\nabla_{4}{\\pi}\\right) \\rightarrow  - \\frac{1}{2}\\partial_{n}{\\pi} {\\phi}^{2} F_{m? p} h^{n p}+A_{m?} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\phi h^{n p}\\end{dmath*}"
+				}
+			],
+			"source": "second4m:=\\nabla_{4}{\\nabla_{m?}{\\pi}}->  - \\frac{1}{2}\\partial_{n}{\\pi} {\\phi}**{2} F_{m? p} h^{n p}+A_{m?} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\phi h^{n p};\nsecondm4:=\\nabla_{m?}{\\nabla_{4}{\\pi}}->  - \\frac{1}{2}\\partial_{n}{\\pi} {\\phi}**{2} F_{m? p} h^{n p}+A_{m?} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\phi h^{n p};"
+		},
+		{
+			"cell_id": 2041215438968308602,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13808314659997904112,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 65649247685308711,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{4}(\\nabla_{4}(\\pi)) ->  1/2 h^{m n} \\partial_{m}((\\phi)**2) \\partial_{n}(\\pi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) \\rightarrow \\frac{1}{2}h^{m n} \\partial_{m}{{\\phi}^{2}} \\partial_{n}{\\pi}\\end{dmath*}"
+				}
+			],
+			"source": "second44:= \\nabla_{4}{\\nabla_{4}{\\pi}}->\\frac{1}{2}h^{m n} \\partial_{m}{{\\phi}**{2}} \\partial_{n}{\\pi};"
+		},
+		{
+			"cell_id": 8823434977970225316,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13147575251263775988,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7348312263193094437,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\kappa}(\\nabla_{\\sigma}(\\pi)) g^{\\mu \\kappa} g^{\\nu \\sigma}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\kappa}\\left(\\nabla_{\\sigma}{\\pi}\\right) g^{\\mu \\kappa} g^{\\nu \\sigma}\\end{dmath*}"
+				}
+			],
+			"source": "sq:= \\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}\\nabla_{\\kappa}{\\nabla_{\\sigma}{\\pi}} g^{\\mu \\kappa}g^{\\nu \\sigma};"
+		},
+		{
+			"cell_id": 7298433282651157885,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7675041213269790109,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4558155694709176443,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{q}(\\pi)) g^{m p} g^{n q} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{4}(\\pi)) g^{m p} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{m n} g^{4 p} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{m n} g^{4 4} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{4 n} g^{m p} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{4 n} g^{4 m} + \\nabla_{4}(\\nabla_{4}(\\pi)) \\nabla_{m}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} + \\nabla_{4}(\\nabla_{4}(\\pi)) \\nabla_{m}(\\nabla_{4}(\\pi)) g^{4 m} g^{4 4} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{4}(\\nabla_{p}(\\pi)) g^{4 m} g^{n p} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{4}(\\nabla_{4}(\\pi)) g^{4 m} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{4}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{4}(\\nabla_{4}(\\pi)) g^{4 m} g^{4 4} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{4}(\\nabla_{n}(\\pi)) g^{4 4} g^{m n} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{4}(\\nabla_{4}(\\pi)) g^{4 4} g^{4 m} + \\nabla_{4}(\\nabla_{4}(\\pi)) \\nabla_{4}(\\nabla_{m}(\\pi)) g^{4 4} g^{4 m} + \\nabla_{4}(\\nabla_{4}(\\pi)) \\nabla_{4}(\\nabla_{4}(\\pi)) g^{4 4} g^{4 4}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{q}{\\pi}\\right) g^{m p} g^{n q}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{4}{\\pi}\\right) g^{m p} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{m n} g^{4 p}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{m n} g^{4 4}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{4 n} g^{m p}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{4 n} g^{4 m}+\\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) g^{4 m} g^{4 4}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{p}{\\pi}\\right) g^{4 m} g^{n p}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) g^{4 m} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) g^{4 m} g^{4 4}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{n}{\\pi}\\right) g^{4 4} g^{m n}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) g^{4 4} g^{4 m}+\\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) g^{4 4} g^{4 m}+\\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{4}{\\pi}\\right) g^{4 4} g^{4 4}\\end{dmath*}"
+				}
+			],
+			"source": "split(sq);"
+		},
+		{
+			"cell_id": 2267162530745937938,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6646387555483032565,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17433714698596726129,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{q}(\\pi)) g^{m p} g^{n q} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{4}(\\pi)) g^{m p} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{m n} g^{4 p} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{m n} g^{4 4} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{4 n} g^{m p} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{4 n} g^{4 m} +  1/2 h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) \\nabla_{m}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) \\nabla_{m}(\\nabla_{4}(\\pi)) g^{4 m} g^{4 4} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{4}(\\nabla_{p}(\\pi)) g^{4 m} g^{n p} +  1/2 \\nabla_{m}(\\nabla_{n}(\\pi)) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 m} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{4}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} +  1/2 \\nabla_{m}(\\nabla_{4}(\\pi)) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 m} g^{4 4} + \\nabla_{4}(\\nabla_{m}(\\pi)) \\nabla_{4}(\\nabla_{n}(\\pi)) g^{4 4} g^{m n} +  1/2 \\nabla_{4}(\\nabla_{m}(\\pi)) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 4} g^{4 m} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) \\nabla_{4}(\\nabla_{m}(\\pi)) g^{4 4} g^{4 m} +  1/4 h^{m n} \\partial_{m}((\\phi)**2) \\partial_{n}(\\pi) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 4} g^{4 4}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{q}{\\pi}\\right) g^{m p} g^{n q}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{4}{\\pi}\\right) g^{m p} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{m n} g^{4 p}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{m n} g^{4 4}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{4 n} g^{m p}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{4 n} g^{4 m}+\\frac{1}{2}h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) g^{4 m} g^{4 4}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{p}{\\pi}\\right) g^{4 m} g^{n p}+\\frac{1}{2}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 m} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 m} g^{4 4}+\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) \\nabla_{4}\\left(\\nabla_{n}{\\pi}\\right) g^{4 4} g^{m n}+\\frac{1}{2}\\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 4} g^{4 m}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\nabla_{4}\\left(\\nabla_{m}{\\pi}\\right) g^{4 4} g^{4 m}+\\frac{1}{4}h^{m n} \\partial_{m}{{\\phi}^{2}} \\partial_{n}{\\pi} h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 4} g^{4 4}\\end{dmath*}"
+				},
+				{
+					"cell_id": 6248236426235410938,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11031594592916803077,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{q}(\\pi)) g^{m p} g^{n q} + \\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{4}(\\pi)) g^{m p} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{m n} g^{4 p} + \\nabla_{m}(\\nabla_{4}(\\pi)) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{m n} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{4 n} g^{m p} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) \\nabla_{n}(\\nabla_{4}(\\pi)) g^{4 n} g^{4 m} +  1/2 h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) \\nabla_{m}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) \\nabla_{m}(\\nabla_{4}(\\pi)) g^{4 m} g^{4 4} + \\nabla_{m}(\\nabla_{n}(\\pi)) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{p q} h^{r q} + A_{p} \\partial_{r}(\\phi) \\partial_{q}(\\pi) \\phi h^{r q}) g^{4 m} g^{n p} +  1/2 \\nabla_{m}(\\nabla_{n}(\\pi)) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 m} g^{4 n} + \\nabla_{m}(\\nabla_{4}(\\pi)) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{n p} h^{q p} + A_{n} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) g^{4 m} g^{4 n} +  1/2 \\nabla_{m}(\\nabla_{4}(\\pi)) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 m} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 4} g^{m n} +  1/2 ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 4} g^{4 m} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) g^{4 4} g^{4 m} +  1/4 h^{m n} \\partial_{m}((\\phi)**2) \\partial_{n}(\\pi) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 4} g^{4 4}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{q}{\\pi}\\right) g^{m p} g^{n q}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{4}{\\pi}\\right) g^{m p} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{m n} g^{4 p}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{m n} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{4 n} g^{m p}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\nabla_{n}\\left(\\nabla_{4}{\\pi}\\right) g^{4 n} g^{4 m}+\\frac{1}{2}h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) g^{4 m} g^{4 4}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{p q} h^{r q}+A_{p} \\partial_{r}{\\phi} \\partial_{q}{\\pi} \\phi h^{r q}\\right) g^{4 m} g^{n p}+\\frac{1}{2}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 m} g^{4 n}+\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{n p} h^{q p}+A_{n} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}\\nabla_{m}\\left(\\nabla_{4}{\\pi}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 m} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 4} g^{m n}+\\frac{1}{2}\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 4} g^{4 m}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) g^{4 4} g^{4 m}+\\frac{1}{4}h^{m n} \\partial_{m}{{\\phi}^{2}} \\partial_{n}{\\pi} h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 4} g^{4 4}\\end{dmath*}"
+				},
+				{
+					"cell_id": 18251504012607346069,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2424623445205632719,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\nabla_{n}(\\pi)) \\nabla_{p}(\\nabla_{q}(\\pi)) g^{m p} g^{n q} + \\nabla_{m}(\\nabla_{n}(\\pi)) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{p q} h^{r q} + A_{p} \\partial_{r}(\\phi) \\partial_{q}(\\pi) \\phi h^{r q}) g^{m p} g^{4 n} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{m n} g^{4 p} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{m n} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) \\nabla_{n}(\\nabla_{p}(\\pi)) g^{4 n} g^{m p} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 n} g^{4 m} +  1/2 h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) \\nabla_{m}(\\nabla_{n}(\\pi)) g^{4 m} g^{4 n} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) g^{4 m} g^{4 4} + \\nabla_{m}(\\nabla_{n}(\\pi)) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{p q} h^{r q} + A_{p} \\partial_{r}(\\phi) \\partial_{q}(\\pi) \\phi h^{r q}) g^{4 m} g^{n p} +  1/2 \\nabla_{m}(\\nabla_{n}(\\pi)) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 m} g^{4 n} + ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{m s} h^{r s} + A_{m} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{n p} h^{q p} + A_{n} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) g^{4 m} g^{4 n} +  1/2 ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 m} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 4} g^{m n} +  1/2 ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 4} g^{4 m} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) g^{4 4} g^{4 m} +  1/4 h^{m n} \\partial_{m}((\\phi)**2) \\partial_{n}(\\pi) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 4} g^{4 4}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{p}\\left(\\nabla_{q}{\\pi}\\right) g^{m p} g^{n q}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{p q} h^{r q}+A_{p} \\partial_{r}{\\phi} \\partial_{q}{\\pi} \\phi h^{r q}\\right) g^{m p} g^{4 n}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{m n} g^{4 p}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{m n} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) \\nabla_{n}\\left(\\nabla_{p}{\\pi}\\right) g^{4 n} g^{m p}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 n} g^{4 m}+\\frac{1}{2}h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) g^{4 m} g^{4 4}+\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{p q} h^{r q}+A_{p} \\partial_{r}{\\phi} \\partial_{q}{\\pi} \\phi h^{r q}\\right) g^{4 m} g^{n p}+\\frac{1}{2}\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 m} g^{4 n}+\\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{m s} h^{r s}+A_{m} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{n p} h^{q p}+A_{n} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 m} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 4} g^{m n}+\\frac{1}{2}\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 4} g^{4 m}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) g^{4 4} g^{4 m}+\\frac{1}{4}h^{m n} \\partial_{m}{{\\phi}^{2}} \\partial_{n}{\\pi} h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 4} g^{4 4}\\end{dmath*}"
+				},
+				{
+					"cell_id": 12154945544872720748,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17233988449277941289,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\nabla_{m}(\\partial_{n}(\\pi)) -  1/2 A_{m} \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{s r} -  1/2 A_{n} \\partial_{r}(\\pi) (\\phi)**2 F_{m s} h^{s r} + A_{m} A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) (\\nabla_{p}(\\partial_{q}(\\pi)) -  1/2 A_{p} \\partial_{t}(\\pi) (\\phi)**2 F_{q u} h^{u t} -  1/2 A_{q} \\partial_{t}(\\pi) (\\phi)**2 F_{p u} h^{u t} + A_{p} A_{q} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{t u}) g^{m p} g^{n q} + (\\nabla_{m}(\\partial_{n}(\\pi)) -  1/2 A_{m} \\partial_{s}(\\pi) (\\phi)**2 F_{n t} h^{t s} -  1/2 A_{n} \\partial_{s}(\\pi) (\\phi)**2 F_{m t} h^{t s} + A_{m} A_{n} \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\phi h^{s t}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{p q} h^{r q} + A_{p} \\partial_{r}(\\phi) \\partial_{q}(\\pi) \\phi h^{r q}) g^{m p} g^{4 n} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) (\\nabla_{n}(\\partial_{p}(\\pi)) -  1/2 A_{n} \\partial_{s}(\\pi) (\\phi)**2 F_{p t} h^{t s} -  1/2 A_{p} \\partial_{s}(\\pi) (\\phi)**2 F_{n t} h^{t s} + A_{n} A_{p} \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\phi h^{s t}) g^{m n} g^{4 p} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{m n} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) (\\nabla_{n}(\\partial_{p}(\\pi)) -  1/2 A_{n} \\partial_{s}(\\pi) (\\phi)**2 F_{p t} h^{t s} -  1/2 A_{p} \\partial_{s}(\\pi) (\\phi)**2 F_{n t} h^{t s} + A_{n} A_{p} \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\phi h^{s t}) g^{4 n} g^{m p} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 n} g^{4 m} +  1/2 h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) (\\nabla_{m}(\\partial_{n}(\\pi)) -  1/2 A_{m} \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{s r} -  1/2 A_{n} \\partial_{r}(\\pi) (\\phi)**2 F_{m s} h^{s r} + A_{m} A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 m} g^{4 n} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) g^{4 m} g^{4 4} + (\\nabla_{m}(\\partial_{n}(\\pi)) -  1/2 A_{m} \\partial_{s}(\\pi) (\\phi)**2 F_{n t} h^{t s} -  1/2 A_{n} \\partial_{s}(\\pi) (\\phi)**2 F_{m t} h^{t s} + A_{m} A_{n} \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\phi h^{s t}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{p q} h^{r q} + A_{p} \\partial_{r}(\\phi) \\partial_{q}(\\pi) \\phi h^{r q}) g^{4 m} g^{n p} +  1/2 (\\nabla_{m}(\\partial_{n}(\\pi)) -  1/2 A_{m} \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{s r} -  1/2 A_{n} \\partial_{r}(\\pi) (\\phi)**2 F_{m s} h^{s r} + A_{m} A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 m} g^{4 n} + ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{m s} h^{r s} + A_{m} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{n p} h^{q p} + A_{n} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) g^{4 m} g^{4 n} +  1/2 ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 m} g^{4 4} + ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m p} h^{q p} + A_{m} \\partial_{q}(\\phi) \\partial_{p}(\\pi) \\phi h^{q p}) ( -  1/2 \\partial_{r}(\\pi) (\\phi)**2 F_{n s} h^{r s} + A_{n} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{r s}) g^{4 4} g^{m n} +  1/2 ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) g^{4 4} g^{4 m} +  1/2 h^{p n} \\partial_{p}((\\phi)**2) \\partial_{n}(\\pi) ( -  1/2 \\partial_{q}(\\pi) (\\phi)**2 F_{m r} h^{q r} + A_{m} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\phi h^{q r}) g^{4 4} g^{4 m} +  1/4 h^{m n} \\partial_{m}((\\phi)**2) \\partial_{n}(\\pi) h^{p q} \\partial_{p}((\\phi)**2) \\partial_{q}(\\pi) g^{4 4} g^{4 4}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) - \\frac{1}{2}A_{m} \\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{s r} - \\frac{1}{2}A_{n} \\partial_{r}{\\pi} {\\phi}^{2} F_{m s} h^{s r}+A_{m} A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) \\left(\\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) - \\frac{1}{2}A_{p} \\partial_{t}{\\pi} {\\phi}^{2} F_{q u} h^{u t} - \\frac{1}{2}A_{q} \\partial_{t}{\\pi} {\\phi}^{2} F_{p u} h^{u t}+A_{p} A_{q} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{t u}\\right) g^{m p} g^{n q}+\\left(\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) - \\frac{1}{2}A_{m} \\partial_{s}{\\pi} {\\phi}^{2} F_{n t} h^{t s} - \\frac{1}{2}A_{n} \\partial_{s}{\\pi} {\\phi}^{2} F_{m t} h^{t s}+A_{m} A_{n} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\phi h^{s t}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{p q} h^{r q}+A_{p} \\partial_{r}{\\phi} \\partial_{q}{\\pi} \\phi h^{r q}\\right) g^{m p} g^{4 n}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) \\left(\\nabla_{n}\\left(\\partial_{p}{\\pi}\\right) - \\frac{1}{2}A_{n} \\partial_{s}{\\pi} {\\phi}^{2} F_{p t} h^{t s} - \\frac{1}{2}A_{p} \\partial_{s}{\\pi} {\\phi}^{2} F_{n t} h^{t s}+A_{n} A_{p} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\phi h^{s t}\\right) g^{m n} g^{4 p}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{m n} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) \\left(\\nabla_{n}\\left(\\partial_{p}{\\pi}\\right) - \\frac{1}{2}A_{n} \\partial_{s}{\\pi} {\\phi}^{2} F_{p t} h^{t s} - \\frac{1}{2}A_{p} \\partial_{s}{\\pi} {\\phi}^{2} F_{n t} h^{t s}+A_{n} A_{p} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\phi h^{s t}\\right) g^{4 n} g^{m p}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 n} g^{4 m}+\\frac{1}{2}h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} \\left(\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) - \\frac{1}{2}A_{m} \\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{s r} - \\frac{1}{2}A_{n} \\partial_{r}{\\pi} {\\phi}^{2} F_{m s} h^{s r}+A_{m} A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) g^{4 m} g^{4 4}+\\left(\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) - \\frac{1}{2}A_{m} \\partial_{s}{\\pi} {\\phi}^{2} F_{n t} h^{t s} - \\frac{1}{2}A_{n} \\partial_{s}{\\pi} {\\phi}^{2} F_{m t} h^{t s}+A_{m} A_{n} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\phi h^{s t}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{p q} h^{r q}+A_{p} \\partial_{r}{\\phi} \\partial_{q}{\\pi} \\phi h^{r q}\\right) g^{4 m} g^{n p}+\\frac{1}{2}\\left(\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) - \\frac{1}{2}A_{m} \\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{s r} - \\frac{1}{2}A_{n} \\partial_{r}{\\pi} {\\phi}^{2} F_{m s} h^{s r}+A_{m} A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 m} g^{4 n}+\\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{m s} h^{r s}+A_{m} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{n p} h^{q p}+A_{n} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) g^{4 m} g^{4 n}+\\frac{1}{2}\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 m} g^{4 4}+\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m p} h^{q p}+A_{m} \\partial_{q}{\\phi} \\partial_{p}{\\pi} \\phi h^{q p}\\right) \\left( - \\frac{1}{2}\\partial_{r}{\\pi} {\\phi}^{2} F_{n s} h^{r s}+A_{n} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{r s}\\right) g^{4 4} g^{m n}+\\frac{1}{2}\\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} g^{4 4} g^{4 m}+\\frac{1}{2}h^{p n} \\partial_{p}{{\\phi}^{2}} \\partial_{n}{\\pi} \\left( - \\frac{1}{2}\\partial_{q}{\\pi} {\\phi}^{2} F_{m r} h^{q r}+A_{m} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\phi h^{q r}\\right) g^{4 4} g^{4 m}+\\frac{1}{4}h^{m n} \\partial_{m}{{\\phi}^{2}} \\partial_{n}{\\pi} h^{p q} \\partial_{p}{{\\phi}^{2}} \\partial_{q}{\\pi} g^{4 4} g^{4 4}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_,second44);\nsubstitute(_,second4m);\nsubstitute(_,secondm4);\nsubstitute(_,second);"
+		},
+		{
+			"cell_id": 582580594393487969,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "tidy(sq)"
+		},
+		{
+			"cell_id": 14736923397728634312,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "kaluza(sq)"
+		},
+		{
+			"cell_id": 17143798868041787456,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "tidy(_)"
+		},
+		{
+			"cell_id": 11761529092484792511,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3526286878228015194,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14607840230973996513,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) h^{m p} h^{n q} -  1/2 A_{m} F_{n p} \\nabla_{q}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{m q} h^{n t} h^{p u} -  1/2 A_{m} F_{n p} \\nabla_{q}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{m t} h^{n q} h^{p u} + A_{m} A_{n} \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{m p} h^{n q} h^{t u} +  1/2 A_{m} F_{n p} \\nabla_{q}(\\partial_{r}(\\pi)) \\partial_{s}(\\pi) (\\phi)**2 h^{m q} h^{n r} h^{p s} +  1/2 A_{m} F_{n p} \\nabla_{q}(\\partial_{r}(\\pi)) \\partial_{s}(\\pi) (\\phi)**2 h^{m r} h^{n q} h^{p s}-A_{m} A_{n} \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\phi h^{m p} h^{n q} h^{r s} +  1/2 F_{m n} F_{p q} \\partial_{r}(\\pi) \\partial_{s}(\\pi) (\\phi)**2 h^{m p} h^{n r} h^{q s}-2A_{m} F_{n p} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\partial_{s}(\\pi) \\phi h^{m n} h^{p r} h^{q s} + 3A_{m} A_{n} \\partial_{p}(\\phi) \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\partial_{s}(\\pi) h^{m n} h^{p r} h^{q s} + 2A_{m} F_{n p} \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\partial_{u}(\\pi) \\phi h^{m n} h^{p r} h^{q u}-4A_{m} A_{n} \\partial_{p}(\\phi) \\partial_{q}(\\phi) \\partial_{r}(\\pi) \\partial_{u}(\\pi) h^{m n} h^{p r} h^{q u} + \\partial_{m}(\\phi) \\partial_{n}(\\phi) \\partial_{p}(\\pi) \\partial_{q}(\\pi) (\\phi)**(-2) h^{m p} h^{n q} + A_{m} A_{n} \\partial_{p}(\\phi) \\partial_{q}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{m n} h^{p t} h^{q u}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) h^{m p} h^{n q} - \\frac{1}{2}A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{m q} h^{n t} h^{p u} - \\frac{1}{2}A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{m t} h^{n q} h^{p u}+A_{m} A_{n} \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{m p} h^{n q} h^{t u}+\\frac{1}{2}A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\pi} {\\phi}^{2} h^{m q} h^{n r} h^{p s}+\\frac{1}{2}A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\pi} {\\phi}^{2} h^{m r} h^{n q} h^{p s}-A_{m} A_{n} \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\phi h^{m p} h^{n q} h^{r s}+\\frac{1}{2}F_{m n} F_{p q} \\partial_{r}{\\pi} \\partial_{s}{\\pi} {\\phi}^{2} h^{m p} h^{n r} h^{q s}-2A_{m} F_{n p} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\partial_{s}{\\pi} \\phi h^{m n} h^{p r} h^{q s}+3A_{m} A_{n} \\partial_{p}{\\phi} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\partial_{s}{\\pi} h^{m n} h^{p r} h^{q s}+2A_{m} F_{n p} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\partial_{u}{\\pi} \\phi h^{m n} h^{p r} h^{q u}-4A_{m} A_{n} \\partial_{p}{\\phi} \\partial_{q}{\\phi} \\partial_{r}{\\pi} \\partial_{u}{\\pi} h^{m n} h^{p r} h^{q u}+\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\partial_{q}{\\pi} {\\phi}^{-2} h^{m p} h^{n q}+A_{m} A_{n} \\partial_{p}{\\phi} \\partial_{q}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{m n} h^{p t} h^{q u}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_, $\\partial_{p}{h^{n m}} h_{q m} -> - \\partial_{p}{h_{q m}} h^{n m}$ )\ncollect_factors(_)\nsort_product(_)\nconverge(sq):\n\tsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\n\teliminate_kronecker(_)\n\tcanonicalise(_)\n;"
+		},
+		{
+			"cell_id": 11672751955414114967,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14530975009726452475,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 67349816923576297,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) h^{m p} h^{n q} +  1/2 F_{m n} F_{p q} \\partial_{r}(\\pi) \\partial_{s}(\\pi) (\\phi)**2 h^{m p} h^{n r} h^{q s} + \\partial_{m}(\\phi) \\partial_{n}(\\phi) \\partial_{p}(\\pi) \\partial_{q}(\\pi) (\\phi)**(-2) h^{m p} h^{n q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) h^{m p} h^{n q}+\\frac{1}{2}F_{m n} F_{p q} \\partial_{r}{\\pi} \\partial_{s}{\\pi} {\\phi}^{2} h^{m p} h^{n r} h^{q s}+\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\partial_{q}{\\pi} {\\phi}^{-2} h^{m p} h^{n q}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_, $\\partial_{n}{A_{m}} -> 1/2*\\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\\partial_{m}{A_{n}}$ )\nsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\nrename_dummies(_)\neliminate_kronecker(_)\ncanonicalise(_)\nsort_product(_)\n;"
+		},
+		{
+			"cell_id": 2751755307927578347,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9330430865212797287,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14149947861993964212,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) h^{n q} +  1/2 F^{p r} F_{p}^{s} \\partial_{r}(\\pi) \\partial_{s}(\\pi) (\\phi)**2 + \\partial_{m}(\\phi) \\partial_{n}(\\phi) \\partial_{p}(\\pi) \\partial_{q}(\\pi) (\\phi)**(-2) h^{m p} h^{n q}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) h^{n q}+\\frac{1}{2}F^{p r} F_{p}\\,^{s} \\partial_{r}{\\pi} \\partial_{s}{\\pi} {\\phi}^{2}+\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\partial_{p}{\\pi} \\partial_{q}{\\pi} {\\phi}^{-2} h^{m p} h^{n q}\\end{dmath*}"
+				}
+			],
+			"source": "eliminate_metric(_,repeat=True);"
+		},
+		{
+			"cell_id": 1782858315199089128,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3048153549460527514,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12078959498384496133,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\rho}(\\nabla_{\\sigma}(\\pi)) \\nabla_{\\lambda}(\\nabla_{\\eta}(\\pi)) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\rho}\\left(\\nabla_{\\sigma}{\\pi}\\right) \\nabla_{\\lambda}\\left(\\nabla_{\\eta}{\\pi}\\right) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "cub:= \\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}\\nabla_{\\rho}{\\nabla_{\\sigma}{\\pi}}\\nabla_{\\lambda}{\\nabla_{\\eta}{\\pi}}g^{\\rho \\mu}g^{\\sigma \\eta}g^{\\lambda \\nu};"
+		},
+		{
+			"cell_id": 2990467936448791816,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "split(cub)"
+		},
+		{
+			"cell_id": 12806949864289621220,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "substitute(_,second44)\nsubstitute(_,second4m)\nsubstitute(_,secondm4)\nsubstitute(_,second)"
+		},
+		{
+			"cell_id": 4705023144241038458,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "kaluza(cub)\ntidy(cub)"
+		},
+		{
+			"cell_id": 6482307519368854669,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "substitute(_, $\\partial_{p}{h^{n m}} h_{q m} -> - \\partial_{p}{h_{q m}} h^{n m}$ )\ncollect_factors(_)\nsort_product(_)\nconverge(cub):\n\tsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\n\teliminate_kronecker(_)\n\tcanonicalise(_)"
+		},
+		{
+			"cell_id": 6596576926436732681,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11743355429558975662,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1404109449414118686,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{m p} h^{n r} h^{q s} +  3/4 F_{m n} F_{p q} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 h^{m r} h^{n t} h^{p s} h^{q u} +  3/4 F_{m n} F_{p q} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{m p} h^{n s} h^{q t} h^{r u} + \\partial_{m}(\\phi) \\partial_{n}(\\phi) \\partial_{p}(\\phi) \\partial_{q}(\\pi) \\partial_{r}(\\pi) \\partial_{s}(\\pi) (\\phi)**(-3) h^{m q} h^{n r} h^{p s}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{m p} h^{n r} h^{q s}+\\frac{3}{4}F_{m n} F_{p q} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} h^{m r} h^{n t} h^{p s} h^{q u}+\\frac{3}{4}F_{m n} F_{p q} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{m p} h^{n s} h^{q t} h^{r u}+\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\partial_{p}{\\phi} \\partial_{q}{\\pi} \\partial_{r}{\\pi} \\partial_{s}{\\pi} {\\phi}^{-3} h^{m q} h^{n r} h^{p s}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_, $\\partial_{n}{A_{m}} -> 1/2*\\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\\partial_{m}{A_{n}}$ )\nsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\nrename_dummies(_)\neliminate_kronecker(_)\ncanonicalise(_)\nsort_product(_)\n;"
+		},
+		{
+			"cell_id": 3819078098872083167,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11022490415915630131,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2063514647215603529,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{s}(\\pi)) h^{q s} +  3/4 F^{r t} F^{s u} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 +  3/4 F^{p s} F_{p}^{t} \\partial_{r}(\\phi) \\partial_{s}(\\pi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{r u} + \\partial_{m}(\\phi) \\partial_{n}(\\phi) \\partial_{p}(\\phi) \\partial_{q}(\\pi) \\partial_{r}(\\pi) \\partial_{s}(\\pi) (\\phi)**(-3) h^{m q} h^{n r} h^{p s}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+\\frac{3}{4}F^{r t} F^{s u} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2}+\\frac{3}{4}F^{p s} F_{p}\\,^{t} \\partial_{r}{\\phi} \\partial_{s}{\\pi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{r u}+\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\partial_{p}{\\phi} \\partial_{q}{\\pi} \\partial_{r}{\\pi} \\partial_{s}{\\pi} {\\phi}^{-3} h^{m q} h^{n r} h^{p s}\\end{dmath*}"
+				}
+			],
+			"source": "eliminate_metric(_,repeat=True);"
+		},
+		{
+			"cell_id": 7902053025704172464,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1884537171379386538,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16648378709233243867,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) g^{\\mu \\nu} -> \\nabla_{m}(\\nabla_{n}(\\pi)) h^{m n} + \\partial_{m}(\\phi) \\partial_{n}(\\pi) (\\phi)**(-1) h^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) g^{\\mu \\nu} \\rightarrow \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}^{-1} h^{m n}\\end{dmath*}"
+				}
+			],
+			"source": "box:=\\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}g^{\\mu \\nu} -> \\nabla_{m}{\\nabla_{n}{\\pi}}h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}**{-1} h^{m n};"
+		},
+		{
+			"cell_id": 13972806068839154970,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2051870749183903938,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12795673572362667455,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) g^{\\mu \\nu})**3-3\\nabla_{\\eta}(\\nabla_{\\lambda}(\\pi)) g^{\\eta \\lambda} \\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\kappa}(\\nabla_{\\sigma}(\\pi)) g^{\\mu \\kappa} g^{\\nu \\sigma} + 2\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\rho}(\\nabla_{\\sigma}(\\pi)) \\nabla_{\\lambda}(\\nabla_{\\eta}(\\pi)) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}{\\left(\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) g^{\\mu \\nu}\\right)}^{3}-3\\nabla_{\\eta}\\left(\\nabla_{\\lambda}{\\pi}\\right) g^{\\eta \\lambda} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\kappa}\\left(\\nabla_{\\sigma}{\\pi}\\right) g^{\\mu \\kappa} g^{\\nu \\sigma}+2\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\rho}\\left(\\nabla_{\\sigma}{\\pi}\\right) \\nabla_{\\lambda}\\left(\\nabla_{\\eta}{\\pi}\\right) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "L4:= (\\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}g^{\\mu \\nu})**3 - 3 \\nabla_{\\eta}{\\nabla_{\\lambda}{\\pi}}g^{\\eta \\lambda} \\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}\\nabla_{\\kappa}{\\nabla_{\\sigma}{\\pi}} g^{\\mu \\kappa}g^{\\nu \\sigma} + 2\\nabla_{\\mu}{\\nabla_{\\nu}{\\pi}}\\nabla_{\\rho}{\\nabla_{\\sigma}{\\pi}}\\nabla_{\\lambda}{\\nabla_{\\eta}{\\pi}}g^{\\rho \\mu}g^{\\sigma \\eta}g^{\\lambda \\nu} ;"
+		},
+		{
+			"cell_id": 15002971063499813383,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13011476492863777293,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3099565335390574469,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\nabla_{m}(\\nabla_{n}(\\pi)) h^{m n} + \\partial_{m}(\\phi) \\partial_{n}(\\pi) (\\phi)**(-1) h^{m n})**3-3(\\nabla_{m}(\\nabla_{n}(\\pi)) h^{m n} + \\partial_{m}(\\phi) \\partial_{n}(\\pi) (\\phi)**(-1) h^{m n}) \\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\kappa}(\\nabla_{\\sigma}(\\pi)) g^{\\mu \\kappa} g^{\\nu \\sigma} + 2\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\rho}(\\nabla_{\\sigma}(\\pi)) \\nabla_{\\lambda}(\\nabla_{\\eta}(\\pi)) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}{\\left(\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}^{-1} h^{m n}\\right)}^{3}-3\\left(\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}^{-1} h^{m n}\\right) \\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\kappa}\\left(\\nabla_{\\sigma}{\\pi}\\right) g^{\\mu \\kappa} g^{\\nu \\sigma}+2\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\rho}\\left(\\nabla_{\\sigma}{\\pi}\\right) \\nabla_{\\lambda}\\left(\\nabla_{\\eta}{\\pi}\\right) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_,box);"
+		},
+		{
+			"cell_id": 16071743082035536642,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 12787369349379769427,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15936788060837956684,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(\\nabla_{m}(\\nabla_{n}(\\pi)) h^{m n} + \\partial_{m}(\\phi) \\partial_{n}(\\pi) (\\phi)**(-1) h^{m n}) (\\nabla_{p}(\\nabla_{q}(\\pi)) h^{p q} + \\partial_{p}(\\phi) \\partial_{q}(\\pi) (\\phi)**(-1) h^{p q}) (\\nabla_{r}(\\nabla_{s}(\\pi)) h^{r s} + \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{r s})-3(\\nabla_{m}(\\nabla_{n}(\\pi)) h^{m n} + \\partial_{m}(\\phi) \\partial_{n}(\\pi) (\\phi)**(-1) h^{m n}) \\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\kappa}(\\nabla_{\\sigma}(\\pi)) g^{\\mu \\kappa} g^{\\nu \\sigma} + 2\\nabla_{\\mu}(\\nabla_{\\nu}(\\pi)) \\nabla_{\\rho}(\\nabla_{\\sigma}(\\pi)) \\nabla_{\\lambda}(\\nabla_{\\eta}(\\pi)) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}^{-1} h^{m n}\\right) \\left(\\nabla_{p}\\left(\\nabla_{q}{\\pi}\\right) h^{p q}+\\partial_{p}{\\phi} \\partial_{q}{\\pi} {\\phi}^{-1} h^{p q}\\right) \\left(\\nabla_{r}\\left(\\nabla_{s}{\\pi}\\right) h^{r s}+\\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{r s}\\right)-3\\left(\\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) h^{m n}+\\partial_{m}{\\phi} \\partial_{n}{\\pi} {\\phi}^{-1} h^{m n}\\right) \\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\kappa}\\left(\\nabla_{\\sigma}{\\pi}\\right) g^{\\mu \\kappa} g^{\\nu \\sigma}+2\\nabla_{\\mu}\\left(\\nabla_{\\nu}{\\pi}\\right) \\nabla_{\\rho}\\left(\\nabla_{\\sigma}{\\pi}\\right) \\nabla_{\\lambda}\\left(\\nabla_{\\eta}{\\pi}\\right) g^{\\rho \\mu} g^{\\sigma \\eta} g^{\\lambda \\nu}\\end{dmath*}"
+				}
+			],
+			"source": "expand_power(_);"
+		},
+		{
+			"cell_id": 13952897015454510661,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "split(L4)"
+		},
+		{
+			"cell_id": 6087820293181091340,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "sort_product(L4)"
+		},
+		{
+			"cell_id": 2089710227759692950,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "substitute(_,second44)\nsubstitute(_,second4m)\nsubstitute(_,secondm4)\nsubstitute(_,second)"
+		},
+		{
+			"cell_id": 11056570960705805468,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "kaluza(L4)"
+		},
+		{
+			"cell_id": 3030059563125730513,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "tidy(L4)"
+		},
+		{
+			"cell_id": 8324882447952345738,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "substitute(_, $\\partial_{p}{h^{n m}} h_{q m} -> - \\partial_{p}{h_{q m}} h^{n m}$ )\ncollect_factors(_)\nsort_product(_)"
+		},
+		{
+			"cell_id": 13806234870369658358,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "converge(L4):\n\tsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\n\teliminate_kronecker(_)\n\tcanonicalise(_)\n"
+		},
+		{
+			"cell_id": 7626480860965855070,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3048585954755431485,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3508977622468155092,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{m n} h^{p q} h^{r s}-3A_{m} F_{n p} \\nabla_{q}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{m n} h^{p u} h^{q r} h^{s t} + 3A_{m} A_{n} \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{m n} h^{p q} h^{r s} h^{t u} + 3\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{m n} h^{p q} h^{r s} + 3A_{m} A_{n} F_{p q} F_{r s} \\nabla_{t}(\\partial_{u}(\\pi)) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4 h^{m p} h^{n r} h^{q v} h^{s w} h^{t u}-6A_{m} A_{n} A_{p} F_{q r} \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{m n} h^{p q} h^{r v} h^{s t} h^{u w}-6A_{m} F_{n p} \\nabla_{q}(\\partial_{r}(\\pi)) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{m n} h^{p t} h^{q r} h^{s u} + 3A_{m} A_{n} A_{p} A_{q} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{m n} h^{p q} h^{r s} h^{t v} h^{u w} + 6A_{m} A_{n} \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{m n} h^{p q} h^{r t} h^{s u} + 3A_{m} A_{n} A_{p} A_{q} F_{r s} F_{t u} \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**5 h^{m n} h^{p r} h^{q t} h^{s w} h^{u x} h^{v y} + 3A_{m} A_{n} F_{p q} F_{r s} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{m p} h^{n r} h^{q u} h^{s v} h^{t w}-6A_{m} A_{n} A_{p} F_{q r} \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{m n} h^{p q} h^{r u} h^{s v} h^{t w} + 3A_{m} A_{n} A_{p} A_{q} \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) \\phi h^{m n} h^{p q} h^{r u} h^{s v} h^{t w}-3\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{m n} h^{p r} h^{q s} + 3A_{m} F_{n p} \\nabla_{q}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{m n} h^{p u} h^{q s} h^{r t}-3A_{m} A_{n} \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{m n} h^{p r} h^{q s} h^{t u}-3\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{m p} h^{n q} h^{r s}-A_{m} A_{n} A_{p} F_{q r} F_{s t} F_{u v} \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**6 h^{m q} h^{n s} h^{p u} h^{r w} h^{t x} h^{v y}-3A_{m} A_{n} A_{p} A_{q} A_{r} F_{s t} \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**4 h^{m n} h^{p q} h^{r s} h^{t w} h^{u x} h^{v y} + A_{m} A_{n} A_{p} A_{q} A_{r} A_{s} \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**3 h^{m n} h^{p q} h^{r s} h^{t w} h^{u x} h^{v y} -  3/2 F_{m n} F_{p q} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 h^{m p} h^{n t} h^{q u} h^{r s} -  3/2 A_{m} A_{n} F_{p q} F_{r s} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{m n} h^{p r} h^{q u} h^{s v} h^{t w} + 2\\nabla_{m}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{m p} h^{n r} h^{q s} +  3/2 F_{m n} F_{p q} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 h^{m r} h^{n t} h^{p s} h^{q u} +  3/2 A_{m} F_{n p} F_{q r} F_{s t} \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4 h^{m n} h^{p u} h^{q s} h^{r v} h^{t w}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{m n} h^{p q} h^{r s}-3A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{m n} h^{p u} h^{q r} h^{s t}+3A_{m} A_{n} \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{m n} h^{p q} h^{r s} h^{t u}+3\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{m n} h^{p q} h^{r s}+3A_{m} A_{n} F_{p q} F_{r s} \\nabla_{t}\\left(\\partial_{u}{\\pi}\\right) \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4} h^{m p} h^{n r} h^{q v} h^{s w} h^{t u}-6A_{m} A_{n} A_{p} F_{q r} \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{m n} h^{p q} h^{r v} h^{s t} h^{u w}-6A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{m n} h^{p t} h^{q r} h^{s u}+3A_{m} A_{n} A_{p} A_{q} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{m n} h^{p q} h^{r s} h^{t v} h^{u w}+6A_{m} A_{n} \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{m n} h^{p q} h^{r t} h^{s u}+3A_{m} A_{n} A_{p} A_{q} F_{r s} F_{t u} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{5} h^{m n} h^{p r} h^{q t} h^{s w} h^{u x} h^{v y}+3A_{m} A_{n} F_{p q} F_{r s} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{m p} h^{n r} h^{q u} h^{s v} h^{t w}-6A_{m} A_{n} A_{p} F_{q r} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{m n} h^{p q} h^{r u} h^{s v} h^{t w}+3A_{m} A_{n} A_{p} A_{q} \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} \\phi h^{m n} h^{p q} h^{r u} h^{s v} h^{t w}-3\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{m n} h^{p r} h^{q s}+3A_{m} F_{n p} \\nabla_{q}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{m n} h^{p u} h^{q s} h^{r t}-3A_{m} A_{n} \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{m n} h^{p r} h^{q s} h^{t u}-3\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{m p} h^{n q} h^{r s}-A_{m} A_{n} A_{p} F_{q r} F_{s t} F_{u v} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{6} h^{m q} h^{n s} h^{p u} h^{r w} h^{t x} h^{v y}-3A_{m} A_{n} A_{p} A_{q} A_{r} F_{s t} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{4} h^{m n} h^{p q} h^{r s} h^{t w} h^{u x} h^{v y}%\n+A_{m} A_{n} A_{p} A_{q} A_{r} A_{s} \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{3} h^{m n} h^{p q} h^{r s} h^{t w} h^{u x} h^{v y} - \\frac{3}{2}F_{m n} F_{p q} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} h^{m p} h^{n t} h^{q u} h^{r s} - \\frac{3}{2}A_{m} A_{n} F_{p q} F_{r s} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{m n} h^{p r} h^{q u} h^{s v} h^{t w}+2\\nabla_{m}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{m p} h^{n r} h^{q s}+\\frac{3}{2}F_{m n} F_{p q} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} h^{m r} h^{n t} h^{p s} h^{q u}+\\frac{3}{2}A_{m} F_{n p} F_{q r} F_{s t} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4} h^{m n} h^{p u} h^{q s} h^{r v} h^{t w}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(_, $\\partial_{n}{A_{m}} -> 1/2*\\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\\partial_{m}{A_{n}}$ )\nsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\nrename_dummies(_)\neliminate_kronecker(_)\ncanonicalise(_)\nsort_product(_)\n;"
+		},
+		{
+			"cell_id": 15873625914228991073,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13976106820826258295,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4833179550265362244,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi))-3A^{n} F_{n}^{u} \\nabla^{r}(\\partial_{r}(\\pi)) \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 + 3A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{t u} + 3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{r s} + 3A^{p} A^{r} F_{p}^{v} F_{r}^{w} \\nabla^{u}(\\partial_{u}(\\pi)) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4-6A^{n} A_{n} A^{q} F_{q}^{v} \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{u w}-6A^{n} F_{n}^{t} \\nabla^{r}(\\partial_{r}(\\pi)) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{s u} + 3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{t v} h^{u w} + 6A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{r t} h^{s u} + 3A^{n} A_{n} A^{r} A^{t} F_{r}^{w} F_{t}^{x} \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**5 h^{v y} + 3A^{p} A^{r} F_{p}^{u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w}-6A^{n} A_{n} A^{q} F_{q}^{u} \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{s v} h^{t w} + 3A^{n} A_{n} A^{q} A_{q} \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{q s} + 3A^{n} F_{n}^{u} \\nabla^{s}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{r t}-3A^{n} A_{n} \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{q s} h^{t u}-3\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}^{w} F_{s}^{x} F_{u}^{y} \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**6-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}^{w} \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**4 h^{u x} h^{v y} + A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**3 h^{t w} h^{u x} h^{v y} -  3/2 F^{p t} F_{p}^{u} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 -  3/2 A^{n} A_{n} F^{r u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w} + 2\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{s}(\\pi)) h^{q s} +  3/2 F^{r t} F^{s u} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 +  3/2 A^{n} F_{n}^{u} F^{s v} F_{s}^{w} \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right)-3A^{n} F_{n}\\,^{u} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2}+3A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{t u}+3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{r s}+3A^{p} A^{r} F_{p}\\,^{v} F_{r}\\,^{w} \\nabla^{u}\\left(\\partial_{u}{\\pi}\\right) \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}-6A^{n} A_{n} A^{q} F_{q}\\,^{v} \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{u w}-6A^{n} F_{n}\\,^{t} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{s u}+3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{t v} h^{u w}+6A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{r t} h^{s u}+3A^{n} A_{n} A^{r} A^{t} F_{r}\\,^{w} F_{t}\\,^{x} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{5} h^{v y}+3A^{p} A^{r} F_{p}\\,^{u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}-6A^{n} A_{n} A^{q} F_{q}\\,^{u} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{s v} h^{t w}+3A^{n} A_{n} A^{q} A_{q} \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+3A^{n} F_{n}\\,^{u} \\nabla^{s}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{r t}-3A^{n} A_{n} \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{q s} h^{t u}-3\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}\\,^{w} F_{s}\\,^{x} F_{u}\\,^{y} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{6}-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}\\,^{w} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{4} h^{u x} h^{v y}%\n+A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{3} h^{t w} h^{u x} h^{v y} - \\frac{3}{2}F^{p t} F_{p}\\,^{u} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} - \\frac{3}{2}A^{n} A_{n} F^{r u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}+2\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+\\frac{3}{2}F^{r t} F^{s u} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2}+\\frac{3}{2}A^{n} F_{n}\\,^{u} F^{s v} F_{s}\\,^{w} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}\\end{dmath*}"
+				}
+			],
+			"source": "eliminate_metric(_,repeat=True);"
+		},
+		{
+			"cell_id": 12893977347274162821,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1878686152133743321,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18320222309134063878,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi))-3A^{n} F_{n}^{u} \\nabla^{r}(\\partial_{r}(\\pi)) \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 + 3A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{t u} + 3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{r s} + 3A^{p} A^{r} F_{p}^{v} F_{r}^{w} \\nabla^{u}(\\partial_{u}(\\pi)) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4-6A^{n} A_{n} A^{q} F_{q}^{v} \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{u w}-6A^{n} F_{n}^{t} \\nabla^{r}(\\partial_{r}(\\pi)) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{s u} + 3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{t v} h^{u w} + 6A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{r t} h^{s u} + 3A^{n} A_{n} A^{r} A^{t} F_{r}^{w} F_{t}^{x} \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**5 h^{v y} + 3A^{p} A^{r} F_{p}^{u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w}-6A^{n} A_{n} A^{q} F_{q}^{u} \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{s v} h^{t w} + 3A^{n} A_{n} A^{q} A_{q} \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{q s} + 3A^{n} F_{n}^{u} \\nabla^{s}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{r t}-3A^{n} A_{n} \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{q s} h^{t u}-3\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}^{w} F_{s}^{x} F_{u}^{y} \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**6-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}^{w} \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**4 h^{u x} h^{v y} + A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**3 h^{t w} h^{u x} h^{v y} -  3/2 F^{p t} F_{p}^{u} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 -  3/2 A^{n} A_{n} F^{r u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w} + 2\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{s}(\\pi)) h^{q s} +  3/2 F^{r t} F^{s u} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 +  3/2 A^{n} F_{n}^{u} F^{s v} F_{s}^{w} \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right)-3A^{n} F_{n}\\,^{u} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2}+3A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{t u}+3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{r s}+3A^{p} A^{r} F_{p}\\,^{v} F_{r}\\,^{w} \\nabla^{u}\\left(\\partial_{u}{\\pi}\\right) \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}-6A^{n} A_{n} A^{q} F_{q}\\,^{v} \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{u w}-6A^{n} F_{n}\\,^{t} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{s u}+3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{t v} h^{u w}+6A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{r t} h^{s u}+3A^{n} A_{n} A^{r} A^{t} F_{r}\\,^{w} F_{t}\\,^{x} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{5} h^{v y}+3A^{p} A^{r} F_{p}\\,^{u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}-6A^{n} A_{n} A^{q} F_{q}\\,^{u} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{s v} h^{t w}+3A^{n} A_{n} A^{q} A_{q} \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+3A^{n} F_{n}\\,^{u} \\nabla^{s}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{r t}-3A^{n} A_{n} \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{q s} h^{t u}-3\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}\\,^{w} F_{s}\\,^{x} F_{u}\\,^{y} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{6}-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}\\,^{w} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{4} h^{u x} h^{v y}%\n+A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{3} h^{t w} h^{u x} h^{v y} - \\frac{3}{2}F^{p t} F_{p}\\,^{u} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} - \\frac{3}{2}A^{n} A_{n} F^{r u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}+2\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+\\frac{3}{2}F^{r t} F^{s u} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2}+\\frac{3}{2}A^{n} F_{n}\\,^{u} F^{s v} F_{s}\\,^{w} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}\\end{dmath*}"
+				}
+			],
+			"source": "collect_factors(_);"
+		},
+		{
+			"cell_id": 14977471185880629506,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9834452413296803236,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13261453353251195296,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi))-3A^{n} F_{n}^{u} \\nabla^{r}(\\partial_{r}(\\pi)) \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 + 3A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{t u} + 3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{r s} + 3A^{p} A^{r} F_{p}^{v} F_{r}^{w} \\nabla^{u}(\\partial_{u}(\\pi)) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4-6A^{n} A_{n} A^{q} F_{q}^{v} \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{u w}-6A^{n} F_{n}^{t} \\nabla^{r}(\\partial_{r}(\\pi)) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{s u} + 3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{t v} h^{u w} + 6A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{r t} h^{s u} + 3A^{n} A_{n} A^{r} A^{t} F_{r}^{w} F_{t}^{x} \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**5 h^{v y} + 3A^{p} A^{r} F_{p}^{u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w}-6A^{n} A_{n} A^{q} F_{q}^{u} \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{s v} h^{t w} + 3A^{n} A_{n} A^{q} A_{q} \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{q s} + 3A^{n} F_{n}^{u} \\nabla^{s}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{r t}-3A^{n} A_{n} \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{q s} h^{t u}-3\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}^{w} F_{s}^{x} F_{u}^{y} \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**6-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}^{w} \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**4 h^{u x} h^{v y} + A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**3 h^{t w} h^{u x} h^{v y} -  3/2 F^{p t} F_{p}^{u} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 -  3/2 A^{n} A_{n} F^{r u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w} + 2\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{s}(\\pi)) h^{q s} +  3/2 F^{r t} F^{s u} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 +  3/2 A^{n} F_{n}^{u} F^{s v} F_{s}^{w} \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right)-3A^{n} F_{n}\\,^{u} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2}+3A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{t u}+3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{r s}+3A^{p} A^{r} F_{p}\\,^{v} F_{r}\\,^{w} \\nabla^{u}\\left(\\partial_{u}{\\pi}\\right) \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}-6A^{n} A_{n} A^{q} F_{q}\\,^{v} \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{u w}-6A^{n} F_{n}\\,^{t} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{s u}+3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{t v} h^{u w}+6A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{r t} h^{s u}+3A^{n} A_{n} A^{r} A^{t} F_{r}\\,^{w} F_{t}\\,^{x} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{5} h^{v y}+3A^{p} A^{r} F_{p}\\,^{u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}-6A^{n} A_{n} A^{q} F_{q}\\,^{u} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{s v} h^{t w}+3A^{n} A_{n} A^{q} A_{q} \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+3A^{n} F_{n}\\,^{u} \\nabla^{s}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{r t}-3A^{n} A_{n} \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{q s} h^{t u}-3\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}\\,^{w} F_{s}\\,^{x} F_{u}\\,^{y} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{6}-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}\\,^{w} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{4} h^{u x} h^{v y}%\n+A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{3} h^{t w} h^{u x} h^{v y} - \\frac{3}{2}F^{p t} F_{p}\\,^{u} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} - \\frac{3}{2}A^{n} A_{n} F^{r u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}+2\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+\\frac{3}{2}F^{r t} F^{s u} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2}+\\frac{3}{2}A^{n} F_{n}\\,^{u} F^{s v} F_{s}\\,^{w} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}\\end{dmath*}"
+				}
+			],
+			"source": "simplify(_);"
+		},
+		{
+			"cell_id": 7727402575664198340,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8169025326840866407,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5436618797876635717,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi))-3A^{n} F_{n}^{u} \\nabla^{r}(\\partial_{r}(\\pi)) \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 + 3A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{t u} + 3\\nabla^{n}(\\partial_{n}(\\pi)) \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{r s} + 3A^{p} A^{r} F_{p}^{v} F_{r}^{w} \\nabla^{u}(\\partial_{u}(\\pi)) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4-6A^{n} A_{n} A^{q} F_{q}^{v} \\nabla^{t}(\\partial_{t}(\\pi)) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{u w}-6A^{n} F_{n}^{t} \\nabla^{r}(\\partial_{r}(\\pi)) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) \\phi h^{s u} + 3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{t v} h^{u w} + 6A^{n} A_{n} \\nabla^{q}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\pi) \\partial_{u}(\\pi) h^{r t} h^{s u} + 3A^{n} A_{n} A^{r} A^{t} F_{r}^{w} F_{t}^{x} \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**5 h^{v y} + 3A^{p} A^{r} F_{p}^{u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w}-6A^{n} A_{n} A^{q} F_{q}^{u} \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**2 h^{s v} h^{t w} + 3A^{n} A_{n} A^{q} A_{q} \\partial_{r}(\\phi) \\partial_{s}(\\phi) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{r}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{n}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) h^{q s} + 3A^{n} F_{n}^{u} \\nabla^{s}(\\partial_{r}(\\pi)) \\nabla_{s}(\\partial_{t}(\\pi)) \\partial_{u}(\\pi) (\\phi)**2 h^{r t}-3A^{n} A_{n} \\nabla^{r}(\\partial_{q}(\\pi)) \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\phi h^{q s} h^{t u}-3\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\partial_{r}(\\phi) \\partial_{s}(\\pi) (\\phi)**(-1) h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}^{w} F_{s}^{x} F_{u}^{y} \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**6-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}^{w} \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**4 h^{u x} h^{v y} + A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}(\\phi) \\partial_{u}(\\phi) \\partial_{v}(\\phi) \\partial_{w}(\\pi) \\partial_{x}(\\pi) \\partial_{y}(\\pi) (\\phi)**3 h^{t w} h^{u x} h^{v y} -  3/2 F^{p t} F_{p}^{u} \\nabla^{s}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 -  3/2 A^{n} A_{n} F^{r u} F_{r}^{v} \\partial_{t}(\\phi) \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**3 h^{t w} + 2\\nabla^{p}(\\partial_{n}(\\pi)) \\nabla_{p}(\\partial_{q}(\\pi)) \\nabla^{n}(\\partial_{s}(\\pi)) h^{q s} +  3/2 F^{r t} F^{s u} \\nabla_{r}(\\partial_{s}(\\pi)) \\partial_{t}(\\pi) \\partial_{u}(\\pi) (\\phi)**2 +  3/2 A^{n} F_{n}^{u} F^{s v} F_{s}^{w} \\partial_{u}(\\pi) \\partial_{v}(\\pi) \\partial_{w}(\\pi) (\\phi)**4"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right)-3A^{n} F_{n}\\,^{u} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2}+3A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{t u}+3\\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{r s}+3A^{p} A^{r} F_{p}\\,^{v} F_{r}\\,^{w} \\nabla^{u}\\left(\\partial_{u}{\\pi}\\right) \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}-6A^{n} A_{n} A^{q} F_{q}\\,^{v} \\nabla^{t}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{u w}-6A^{n} F_{n}\\,^{t} \\nabla^{r}\\left(\\partial_{r}{\\pi}\\right) \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} \\phi h^{s u}+3A^{n} A_{n} A^{q} A_{q} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{t v} h^{u w}+6A^{n} A_{n} \\nabla^{q}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\pi} \\partial_{u}{\\pi} h^{r t} h^{s u}+3A^{n} A_{n} A^{r} A^{t} F_{r}\\,^{w} F_{t}\\,^{x} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{5} h^{v y}+3A^{p} A^{r} F_{p}\\,^{u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}-6A^{n} A_{n} A^{q} F_{q}\\,^{u} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{2} h^{s v} h^{t w}+3A^{n} A_{n} A^{q} A_{q} \\partial_{r}{\\phi} \\partial_{s}{\\phi} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} \\phi h^{r u} h^{s v} h^{t w}-3\\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+3A^{n} F_{n}\\,^{u} \\nabla^{s}\\left(\\partial_{r}{\\pi}\\right) \\nabla_{s}\\left(\\partial_{t}{\\pi}\\right) \\partial_{u}{\\pi} {\\phi}^{2} h^{r t}-3A^{n} A_{n} \\nabla^{r}\\left(\\partial_{q}{\\pi}\\right) \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\phi h^{q s} h^{t u}-3\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\partial_{r}{\\phi} \\partial_{s}{\\pi} {\\phi}^{-1} h^{n q} h^{r s}-A^{q} A^{s} A^{u} F_{q}\\,^{w} F_{s}\\,^{x} F_{u}\\,^{y} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{6}-3A^{n} A_{n} A^{q} A_{q} A^{s} F_{s}\\,^{w} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{4} h^{u x} h^{v y}%\n+A^{n} A_{n} A^{q} A_{q} A^{s} A_{s} \\partial_{t}{\\phi} \\partial_{u}{\\phi} \\partial_{v}{\\phi} \\partial_{w}{\\pi} \\partial_{x}{\\pi} \\partial_{y}{\\pi} {\\phi}^{3} h^{t w} h^{u x} h^{v y} - \\frac{3}{2}F^{p t} F_{p}\\,^{u} \\nabla^{s}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2} - \\frac{3}{2}A^{n} A_{n} F^{r u} F_{r}\\,^{v} \\partial_{t}{\\phi} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{3} h^{t w}+2\\nabla^{p}\\left(\\partial_{n}{\\pi}\\right) \\nabla_{p}\\left(\\partial_{q}{\\pi}\\right) \\nabla^{n}\\left(\\partial_{s}{\\pi}\\right) h^{q s}+\\frac{3}{2}F^{r t} F^{s u} \\nabla_{r}\\left(\\partial_{s}{\\pi}\\right) \\partial_{t}{\\pi} \\partial_{u}{\\pi} {\\phi}^{2}+\\frac{3}{2}A^{n} F_{n}\\,^{u} F^{s v} F_{s}\\,^{w} \\partial_{u}{\\pi} \\partial_{v}{\\pi} \\partial_{w}{\\pi} {\\phi}^{4}\\end{dmath*}"
+				}
+			],
+			"source": "sort_product(_);"
+		},
+		{
+			"cell_id": 17390231904516327574,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

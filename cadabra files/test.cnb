@@ -1,0 +1,75 @@
+{
+	"cell_id": 17436455929112145737,
+	"cells": [
+		{
+			"cell_id": 1841843630720929859,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import varying as var\nimport functions as fun"
+		},
+		{
+			"cell_id": 4269855174064704257,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "fun.writing(var.mathcalG4)"
+		},
+		{
+			"cell_id": 8974434518595894050,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,q,r,s,u,v,w,z#}::Indices(full,values={t,x,y}, position=independent).\n\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting.\nh_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\np::Depends(\\nabla{#}, \\partial{#}).\n\\phi::Depends(\\nabla{#}, \\partial{#}).\nh_{m n}::Depends(\\partial{#}).\nh^{m n}::Depends(\\partial{#}).\nG4::Depends(\\nabla{#}, \\partial{#}).\nG4p::Depends(\\nabla{#}, \\partial{#}).\nG4X::Depends(\\nabla{#}, \\partial{#}).\nG4XX::Depends(\\nabla{#}, \\partial{#}).\nR::Depends(\\nabla{#}, \\partial{#}).\nF_{m n}::Depends(\\nabla{#}, \\partial{#}).\nF^{m n}::Depends(\\nabla{#}, \\partial{#}).\npi2::Depends(\\nabla{#}, \\partial{#}).\nboxpi4::Depends(\\nabla{#}, \\partial{#}).\npi24::Depends(\\nabla{#}, \\partial{#}).\np::LaTeXForm(\"\\pi\").\nG4p::LaTeXForm(\"G_{4\\pi}\").\nG4X::LaTeXForm(\"G_{4X}\").\nG4XX::LaTeXForm(\"G_{4XX}\").\nG4Xp::LaTeXForm(\"G_{4\\pi X}\").\nboxpi4::LaTeXForm(\"\\Box^{(4)}{\\pi}\").\npi24::LaTeXForm(\"\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\").\nmathcalG{#}::LaTeXForm(\"\\mathcal{G}\")."
+		},
+		{
+			"cell_id": 8093658527029644617,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1710855504187910695,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12131499873253554257,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} =  -  1/2 G4X R \\nabla_{a}(p) \\nabla_{b}(p)-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1) + \\nabla_{c}(\\nabla_{d}(G4)) h^{c d} h_{a b} + \\nabla_{c}(G4X \\nabla_{d}(p) boxpi4) h_{a b} h^{c d} + \\nabla_{d}(G4X \\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(p)) h^{d c}-\\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} =  - \\frac{1}{2}G_{4X} R \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}-2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1}+\\nabla_{c}\\left(\\nabla_{d}\\left({G_{4}}\\right)\\right) h^{c d} h_{a b}+\\nabla_{c}\\left(G_{4X} \\nabla_{d}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{c d}+\\nabla_{d}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{d c}-\\nabla_{c}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{c d}\\end{dmath*}"
+				}
+			],
+			"source": "G4 := mathcalG^{4}_{a b} =  -  1/2 G4X R \\nabla_{a}(p) \\nabla_{b}(p)-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1) + \\nabla_{c}(\\nabla_{d}(G4)) h^{c d} h_{a b}\n+ \\nabla_{c}(G4X \\nabla_{d}(p) boxpi4) h_{a b} h^{c d} \n+ \\nabla_{d}(G4X \\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(p)) h^{d c}-\\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d}; \n#+ G4X ( -  1/2 (boxpi4)**2 h_{a b} \n#+  1/2 h_{a b} pi24-2\\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(\\nabla_{d}(p)) h^{c d} -  1/2 F_{a c} F_{b d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{c e} h^{d f}\n#-2\\nabla_{a}(\\phi) \\nabla_{c}(\\phi) \\nabla_{b}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{c d} + F_{a e} F_{c d} \\nabla_{b}(p) \\nabla_{f}(p) (\\phi)**2 h^{e c} h^{d f}); \n#+ G4XX ( -  1/2 \\nabla_{a}(p) \\nabla_{b}(p) (boxpi4)**2 +  1/2 \\nabla_{a}(p) \\nabla_{b}(p) pi24) + G4X boxpi4 (2\\nabla_{a}(\\nabla_{b}(p)) + 2\\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1));-\\nabla_{a}(\\nabla_{b}(G4))"
+		},
+		{
+			"cell_id": 9605259198806086655,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 6182865819711184383,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11780950539544179997,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} = ( -  1/2 G4X R-2G4 (\\phi)**(-1)) \\nabla_{a}(p) \\nabla_{b}(p) + 2\\nabla_{c}(\\nabla_{d}(G4)) h^{c d} h_{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} = \\left( - \\frac{1}{2}G_{4X} R-2{G_{4}} {\\phi}^{-1}\\right) \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}+2\\nabla_{c}\\left(\\nabla_{d}\\left({G_{4}}\\right)\\right) h^{c d} h_{a b}\\end{dmath*}"
+				}
+			],
+			"source": "meld(G4);"
+		},
+		{
+			"cell_id": 14155852403708024718,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

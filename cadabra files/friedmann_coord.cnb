@@ -1,0 +1,503 @@
+{
+	"cell_id": 3284426380060218884,
+	"cells": [
+		{
+			"cell_id": 15788948964467712438,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import sympy\nimport cdb.core.manip as man\nimport functions as fun\nimport friedmann_analitic as fr"
+		},
+		{
+			"cell_id": 6067293362292974559,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,q,r,s,u,v,w,x,y,z#}::Indices(full,values={t,x,y}, position=independent).\n{t, x, y}::Coordinate.\n\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting."
+		},
+		{
+			"cell_id": 17970604808265022127,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "h_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\nh::Determinant(h_{m n}).\n\\delta^{m?}_{n?}::KroneckerDelta.\n\\delta_{m?}^{n?}::KroneckerDelta.\nF_{m? n?}::AntiSymmetric.\nG3_{m? n?}::Symmetric.\ndelh_{m n}::Symmetric.\ndelh^{m n}::Symmetric.\n\\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2})."
+		},
+		{
+			"cell_id": 235018891554191807,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::Depends(t,x,y).\nX::Depends(t,x,y).\n\\phi::Depends(t,x,y).\nA_{m?}::Depends(t,x,y).\nh_{m n}::Depends(t,x,y).\nh^{m n}::Depends(t,x,y).\nG4::Depends(t,x,y).\nG4p::Depends(t,x,y).\nG4X::Depends(t,x,y).\nG4XX::Depends(t,x,y).\nK::Depends(t,x,y).\nKp::Depends(t,x,y).\nKX::Depends(t,x,y).\nN::Depends(t,x,y).\nNp::Depends(t,x,y).\nNX::Depends(t,x,y).\nF_{m n}::Depends(t,x,y).\nF^{m n}::Depends(t,x,y).\n{a,H}::Depends(t)."
+		},
+		{
+			"cell_id": 3067155718713332926,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::LaTeXForm(\"\\pi\").\nG4p::LaTeXForm(\"G_{4\\pi}\").\nG4X::LaTeXForm(\"G_{4X}\").\nG4XX::LaTeXForm(\"G_{4XX}\").\nG4Xp::LaTeXForm(\"G_{4\\pi X}\").\nKp::LaTeXForm(\"K_{\\pi}\").\nKX::LaTeXForm(\"K_{X}\").\nN::LaTeXForm(\"F\").\nNp::LaTeXForm(\"F_{\\pi}\").\nNX::LaTeXForm(\"F_{X}\").\npi2::LaTeXForm(\"\\pi^{m n}\\pi_{m n}\").\t\nboxpi4::LaTeXForm(\"\\Box^{(4)}{\\pi}\").\ndelboxpi4::LaTeXForm(\"\\delta\\Box^{(4)}{\\pi}\").\npi24::LaTeXForm(\"\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\").\nmathcalG{#}::LaTeXForm(\"\\mathcal{G}\").\nmathcalP{#}::LaTeXForm(\"\\mathcal{P}\").\nmathcalA{#}::LaTeXForm(\"\\mathcal{A}\").\nmathcalphi{#}::LaTeXForm(\"\\Phi\")."
+		},
+		{
+			"cell_id": 9002384242950056375,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14056392352344675924,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13016323550473392240,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R^{s?}_{m? n? r?} -> -\\partial_{r?}(\\Gamma^{s?}_{m? n?}) + \\partial_{n?}(\\Gamma^{s?}_{m? r?})-\\Gamma^{z}_{m? n?} \\Gamma^{s?}_{r? z} + \\Gamma^{z}_{m? r?} \\Gamma^{s?}_{n? z}"
+						}
+					],
+					"source": "\\begin{dmath*}{}R^{s?}\\,_{m? n? r?} \\rightarrow -\\partial_{r?}{\\Gamma^{s?}\\,_{m? n?}}+\\partial_{n?}{\\Gamma^{s?}\\,_{m? r?}}-\\Gamma^{z}\\,_{m? n?} \\Gamma^{s?}\\,_{r? z}+\\Gamma^{z}\\,_{m? r?} \\Gamma^{s?}\\,_{n? z}\\end{dmath*}"
+				},
+				{
+					"cell_id": 7793035170297826057,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4394672991440311421,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{l?}_{m? n?} ->  1/2 h^{l? k} (\\partial_{n?}(h_{k m?}) + \\partial_{m?}(h_{k n?})-\\partial_{k}(h_{m? n?}))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Gamma^{l?}\\,_{m? n?} \\rightarrow \\frac{1}{2}h^{l? k} \\left(\\partial_{n?}{h_{k m?}}+\\partial_{m?}{h_{k n?}}-\\partial_{k}{h_{m? n?}}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 881112829926360175,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17225397737012744683,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{h_{t t} = 1, h_{x x} = -a, h_{y y} = -a, h^{t t} = 1, h^{x x} = -(a)**(-1), h^{y y} = -(a)**(-1)}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[h_{t t} = 1,~\\discretionary{}{}{} h_{x x} = -a,~\\discretionary{}{}{} h_{y y} = -a,~\\discretionary{}{}{} h^{t t} = 1,~\\discretionary{}{}{} h^{x x} = -{a}^{-1},~\\discretionary{}{}{} h^{y y} = -{a}^{-1}\\right]\\end{dmath*}"
+				},
+				{
+					"cell_id": 10860116212564965581,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7611230225831644060,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "{h_{t t} = 1, h_{x x} = -a, h_{y y} = -a, h^{t t} = 1, h^{x x} = -(a)**(-1), h^{y y} = -(a)**(-1), h = (a)**2}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left[h_{t t} = 1,~\\discretionary{}{}{} h_{x x} = -a,~\\discretionary{}{}{} h_{y y} = -a,~\\discretionary{}{}{} h^{t t} = 1,~\\discretionary{}{}{} h^{x x} = -{a}^{-1},~\\discretionary{}{}{} h^{y y} = -{a}^{-1},~\\discretionary{}{}{} h = {a}^{2}\\right]\\end{dmath*}"
+				}
+			],
+			"source": "RtoG:= R^{s?}_{m? n? r?} -> \n - \\partial_{r?}{ \\Gamma^{s?}_{m? n?} }\n + \\partial_{n?}{ \\Gamma^{s?}_{m? r?} }\n - \\Gamma^{z}_{m? n?} \\Gamma^{s?}_{r? z}\n + \\Gamma^{z}_{m? r?} \\Gamma^{s?}_{n? z};\nGtog:= \\Gamma^{l?}_{m? n?} ->\n  (1/2) * h^{l? k} ( \n        \\partial_{n?}{ h_{k m?} } + \\partial_{m?}{ h_{k n?} } - \\partial_{k}{ h_{m? n?} } );\nfriedmann:= { h_{t t} = 1,   \n       h_{x x} = -a, \n       h_{y y} = -a,\n     }.\nfriedmannInv:= { h^{t t} = 1,   \n       h^{x x} = -a**(-1), \n       h^{y y} = -a**(-1),\n\th^{t x} =0,\nh^{t y} =0,\nh^{x y} =0,\nh^{x t} =0,\nh^{y t} =0,\nh^{y x} =0,\n     }.\ncomplete(friedmann, $h^{m n}$);\ncomplete(friedmann, $h$);"
+		},
+		{
+			"cell_id": 17799195918097873426,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "#ElField:= { F_{t x} = \\partial_{t}{A_{x}} - \\partial_{x}{A_{t}},\n#F_{x t} = \\partial_{x}{A_{t}} - \\partial_{t}{A_{x}},\n#F_{t y} = \\partial_{t}{A_{y}} - \\partial_{y}{A_{t}},\n#F_{y t} = \\partial_{y}{A_{t}} - \\partial_{t}{A_{y}},\n#F_{x y} = \\partial_{x}{A_{y}} - \\partial_{y}{A_{x}},\n#F_{y x} = \\partial_{y}{A_{x}} - \\partial_{x}{A_{y}} \n#     }.\n#ElFieldInv:= F^{m n} = h^{m a} h^{n b} F_{a b};\n#evaluate(ElFieldInv, ElField, rhsonly=True);\n#substitute(ElFieldInv, friedmannInv)\n#collect_factors(ElFieldInv);"
+		},
+		{
+			"cell_id": 7834749911539192372,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 10777360503074238081,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5987489807178993823,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{l}_{m n} =  1/2 h^{l k} (\\partial_{n}(h_{k m}) + \\partial_{m}(h_{k n})-\\partial_{k}(h_{m n}))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Gamma^{l}\\,_{m n} = \\frac{1}{2}h^{l k} \\left(\\partial_{n}{h_{k m}}+\\partial_{m}{h_{k n}}-\\partial_{k}{h_{m n}}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 14938396551743552840,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17976714730659398936,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Gamma^{l}_{m n} = \\components_{m n}^{l}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Gamma^{l}\\,_{m n} = \\square{}_{m}{}_{n}{}^{l}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source": "Chr:= \\Gamma^{l}_{m n} =\n  (1/2) * h^{l k} ( \n        \\partial_{n}{ h_{k m} } + \\partial_{m}{ h_{k n} } - \\partial_{k}{ h_{m n} } );\nevaluate(Chr, friedmann, rhsonly=True)\nsubstitute(Chr, $\\partial_{t}{a} a**(-1) -> H$);"
+		},
+		{
+			"cell_id": 15343599006208015647,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 13611094151432815524,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12982901303591368983,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R3 = R^{s}_{m s n} h^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}{R_{3}} = R^{s}\\,_{m s n} h^{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 536354594883842427,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 7251659829978137298,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R3 = ( -  1/2 \\partial_{n}(h^{s k} (\\partial_{s}(h_{k m}) + \\partial_{m}(h_{k s})-\\partial_{k}(h_{m s}))) +  1/2 \\partial_{s}(h^{s k} (\\partial_{n}(h_{k m}) + \\partial_{m}(h_{k n})-\\partial_{k}(h_{m n}))) -  1/4 h^{z k} (\\partial_{s}(h_{k m}) + \\partial_{m}(h_{k s})-\\partial_{k}(h_{m s})) h^{s a} (\\partial_{z}(h_{a n}) + \\partial_{n}(h_{a z})-\\partial_{a}(h_{n z})) +  1/4 h^{z k} (\\partial_{n}(h_{k m}) + \\partial_{m}(h_{k n})-\\partial_{k}(h_{m n})) h^{s a} (\\partial_{z}(h_{a s}) + \\partial_{s}(h_{a z})-\\partial_{a}(h_{s z}))) h^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}{R_{3}} = \\left( - \\frac{1}{2}\\partial_{n}\\left(h^{s k} \\left(\\partial_{s}{h_{k m}}+\\partial_{m}{h_{k s}}-\\partial_{k}{h_{m s}}\\right)\\right)+\\frac{1}{2}\\partial_{s}\\left(h^{s k} \\left(\\partial_{n}{h_{k m}}+\\partial_{m}{h_{k n}}-\\partial_{k}{h_{m n}}\\right)\\right) - \\frac{1}{4}h^{z k} \\left(\\partial_{s}{h_{k m}}+\\partial_{m}{h_{k s}}-\\partial_{k}{h_{m s}}\\right) h^{s a} \\left(\\partial_{z}{h_{a n}}+\\partial_{n}{h_{a z}}-\\partial_{a}{h_{n z}}\\right)+\\frac{1}{4}h^{z k} \\left(\\partial_{n}{h_{k m}}+\\partial_{m}{h_{k n}}-\\partial_{k}{h_{m n}}\\right) h^{s a} \\left(\\partial_{z}{h_{a s}}+\\partial_{s}{h_{a z}}-\\partial_{a}{h_{s z}}\\right)\\right) h^{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 17947453474626077266,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9813473792555432471,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R3 =  1/2 (-4a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2)"
+						}
+					],
+					"source": "\\begin{dmath*}{}{R_{3}} = \\frac{1}{2}\\left(-4a \\partial_{t t}{a}+{\\left(\\partial_{t}{a}\\right)}^{2}\\right) {a}^{-2}\\end{dmath*}"
+				}
+			],
+			"source": "RScallar := R3 = R^{s}_{m s n}h^{m n};\nsubstitute(RScallar, RtoG)\nsubstitute(RScallar, Gtog);\nevaluate(RScallar, friedmann, rhsonly=True);"
+		},
+		{
+			"cell_id": 11908897222271796459,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15186918738561335228,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9973675916302673899,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R =  1/2 (-4a \\partial_{t t}(a) + (\\partial_{t}(a))**2) (a)**(-2) -  1/4 F_{a b} F_{c d} h^{a c} h^{b d} (\\phi)**2-2(\\phi)**(-1) h^{a b} \\partial_{a}(\\phi) \\partial_{b}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = \\frac{1}{2}\\left(-4a \\partial_{t t}{a}+{\\left(\\partial_{t}{a}\\right)}^{2}\\right) {a}^{-2} - \\frac{1}{4}F_{a b} F_{c d} h^{a c} h^{b d} {\\phi}^{2}-2{\\phi}^{-1} h^{a b} \\partial_{a}{\\phi} \\partial_{b}{\\phi}\\end{dmath*}"
+				}
+			],
+			"source": "ScalarCurvature = substitute(fr.ScalarCurvature, RScallar);"
+		},
+		{
+			"cell_id": 15409672026481537806,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14637520700158140426,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2059565923874740708,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R =  1/4 (((((F_{t x})**2 + (F_{t y})**2 + (F_{x t})**2 + (F_{y t})**2) a-(F_{t t})**2 (a)**2-(F_{x x})**2-(F_{x y})**2-(F_{y x})**2-(F_{y y})**2) (\\phi)**2-8a \\partial_{t t}(a) + 2(\\partial_{t}(a))**2) \\phi + 8(-a (\\partial_{t}(\\phi))**2 + (\\partial_{x}(\\phi))**2 + (\\partial_{y}(\\phi))**2) a) ((a)**2 \\phi)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = \\frac{1}{4}\\left(\\left(\\left(\\left({F_{t x}}^{2}+{F_{t y}}^{2}+{F_{x t}}^{2}+{F_{y t}}^{2}\\right) a-{F_{t t}}^{2} {a}^{2}-{F_{x x}}^{2}-{F_{x y}}^{2}-{F_{y x}}^{2}-{F_{y y}}^{2}\\right) {\\phi}^{2}-8a \\partial_{t t}{a}+2{\\left(\\partial_{t}{a}\\right)}^{2}\\right) \\phi+8\\left(-a {\\left(\\partial_{t}{\\phi}\\right)}^{2}+{\\left(\\partial_{x}{\\phi}\\right)}^{2}+{\\left(\\partial_{y}{\\phi}\\right)}^{2}\\right) a\\right) {\\left({a}^{2} \\phi\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "evaluate(ScalarCurvature, friedmann, rhsonly=True);"
+		},
+		{
+			"cell_id": 7666261926425679060,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 868988344831175069,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13127470339413861567,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "h^{a b} (\\partial_{a b}(p)-\\Gamma^{y}_{a b} \\partial_{y}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}h^{a b} \\left(\\partial_{a b}{\\pi}-\\Gamma^{y}\\,_{a b} \\partial_{y}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "box3D = man.get_rhs(fr.box3D);"
+		},
+		{
+			"cell_id": 7826822978915403346,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3028918673820531708,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2591858155688910053,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "h^{a b} (\\partial_{a b}(p)-\\components_{a b}^{y}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{y}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}h^{a b} \\left(\\partial_{a b}{\\pi}-\\square{}_{a}{}_{b}{}^{y}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{y}{\\pi}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "substitute(box3D, Chr);"
+		},
+		{
+			"cell_id": 17653329648013813412,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "evaluate(box3D, friedmann);"
+		},
+		{
+			"cell_id": 7929675934291208934,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17671649040860901841,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13195777249669753470,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "a \\partial_{t t}(p) \\phi (a \\phi)**(-1) + \\partial_{t}(a) \\partial_{t}(p) \\phi (a \\phi)**(-1)-\\partial_{x x}(p) \\phi (a \\phi)**(-1)-\\partial_{y y}(p) \\phi (a \\phi)**(-1) + a \\partial_{t}(p) \\partial_{t}(\\phi) (a \\phi)**(-1)-\\partial_{x}(p) \\partial_{x}(\\phi) (a \\phi)**(-1)-\\partial_{y}(p) \\partial_{y}(\\phi) (a \\phi)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}a \\partial_{t t}{\\pi} \\phi {\\left(a \\phi\\right)}^{-1}+\\partial_{t}{a} \\partial_{t}{\\pi} \\phi {\\left(a \\phi\\right)}^{-1}-\\partial_{x x}{\\pi} \\phi {\\left(a \\phi\\right)}^{-1}-\\partial_{y y}{\\pi} \\phi {\\left(a \\phi\\right)}^{-1}+a \\partial_{t}{\\pi} \\partial_{t}{\\phi} {\\left(a \\phi\\right)}^{-1}-\\partial_{x}{\\pi} \\partial_{x}{\\phi} {\\left(a \\phi\\right)}^{-1}-\\partial_{y}{\\pi} \\partial_{y}{\\phi} {\\left(a \\phi\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "distribute(box4D);"
+		},
+		{
+			"cell_id": 10998850548450986215,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15601538244757448185,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1912876833699385727,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "((a \\partial_{t t}(p) + \\partial_{t}(a) \\partial_{t}(p)-\\partial_{x x}(p)-\\partial_{y y}(p)) \\phi + a \\partial_{t}(p) \\partial_{t}(\\phi)-\\partial_{x}(p) \\partial_{x}(\\phi)-\\partial_{y}(p) \\partial_{y}(\\phi)) (a \\phi)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\left(a \\partial_{t t}{\\pi}+\\partial_{t}{a} \\partial_{t}{\\pi}-\\partial_{x x}{\\pi}-\\partial_{y y}{\\pi}\\right) \\phi+a \\partial_{t}{\\pi} \\partial_{t}{\\phi}-\\partial_{x}{\\pi} \\partial_{x}{\\phi}-\\partial_{y}{\\pi} \\partial_{y}{\\phi}\\right) {\\left(a \\phi\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "canonicalise(box4D);"
+		},
+		{
+			"cell_id": 17811031011204086086,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "#substitute(an.AEq, ElFieldInv);"
+		},
+		{
+			"cell_id": 18288779291487442204,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8919762869855490527,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16108152460168107362,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components^{n}({{y} =  1/2 (8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{y}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{y t}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{y}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{y x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{y}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y y}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{y}(p) + 8(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{y}(p) + 8(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{y}(p) + 8(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{y}(p)-4(F^{t t} H \\partial_{t}(p) \\partial_{y}(p) + F^{t x} H \\partial_{x}(p) \\partial_{y}(p) + F^{t y} H (\\partial_{y}(p))**2 + F^{y t} \\partial_{t}(a) (\\partial_{t}(p))**2 + F^{y x} \\partial_{t}(a) \\partial_{t}(p) \\partial_{x}(p) + F^{y y} \\partial_{t}(a) \\partial_{t}(p) \\partial_{y}(p)) G4X-(3F^{t y} G4 H + 2F^{t y} \\partial_{t}(G4) + 2F^{x y} \\partial_{x}(G4) + F^{y t} G4 H + 2F^{y y} \\partial_{y}(G4) + 2G4 \\partial_{t}(F^{t y}) + 2G4 \\partial_{x}(F^{x y}) + 2G4 \\partial_{y}(F^{y y})) a) (a)**(-1), {x} =  1/2 (8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{x}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{x t}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{x x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{x}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y x}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{x}(p) + 8(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{x}(p) + 8(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{x}(p) + 8(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{x}(p)-4(F^{t t} H \\partial_{t}(p) \\partial_{x}(p) + F^{t x} H (\\partial_{x}(p))**2 + F^{t y} H \\partial_{x}(p) \\partial_{y}(p) + F^{x t} \\partial_{t}(a) (\\partial_{t}(p))**2 + F^{x x} \\partial_{t}(a) \\partial_{t}(p) \\partial_{x}(p) + F^{x y} \\partial_{t}(a) \\partial_{t}(p) \\partial_{y}(p)) G4X-(3F^{t x} G4 H + 2F^{t x} \\partial_{t}(G4) + F^{x t} G4 H + 2F^{x x} \\partial_{x}(G4) + 2F^{y x} \\partial_{y}(G4) + 2G4 \\partial_{t}(F^{t x}) + 2G4 \\partial_{x}(F^{x x}) + 2G4 \\partial_{y}(F^{y x})) a) (a)**(-1), {t} =  -  1/2 (F^{x x} + F^{y y}) G4 \\partial_{t}(a)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{t}(p)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{t t}(p)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{t}(p)-4(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{x t}(p)-4(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{t}(p)-4(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y t}(p)-4(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{t}(p)-4(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{t}(p)-4(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{t}(p)-4(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{t}(p) + 2(F^{x t} \\partial_{t}(p) \\partial_{x}(p) + F^{x x} (\\partial_{x}(p))**2 + F^{x y} \\partial_{x}(p) \\partial_{y}(p) + F^{y t} \\partial_{t}(p) \\partial_{y}(p) + F^{y x} \\partial_{x}(p) \\partial_{y}(p) + F^{y y} (\\partial_{y}(p))**2) G4X H-F^{t t} G4 H-F^{t t} \\partial_{t}(G4)-F^{x t} \\partial_{x}(G4)-F^{y t} \\partial_{y}(G4)-G4 \\partial_{t}(F^{t t})-G4 \\partial_{x}(F^{x t})-G4 \\partial_{y}(F^{y t})}) = 0"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}^{n}\\left\\{\\begin{aligned}\\square{}^{y}& = \\frac{1}{2}\\left(8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{y}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y t}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y y}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}+8\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}+8\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}-4\\left(F^{t t} H \\partial_{t}{\\pi} \\partial_{y}{\\pi}+F^{t x} H \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{t y} H {\\left(\\partial_{y}{\\pi}\\right)}^{2}+F^{y t} \\partial_{t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2}+F^{y x} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{y y} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{y}{\\pi}\\right) G_{4X}-\\left(3F^{t y} {G_{4}} H+2F^{t y} \\partial_{t}\\left({G_{4}}\\right)+2F^{x y} \\partial_{x}\\left({G_{4}}\\right)+F^{y t} {G_{4}} H+2F^{y y} \\partial_{y}\\left({G_{4}}\\right)+2{G_{4}} \\partial_{t}{F^{t y}}+2{G_{4}} \\partial_{x}{F^{x y}}+2{G_{4}} \\partial_{y}{F^{y y}}\\right) a\\right) {a}^{-1}\\\\[-.5ex]\n\\square{}^{x}& = \\frac{1}{2}\\left(8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{x}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x t}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y x}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}+8\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}+8\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}-4\\left(F^{t t} H \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{t x} H {\\left(\\partial_{x}{\\pi}\\right)}^{2}+F^{t y} H \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{x t} \\partial_{t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2}+F^{x x} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{x y} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{y}{\\pi}\\right) G_{4X}-\\left(3F^{t x} {G_{4}} H+2F^{t x} \\partial_{t}\\left({G_{4}}\\right)+F^{x t} {G_{4}} H+2F^{x x} \\partial_{x}\\left({G_{4}}\\right)+2F^{y x} \\partial_{y}\\left({G_{4}}\\right)+2{G_{4}} \\partial_{t}{F^{t x}}+2{G_{4}} \\partial_{x}{F^{x x}}+2{G_{4}} \\partial_{y}{F^{y x}}\\right) a\\right) {a}^{-1}\\\\[-.5ex]\n\\square{}^{t}& =  - \\frac{1}{2}\\left(F^{x x}+F^{y y}\\right) {G_{4}} \\partial_{t}{a}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{t}{\\pi}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t t}{\\pi}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x t}{\\pi}-4\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y t}{\\pi}-4\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}-4\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}-4\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}+2\\left(F^{x t} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{x x} {\\left(\\partial_{x}{\\pi}\\right)}^{2}+F^{x y} \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{y t} \\partial_{t}{\\pi} \\partial_{y}{\\pi}+F^{y x} \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{y y} {\\left(\\partial_{y}{\\pi}\\right)}^{2}\\right) G_{4X} H-F^{t t} {G_{4}} H-F^{t t} \\partial_{t}\\left({G_{4}}\\right)-F^{x t} \\partial_{x}\\left({G_{4}}\\right)-F^{y t} \\partial_{y}\\left({G_{4}}\\right)-{G_{4}} \\partial_{t}{F^{t t}}-{G_{4}} \\partial_{x}{F^{x t}}-{G_{4}} \\partial_{y}{F^{y t}}\\\\[-.5ex]\n\\end{aligned}\\right.\n = 0\\end{dmath*}"
+				}
+			],
+			"source": "evaluate(an.AEq, friedmann);"
+		},
+		{
+			"cell_id": 14886978659114780386,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15422807286182426950,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9561272652821189689,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\components^{n}({{y} =  1/2 (8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{y}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{y t}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{y}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{y x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{y}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y y}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{y}(p) + 8(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{y}(p) + 8(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{y}(p) + 8(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{y}(p)-4(F^{t t} H \\partial_{t}(p) \\partial_{y}(p) + F^{t x} H \\partial_{x}(p) \\partial_{y}(p) + F^{t y} H (\\partial_{y}(p))**2 + F^{y t} \\partial_{t}(a) (\\partial_{t}(p))**2 + F^{y x} \\partial_{t}(a) \\partial_{t}(p) \\partial_{x}(p) + F^{y y} \\partial_{t}(a) \\partial_{t}(p) \\partial_{y}(p)) G4X-(3F^{t y} G4 H + 2F^{t y} \\partial_{t}(G4) + 2F^{x y} \\partial_{x}(G4) + F^{y t} G4 H + 2F^{y y} \\partial_{y}(G4) + 2G4 \\partial_{t}(F^{t y}) + 2G4 \\partial_{x}(F^{x y}) + 2G4 \\partial_{y}(F^{y y})) a) (a)**(-1), {x} =  1/2 (8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{x}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{x t}(p) + 8(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{x x}(p) + 8(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{x}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y x}(p) + 8(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{x}(p) + 8(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{x}(p) + 8(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{x}(p) + 8(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{x}(p)-4(F^{t t} H \\partial_{t}(p) \\partial_{x}(p) + F^{t x} H (\\partial_{x}(p))**2 + F^{t y} H \\partial_{x}(p) \\partial_{y}(p) + F^{x t} \\partial_{t}(a) (\\partial_{t}(p))**2 + F^{x x} \\partial_{t}(a) \\partial_{t}(p) \\partial_{x}(p) + F^{x y} \\partial_{t}(a) \\partial_{t}(p) \\partial_{y}(p)) G4X-(3F^{t x} G4 H + 2F^{t x} \\partial_{t}(G4) + F^{x t} G4 H + 2F^{x x} \\partial_{x}(G4) + 2F^{y x} \\partial_{y}(G4) + 2G4 \\partial_{t}(F^{t x}) + 2G4 \\partial_{x}(F^{x x}) + 2G4 \\partial_{y}(F^{y x})) a) (a)**(-1), {t} =  -  1/2 (F^{x x} + F^{y y}) G4 \\partial_{t}(a)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X H \\partial_{t}(p)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) G4X \\partial_{t t}(p)-4(F^{t t} \\partial_{t}(p) + F^{t x} \\partial_{x}(p) + F^{t y} \\partial_{y}(p)) \\partial_{t}(G4X) \\partial_{t}(p)-4(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) G4X \\partial_{x t}(p)-4(F^{x t} \\partial_{t}(p) + F^{x x} \\partial_{x}(p) + F^{x y} \\partial_{y}(p)) \\partial_{x}(G4X) \\partial_{t}(p)-4(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) G4X \\partial_{y t}(p)-4(F^{y t} \\partial_{t}(p) + F^{y x} \\partial_{x}(p) + F^{y y} \\partial_{y}(p)) \\partial_{y}(G4X) \\partial_{t}(p)-4(F^{t t} \\partial_{t t}(p) + F^{t x} \\partial_{x t}(p) + F^{t y} \\partial_{y t}(p) + \\partial_{t}(F^{t t}) \\partial_{t}(p) + \\partial_{t}(F^{t x}) \\partial_{x}(p) + \\partial_{t}(F^{t y}) \\partial_{y}(p)) G4X \\partial_{t}(p)-4(F^{x t} \\partial_{x t}(p) + F^{x x} \\partial_{x x}(p) + F^{x y} \\partial_{y x}(p) + \\partial_{x}(F^{x t}) \\partial_{t}(p) + \\partial_{x}(F^{x x}) \\partial_{x}(p) + \\partial_{x}(F^{x y}) \\partial_{y}(p)) G4X \\partial_{t}(p)-4(F^{y t} \\partial_{y t}(p) + F^{y x} \\partial_{y x}(p) + F^{y y} \\partial_{y y}(p) + \\partial_{y}(F^{y t}) \\partial_{t}(p) + \\partial_{y}(F^{y x}) \\partial_{x}(p) + \\partial_{y}(F^{y y}) \\partial_{y}(p)) G4X \\partial_{t}(p) + 2(F^{x t} \\partial_{t}(p) \\partial_{x}(p) + F^{x x} (\\partial_{x}(p))**2 + F^{x y} \\partial_{x}(p) \\partial_{y}(p) + F^{y t} \\partial_{t}(p) \\partial_{y}(p) + F^{y x} \\partial_{x}(p) \\partial_{y}(p) + F^{y y} (\\partial_{y}(p))**2) G4X H-F^{t t} G4 H-F^{t t} \\partial_{t}(G4)-F^{x t} \\partial_{x}(G4)-F^{y t} \\partial_{y}(G4)-G4 \\partial_{t}(F^{t t})-G4 \\partial_{x}(F^{x t})-G4 \\partial_{y}(F^{y t})}) = 0"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\square{}^{n}\\left\\{\\begin{aligned}\\square{}^{y}& = \\frac{1}{2}\\left(8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{y}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y t}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y y}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{y}{\\pi}+8\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}+8\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}+8\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y}{\\pi}-4\\left(F^{t t} H \\partial_{t}{\\pi} \\partial_{y}{\\pi}+F^{t x} H \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{t y} H {\\left(\\partial_{y}{\\pi}\\right)}^{2}+F^{y t} \\partial_{t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2}+F^{y x} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{y y} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{y}{\\pi}\\right) G_{4X}-\\left(3F^{t y} {G_{4}} H+2F^{t y} \\partial_{t}\\left({G_{4}}\\right)+2F^{x y} \\partial_{x}\\left({G_{4}}\\right)+F^{y t} {G_{4}} H+2F^{y y} \\partial_{y}\\left({G_{4}}\\right)+2{G_{4}} \\partial_{t}{F^{t y}}+2{G_{4}} \\partial_{x}{F^{x y}}+2{G_{4}} \\partial_{y}{F^{y y}}\\right) a\\right) {a}^{-1}\\\\[-.5ex]\n\\square{}^{x}& = \\frac{1}{2}\\left(8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{x}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x t}{\\pi}+8\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x x}{\\pi}+8\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y x}{\\pi}+8\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{x}{\\pi}+8\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}+8\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}+8\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x}{\\pi}-4\\left(F^{t t} H \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{t x} H {\\left(\\partial_{x}{\\pi}\\right)}^{2}+F^{t y} H \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{x t} \\partial_{t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2}+F^{x x} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{x y} \\partial_{t}{a} \\partial_{t}{\\pi} \\partial_{y}{\\pi}\\right) G_{4X}-\\left(3F^{t x} {G_{4}} H+2F^{t x} \\partial_{t}\\left({G_{4}}\\right)+F^{x t} {G_{4}} H+2F^{x x} \\partial_{x}\\left({G_{4}}\\right)+2F^{y x} \\partial_{y}\\left({G_{4}}\\right)+2{G_{4}} \\partial_{t}{F^{t x}}+2{G_{4}} \\partial_{x}{F^{x x}}+2{G_{4}} \\partial_{y}{F^{y x}}\\right) a\\right) {a}^{-1}\\\\[-.5ex]\n\\square{}^{t}& =  - \\frac{1}{2}\\left(F^{x x}+F^{y y}\\right) {G_{4}} \\partial_{t}{a}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} H \\partial_{t}{\\pi}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t t}{\\pi}-4\\left(F^{t t} \\partial_{t}{\\pi}+F^{t x} \\partial_{x}{\\pi}+F^{t y} \\partial_{y}{\\pi}\\right) \\partial_{t}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{x t}{\\pi}-4\\left(F^{x t} \\partial_{t}{\\pi}+F^{x x} \\partial_{x}{\\pi}+F^{x y} \\partial_{y}{\\pi}\\right) \\partial_{x}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{y t}{\\pi}-4\\left(F^{y t} \\partial_{t}{\\pi}+F^{y x} \\partial_{x}{\\pi}+F^{y y} \\partial_{y}{\\pi}\\right) \\partial_{y}{G_{4X}} \\partial_{t}{\\pi}-4\\left(F^{t t} \\partial_{t t}{\\pi}+F^{t x} \\partial_{x t}{\\pi}+F^{t y} \\partial_{y t}{\\pi}+\\partial_{t}{F^{t t}} \\partial_{t}{\\pi}+\\partial_{t}{F^{t x}} \\partial_{x}{\\pi}+\\partial_{t}{F^{t y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}-4\\left(F^{x t} \\partial_{x t}{\\pi}+F^{x x} \\partial_{x x}{\\pi}+F^{x y} \\partial_{y x}{\\pi}+\\partial_{x}{F^{x t}} \\partial_{t}{\\pi}+\\partial_{x}{F^{x x}} \\partial_{x}{\\pi}+\\partial_{x}{F^{x y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}-4\\left(F^{y t} \\partial_{y t}{\\pi}+F^{y x} \\partial_{y x}{\\pi}+F^{y y} \\partial_{y y}{\\pi}+\\partial_{y}{F^{y t}} \\partial_{t}{\\pi}+\\partial_{y}{F^{y x}} \\partial_{x}{\\pi}+\\partial_{y}{F^{y y}} \\partial_{y}{\\pi}\\right) G_{4X} \\partial_{t}{\\pi}+2\\left(F^{x t} \\partial_{t}{\\pi} \\partial_{x}{\\pi}+F^{x x} {\\left(\\partial_{x}{\\pi}\\right)}^{2}+F^{x y} \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{y t} \\partial_{t}{\\pi} \\partial_{y}{\\pi}+F^{y x} \\partial_{x}{\\pi} \\partial_{y}{\\pi}+F^{y y} {\\left(\\partial_{y}{\\pi}\\right)}^{2}\\right) G_{4X} H-F^{t t} {G_{4}} H-F^{t t} \\partial_{t}\\left({G_{4}}\\right)-F^{x t} \\partial_{x}\\left({G_{4}}\\right)-F^{y t} \\partial_{y}\\left({G_{4}}\\right)-{G_{4}} \\partial_{t}{F^{t t}}-{G_{4}} \\partial_{x}{F^{x t}}-{G_{4}} \\partial_{y}{F^{y t}}\\\\[-.5ex]\n\\end{aligned}\\right.\n = 0\\end{dmath*}"
+				}
+			],
+			"source": "factor_out(an.AEq, $8(F^{t t}\\patrial_{t}{p} + F^{t x}\\partial_{x}{p} + F^{t y}\\partial_{y}{p})$);"
+		},
+		{
+			"cell_id": 9039874379081984163,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "an.writing(an.AEq)"
+		},
+		{
+			"cell_id": 1257082036235974256,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 1580312934598754924,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5490533011124405106,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Np-2h^{m n} \\partial_{m}(NX) \\partial_{n}(p)-2h^{m n} NX \\partial_{m n}(p) + 2h^{m n} \\components_{m n}^{w}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) NX \\partial_{w}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}F_{\\pi}-2h^{m n} \\partial_{m}{F_{X}} \\partial_{n}{\\pi}-2h^{m n} F_{X} \\partial_{m n}{\\pi}+2h^{m n} \\square{}_{m}{}_{n}{}^{w}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n F_{X} \\partial_{w}{\\pi}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(an.piEq1, Chr);"
+		},
+		{
+			"cell_id": 11805342540133152051,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 7737009807296958394,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14402197360024695420,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "((Np-2\\partial_{t}(NX) \\partial_{t}(p)) a + 2(-a \\partial_{t t}(p) + \\partial_{x x}(p) + \\partial_{y y}(p)) NX-2NX \\partial_{t}(a) \\partial_{t}(p) + 2\\partial_{x}(NX) \\partial_{x}(p) + 2\\partial_{y}(NX) \\partial_{y}(p)) (a)**(-1)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(\\left(F_{\\pi}-2\\partial_{t}{F_{X}} \\partial_{t}{\\pi}\\right) a+2\\left(-a \\partial_{t t}{\\pi}+\\partial_{x x}{\\pi}+\\partial_{y y}{\\pi}\\right) F_{X}-2F_{X} \\partial_{t}{a} \\partial_{t}{\\pi}+2\\partial_{x}{F_{X}} \\partial_{x}{\\pi}+2\\partial_{y}{F_{X}} \\partial_{y}{\\pi}\\right) {a}^{-1}\\end{dmath*}"
+				}
+			],
+			"source": "evaluate(an.piEq1,friedmann);"
+		},
+		{
+			"cell_id": 8298355125582636363,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 11523441709899621810,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12960175632821437375,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "Kp \\partial_{a}(\\partial_{b}(p)) h^{a b}-Kp \\components_{b w}^{a}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{a}(p) h^{b w}-2h^{a b} \\partial_{a}(KX) \\partial_{b}(p) \\partial_{m}(\\partial_{n}(p)) h^{m n}-2h^{a b} KX \\partial_{a b}(p) \\partial_{m}(\\partial_{n}(p)) h^{m n}-2h^{a b} KX \\partial_{a}(p) \\partial_{b m n}(p) h^{m n}-2h^{a b} KX \\partial_{a}(p) \\partial_{m}(\\partial_{n}(p)) \\partial_{b}(h^{m n}) + 2h^{a b} \\partial_{a}(KX) \\partial_{b}(p) \\components_{n u}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{m}(p) h^{n u} + 2h^{a b} KX \\partial_{a b}(p) \\components_{n u}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{m}(p) h^{n u} + 2h^{a b} KX \\partial_{a}(p) \\partial_{b}(\\components_{n u}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)})) \\partial_{m}(p) h^{n u} + 2h^{a b} KX \\partial_{a}(p) \\components_{n u}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{b m}(p) h^{n u} + 2h^{a b} KX \\partial_{a}(p) \\components_{n u}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{m}(p) \\partial_{b}(h^{n u}) + 2h^{a b} \\components_{a b}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) KX \\partial_{m}(p) \\partial_{n}(\\partial_{v}(p)) h^{n v}-2h^{a b} \\components_{a b}^{t}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) KX \\partial_{t}(p) \\components_{n v}^{m}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{m}(p) h^{n v} + \\partial_{a}(\\partial_{b}(K)) h^{a b}-\\components_{b s}^{a}({{y, t, y} =  1/2 H, {x, t, x} =  1/2 H, {t, y, y} =  1/2 H, {t, x, x} =  1/2 H, {y, y, t} =  1/2 \\partial_{t}(a), {x, x, t} =  1/2 \\partial_{t}(a)}) \\partial_{a}(K) h^{b s}"
+						}
+					],
+					"source": "\\begin{dmath*}{}K_{\\pi} \\partial_{a}\\left(\\partial_{b}{\\pi}\\right) h^{a b}-K_{\\pi} \\square{}_{b}{}_{w}{}^{a}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{a}{\\pi} h^{b w}-2h^{a b} \\partial_{a}{K_{X}} \\partial_{b}{\\pi} \\partial_{m}\\left(\\partial_{n}{\\pi}\\right) h^{m n}-2h^{a b} K_{X} \\partial_{a b}{\\pi} \\partial_{m}\\left(\\partial_{n}{\\pi}\\right) h^{m n}-2h^{a b} K_{X} \\partial_{a}{\\pi} \\partial_{b m n}{\\pi} h^{m n}-2h^{a b} K_{X} \\partial_{a}{\\pi} \\partial_{m}\\left(\\partial_{n}{\\pi}\\right) \\partial_{b}{h^{m n}}+2h^{a b} \\partial_{a}{K_{X}} \\partial_{b}{\\pi} \\square{}_{n}{}_{u}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{m}{\\pi} h^{n u}+2h^{a b} K_{X} \\partial_{a b}{\\pi} \\square{}_{n}{}_{u}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{m}{\\pi} h^{n u}+2h^{a b} K_{X} \\partial_{a}{\\pi} \\partial_{b}\\left(\\square{}_{n}{}_{u}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\right) \\partial_{m}{\\pi} h^{n u}+2h^{a b} K_{X} \\partial_{a}{\\pi} \\square{}_{n}{}_{u}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{b m}{\\pi} h^{n u}+2h^{a b} K_{X} \\partial_{a}{\\pi} \\square{}_{n}{}_{u}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{m}{\\pi} \\partial_{b}{h^{n u}}+2h^{a b} \\square{}_{a}{}_{b}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n K_{X} \\partial_{m}{\\pi} \\partial_{n}\\left(\\partial_{v}{\\pi}\\right) h^{n v}-2h^{a b} \\square{}_{a}{}_{b}{}^{t}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n K_{X} \\partial_{t}{\\pi} \\square{}_{n}{}_{v}{}^{m}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{m}{\\pi} h^{n v}+\\partial_{a}\\left(\\partial_{b}{K}\\right) h^{a b}-\\square{}_{b}{}_{s}{}^{a}\\left\\{\\begin{aligned}\\square{}_{y}{}_{t}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{x}{}_{t}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{y}{}^{y}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{t}{}_{x}{}^{x}& = \\frac{1}{2}H\\\\[-.5ex]\n\\square{}_{y}{}_{y}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\square{}_{x}{}_{x}{}^{t}& = \\frac{1}{2}\\partial_{t}{a}\\\\[-.5ex]\n\\end{aligned}\\right.\n \\partial_{a}{K} h^{b s}\\end{dmath*}"
+				}
+			],
+			"source": "substitute(an.piEq2, Chr);"
+		},
+		{
+			"cell_id": 18103122659362503081,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3382512338646647280,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6759026472857005494,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "(-2(\\partial_{x x}(p) + \\partial_{y y}(p)) KX \\partial_{t}(a) \\partial_{t}(p)-(-a \\partial_{t t}(K) + \\partial_{x x}(K) + \\partial_{y y}(K)) a + 4(-a \\partial_{t t}(p) + \\partial_{x x}(p) + \\partial_{y y}(p)) KX \\partial_{t}(a) \\partial_{t}(p) + 2(-a \\partial_{t}(KX) \\partial_{t}(p) + \\partial_{x}(KX) \\partial_{x}(p) + \\partial_{y}(KX) \\partial_{y}(p)) \\partial_{t}(a) \\partial_{t}(p) + 2(-a \\partial_{t}(p) \\partial_{t t}(p) + \\partial_{x}(p) \\partial_{x t}(p) + \\partial_{y}(p) \\partial_{y t}(p)) KX \\partial_{t}(a) + (a \\partial_{t t}(p) + \\partial_{t}(a) \\partial_{t}(p)-\\partial_{x x}(p)-\\partial_{y y}(p)) Kp a + 2(\\partial_{t}(KX) \\partial_{t}(p) \\partial_{x x}(p) + \\partial_{t}(KX) \\partial_{t}(p) \\partial_{y y}(p) + \\partial_{x}(KX) \\partial_{t t}(p) \\partial_{x}(p) + \\partial_{y}(KX) \\partial_{t t}(p) \\partial_{y}(p)) a-2(-2(\\partial_{x x}(p) + \\partial_{y y}(p)) a \\partial_{t t}(p) + (a)**2 (\\partial_{t t}(p))**2 + (\\partial_{x x}(p))**2 + 2\\partial_{x x}(p) \\partial_{y y}(p) + (\\partial_{y y}(p))**2) KX-2(-(\\partial_{t}(p) \\partial_{x x t}(p) + \\partial_{t}(p) \\partial_{y y t}(p) + \\partial_{x}(p) \\partial_{x t t}(p) + \\partial_{y}(p) \\partial_{y t t}(p)) a + (a)**2 \\partial_{t}(p) \\partial_{t t t}(p) + \\partial_{x}(p) \\partial_{x x x}(p) + \\partial_{x}(p) \\partial_{y y x}(p) + \\partial_{y}(p) \\partial_{y y y}(p) + \\partial_{y}(p) \\partial_{y x x}(p)) KX-2KX a \\partial_{t t}(a) (\\partial_{t}(p))**2 + 2KX (\\partial_{t}(a))**2 (\\partial_{t}(p))**2-2(a)**2 \\partial_{t}(KX) \\partial_{t}(p) \\partial_{t t}(p) + a \\partial_{t}(K) \\partial_{t}(a)-2\\partial_{x}(KX) \\partial_{x}(p) \\partial_{x x}(p)-2\\partial_{x}(KX) \\partial_{x}(p) \\partial_{y y}(p)-2\\partial_{y}(KX) \\partial_{x x}(p) \\partial_{y}(p)-2\\partial_{y}(KX) \\partial_{y}(p) \\partial_{y y}(p)) (a)**(-2)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\left(-2\\left(\\partial_{x x}{\\pi}+\\partial_{y y}{\\pi}\\right) K_{X} \\partial_{t}{a} \\partial_{t}{\\pi}-\\left(-a \\partial_{t t}{K}+\\partial_{x x}{K}+\\partial_{y y}{K}\\right) a+4\\left(-a \\partial_{t t}{\\pi}+\\partial_{x x}{\\pi}+\\partial_{y y}{\\pi}\\right) K_{X} \\partial_{t}{a} \\partial_{t}{\\pi}+2\\left(-a \\partial_{t}{K_{X}} \\partial_{t}{\\pi}+\\partial_{x}{K_{X}} \\partial_{x}{\\pi}+\\partial_{y}{K_{X}} \\partial_{y}{\\pi}\\right) \\partial_{t}{a} \\partial_{t}{\\pi}+2\\left(-a \\partial_{t}{\\pi} \\partial_{t t}{\\pi}+\\partial_{x}{\\pi} \\partial_{x t}{\\pi}+\\partial_{y}{\\pi} \\partial_{y t}{\\pi}\\right) K_{X} \\partial_{t}{a}+\\left(a \\partial_{t t}{\\pi}+\\partial_{t}{a} \\partial_{t}{\\pi}-\\partial_{x x}{\\pi}-\\partial_{y y}{\\pi}\\right) K_{\\pi} a+2\\left(\\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{x x}{\\pi}+\\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{y y}{\\pi}+\\partial_{x}{K_{X}} \\partial_{t t}{\\pi} \\partial_{x}{\\pi}+\\partial_{y}{K_{X}} \\partial_{t t}{\\pi} \\partial_{y}{\\pi}\\right) a-2\\left(-2\\left(\\partial_{x x}{\\pi}+\\partial_{y y}{\\pi}\\right) a \\partial_{t t}{\\pi}+{a}^{2} {\\left(\\partial_{t t}{\\pi}\\right)}^{2}+{\\left(\\partial_{x x}{\\pi}\\right)}^{2}+2\\partial_{x x}{\\pi} \\partial_{y y}{\\pi}+{\\left(\\partial_{y y}{\\pi}\\right)}^{2}\\right) K_{X}-2\\left(-\\left(\\partial_{t}{\\pi} \\partial_{x x t}{\\pi}+\\partial_{t}{\\pi} \\partial_{y y t}{\\pi}+\\partial_{x}{\\pi} \\partial_{x t t}{\\pi}+\\partial_{y}{\\pi} \\partial_{y t t}{\\pi}\\right) a+{a}^{2} \\partial_{t}{\\pi} \\partial_{t t t}{\\pi}+\\partial_{x}{\\pi} \\partial_{x x x}{\\pi}+\\partial_{x}{\\pi} \\partial_{y y x}{\\pi}+\\partial_{y}{\\pi} \\partial_{y y y}{\\pi}+\\partial_{y}{\\pi} \\partial_{y x x}{\\pi}\\right) K_{X}-2K_{X} a \\partial_{t t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2}+2K_{X} {\\left(\\partial_{t}{a}\\right)}^{2} {\\left(\\partial_{t}{\\pi}\\right)}^{2}-2{a}^{2} \\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{t t}{\\pi}+a \\partial_{t}{K} \\partial_{t}{a}-2\\partial_{x}{K_{X}} \\partial_{x}{\\pi} \\partial_{x x}{\\pi}-2\\partial_{x}{K_{X}} \\partial_{x}{\\pi} \\partial_{y y}{\\pi}-2\\partial_{y}{K_{X}} \\partial_{x x}{\\pi} \\partial_{y}{\\pi}-2\\partial_{y}{K_{X}} \\partial_{y}{\\pi} \\partial_{y y}{\\pi}\\right) {a}^{-2}\\end{dmath*}"
+				}
+			],
+			"source": "evaluate(an.piEq2, friedmann);"
+		},
+		{
+			"cell_id": 15570948009374225518,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4568115750935815054,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14535491625030775987,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "2\\partial_{x x}(p) KX \\partial_{t}(a) \\partial_{t}(p) (a)**(-2) + 2\\partial_{y y}(p) KX \\partial_{t}(a) \\partial_{t}(p) (a)**(-2) + a \\partial_{t t}(K) a (a)**(-2)-\\partial_{x x}(K) a (a)**(-2)-\\partial_{y y}(K) a (a)**(-2)-4a \\partial_{t t}(p) KX \\partial_{t}(a) \\partial_{t}(p) (a)**(-2)-2a \\partial_{t}(KX) \\partial_{t}(p) \\partial_{t}(a) \\partial_{t}(p) (a)**(-2) + 2\\partial_{x}(KX) \\partial_{x}(p) \\partial_{t}(a) \\partial_{t}(p) (a)**(-2) + 2\\partial_{y}(KX) \\partial_{y}(p) \\partial_{t}(a) \\partial_{t}(p) (a)**(-2)-2a \\partial_{t}(p) \\partial_{t t}(p) KX \\partial_{t}(a) (a)**(-2) + 2\\partial_{x}(p) \\partial_{t x}(p) KX \\partial_{t}(a) (a)**(-2) + 2\\partial_{y}(p) \\partial_{t y}(p) KX \\partial_{t}(a) (a)**(-2) + a \\partial_{t t}(p) Kp a (a)**(-2) + \\partial_{t}(a) \\partial_{t}(p) Kp a (a)**(-2)-\\partial_{x x}(p) Kp a (a)**(-2)-\\partial_{y y}(p) Kp a (a)**(-2) + 2\\partial_{t}(KX) \\partial_{t}(p) \\partial_{x x}(p) a (a)**(-2) + 2\\partial_{t}(KX) \\partial_{t}(p) \\partial_{y y}(p) a (a)**(-2) + 2\\partial_{x}(KX) \\partial_{t t}(p) \\partial_{x}(p) a (a)**(-2) + 2\\partial_{y}(KX) \\partial_{t t}(p) \\partial_{y}(p) a (a)**(-2) + 4\\partial_{x x}(p) a \\partial_{t t}(p) KX (a)**(-2) + 4\\partial_{y y}(p) a \\partial_{t t}(p) KX (a)**(-2)-2(a)**2 (\\partial_{t t}(p))**2 KX (a)**(-2)-2(\\partial_{x x}(p))**2 KX (a)**(-2)-4\\partial_{x x}(p) \\partial_{y y}(p) KX (a)**(-2)-2(\\partial_{y y}(p))**2 KX (a)**(-2) + 2\\partial_{t}(p) \\partial_{t x x}(p) a KX (a)**(-2) + 2\\partial_{t}(p) \\partial_{t y y}(p) a KX (a)**(-2) + 2\\partial_{x}(p) \\partial_{t t x}(p) a KX (a)**(-2) + 2\\partial_{y}(p) \\partial_{t t y}(p) a KX (a)**(-2)-2(a)**2 \\partial_{t}(p) \\partial_{t t t}(p) KX (a)**(-2)-2\\partial_{x}(p) \\partial_{x x x}(p) KX (a)**(-2)-2\\partial_{x}(p) \\partial_{x y y}(p) KX (a)**(-2)-2\\partial_{y}(p) \\partial_{y y y}(p) KX (a)**(-2)-2\\partial_{y}(p) \\partial_{x x y}(p) KX (a)**(-2)-2KX a \\partial_{t t}(a) (\\partial_{t}(p))**2 (a)**(-2) + 2KX (\\partial_{t}(a))**2 (\\partial_{t}(p))**2 (a)**(-2)-2(a)**2 \\partial_{t}(KX) \\partial_{t}(p) \\partial_{t t}(p) (a)**(-2) + a \\partial_{t}(K) \\partial_{t}(a) (a)**(-2)-2\\partial_{x}(KX) \\partial_{x}(p) \\partial_{x x}(p) (a)**(-2)-2\\partial_{x}(KX) \\partial_{x}(p) \\partial_{y y}(p) (a)**(-2)-2\\partial_{y}(KX) \\partial_{x x}(p) \\partial_{y}(p) (a)**(-2)-2\\partial_{y}(KX) \\partial_{y}(p) \\partial_{y y}(p) (a)**(-2)"
+						}
+					],
+					"source": "\\begin{dmath*}{}2\\partial_{x x}{\\pi} K_{X} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}+2\\partial_{y y}{\\pi} K_{X} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}+a \\partial_{t t}{K} a {a}^{-2}-\\partial_{x x}{K} a {a}^{-2}-\\partial_{y y}{K} a {a}^{-2}-4a \\partial_{t t}{\\pi} K_{X} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}-2a \\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}+2\\partial_{x}{K_{X}} \\partial_{x}{\\pi} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}+2\\partial_{y}{K_{X}} \\partial_{y}{\\pi} \\partial_{t}{a} \\partial_{t}{\\pi} {a}^{-2}-2a \\partial_{t}{\\pi} \\partial_{t t}{\\pi} K_{X} \\partial_{t}{a} {a}^{-2}+2\\partial_{x}{\\pi} \\partial_{t x}{\\pi} K_{X} \\partial_{t}{a} {a}^{-2}+2\\partial_{y}{\\pi} \\partial_{t y}{\\pi} K_{X} \\partial_{t}{a} {a}^{-2}+a \\partial_{t t}{\\pi} K_{\\pi} a {a}^{-2}+\\partial_{t}{a} \\partial_{t}{\\pi} K_{\\pi} a {a}^{-2}-\\partial_{x x}{\\pi} K_{\\pi} a {a}^{-2}-\\partial_{y y}{\\pi} K_{\\pi} a {a}^{-2}+2\\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{x x}{\\pi} a {a}^{-2}+2\\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{y y}{\\pi} a {a}^{-2}+2\\partial_{x}{K_{X}} \\partial_{t t}{\\pi} \\partial_{x}{\\pi} a {a}^{-2}%\n+2\\partial_{y}{K_{X}} \\partial_{t t}{\\pi} \\partial_{y}{\\pi} a {a}^{-2}+4\\partial_{x x}{\\pi} a \\partial_{t t}{\\pi} K_{X} {a}^{-2}+4\\partial_{y y}{\\pi} a \\partial_{t t}{\\pi} K_{X} {a}^{-2}-2{a}^{2} {\\left(\\partial_{t t}{\\pi}\\right)}^{2} K_{X} {a}^{-2}-2{\\left(\\partial_{x x}{\\pi}\\right)}^{2} K_{X} {a}^{-2}-4\\partial_{x x}{\\pi} \\partial_{y y}{\\pi} K_{X} {a}^{-2}-2{\\left(\\partial_{y y}{\\pi}\\right)}^{2} K_{X} {a}^{-2}+2\\partial_{t}{\\pi} \\partial_{t x x}{\\pi} a K_{X} {a}^{-2}+2\\partial_{t}{\\pi} \\partial_{t y y}{\\pi} a K_{X} {a}^{-2}+2\\partial_{x}{\\pi} \\partial_{t t x}{\\pi} a K_{X} {a}^{-2}+2\\partial_{y}{\\pi} \\partial_{t t y}{\\pi} a K_{X} {a}^{-2}-2{a}^{2} \\partial_{t}{\\pi} \\partial_{t t t}{\\pi} K_{X} {a}^{-2}-2\\partial_{x}{\\pi} \\partial_{x x x}{\\pi} K_{X} {a}^{-2}-2\\partial_{x}{\\pi} \\partial_{x y y}{\\pi} K_{X} {a}^{-2}-2\\partial_{y}{\\pi} \\partial_{y y y}{\\pi} K_{X} {a}^{-2}-2\\partial_{y}{\\pi} \\partial_{x x y}{\\pi} K_{X} {a}^{-2}-2K_{X} a \\partial_{t t}{a} {\\left(\\partial_{t}{\\pi}\\right)}^{2} {a}^{-2}+2K_{X} {\\left(\\partial_{t}{a}\\right)}^{2} {\\left(\\partial_{t}{\\pi}\\right)}^{2} {a}^{-2}-2{a}^{2} \\partial_{t}{K_{X}} \\partial_{t}{\\pi} \\partial_{t t}{\\pi} {a}^{-2}+a \\partial_{t}{K} \\partial_{t}{a} {a}^{-2}%\n-2\\partial_{x}{K_{X}} \\partial_{x}{\\pi} \\partial_{x x}{\\pi} {a}^{-2}-2\\partial_{x}{K_{X}} \\partial_{x}{\\pi} \\partial_{y y}{\\pi} {a}^{-2}-2\\partial_{y}{K_{X}} \\partial_{x x}{\\pi} \\partial_{y}{\\pi} {a}^{-2}-2\\partial_{y}{K_{X}} \\partial_{y}{\\pi} \\partial_{y y}{\\pi} {a}^{-2}\\end{dmath*}"
+				}
+			],
+			"source": "an.tidy(an.piEq2);"
+		},
+		{
+			"cell_id": 1716021040403564317,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}

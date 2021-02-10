@@ -1,0 +1,946 @@
+{
+	"cell_id": 14760918030421267787,
+	"cells": [
+		{
+			"cell_id": 6029889616786585761,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 145357949413724956,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Here I'm trying to calculate variation of Horndeski theory after Kaluza-Klein reduction"
+				}
+			],
+			"hidden": true,
+			"source": "Here I'm trying to calculate variation of Horndeski theory after Kaluza-Klein reduction"
+		},
+		{
+			"cell_id": 6917100199694584409,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "import cdb.core.manip as man\n#import functions as fun"
+		},
+		{
+			"cell_id": 16277038530090189061,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "{a,b,c,d,e,f,g,h,i,j,k,l,m,n,q,r,s,u,v,w,z#}::Indices(full,values={t,x,y}, position=independent)."
+		},
+		{
+			"cell_id": 15213928113435190806,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10583886155923863985,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "There are all simmetrises"
+				}
+			],
+			"hidden": true,
+			"source": "There are all simmetrises"
+		},
+		{
+			"cell_id": 7053016912680929534,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "\\partial{#}::PartialDerivative.\n\\nabla{#}::Derivative.\n{\\nabla{#},\\partial{#}}::Commuting.\nh_{m? n?}::Metric.\nh^{m? n?}::InverseMetric.\nh_{m? n?}::Symmetric.\nh^{m? n?}::Symmetric.\ndelh_{m? n?}::Symmetric.\ndelh^{m? n?}::Symmetric.\n\\Gamma^{m}_{n q}::TableauSymmetry(shape={2}, indices={1,2}).\nG3_{m? n?}::Symmetric.\nDh::Depends(\\partial{#}).\n\\delta^{m?}_{n?}::KroneckerDelta.\n\\delta_{m?}^{n?}::KroneckerDelta.\nF_{m? n?}::AntiSymmetric."
+		},
+		{
+			"cell_id": 3204549075754308255,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 290720614015632039,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Dependencies:"
+				}
+			],
+			"hidden": true,
+			"source": "Dependencies:"
+		},
+		{
+			"cell_id": 998172228052878079,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::Depends(\\nabla{#}, \\partial{#}).\nX_{m? n?}::Depends(\\nabla{#}, \\partial{#}).\n\\phi::Depends(\\nabla{#}, \\partial{#}).\nA_{m?}::Depends(\\nabla{#}, \\partial{#}).\nh_{m n}::Depends(\\partial{#}).\nh^{m n}::Depends(\\partial{#}).\ndeth::Depends(\\partial{#}).\nG4::Depends(\\nabla{#}, \\partial{#}).\nG4p::Depends(\\nabla{#}, \\partial{#}).\nG4X::Depends(\\nabla{#}, \\partial{#}).\nG4XX::Depends(\\nabla{#}, \\partial{#}).\nK::Depends(\\nabla{#}, \\partial{#}).\nKp::Depends(\\nabla{#}, \\partial{#}).\nKX::Depends(\\nabla{#}, \\partial{#}).\nN::Depends(\\nabla{#}, \\partial{#}).\nNp::Depends(\\nabla{#}, \\partial{#}).\nNX::Depends(\\nabla{#}, \\partial{#}).\nR::Depends(\\nabla{#}, \\partial{#}).\nF_{m n}::Depends(\\nabla{#}, \\partial{#}).\nF^{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelphi::Depends(\\nabla{#}, \\partial{#}).\ndelh_{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelh^{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelpi::Depends(\\nabla{#}, \\partial{#}).\ndelp_{m n}::Depends(\\nabla{#}, \\partial{#}).\ndelA_{m}::Depends(\\nabla{#}, \\partial{#}).\ndelF_{m n}::Depends(\\nabla{#}, \\partial{#}).\npi2::Depends(\\nabla{#}, \\partial{#}).\ndelpi2::Depends(\\nabla{#}, \\partial{#}).\nboxpi4::Depends(\\nabla{#}, \\partial{#}).\ndelboxpi4::Depends(\\nabla{#}, \\partial{#}).\npi24::Depends(\\nabla{#}, \\partial{#}).\ndelpi24::Depends(\\nabla{#}, \\partial{#})."
+		},
+		{
+			"cell_id": 17332832554175318109,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 11373367672062971136,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "And Latex forms:"
+				}
+			],
+			"hidden": true,
+			"source": "And Latex forms:"
+		},
+		{
+			"cell_id": 40273036510258725,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "p::LaTeXForm(\"\\pi\").\nG4p::LaTeXForm(\"G_{4\\pi}\").\nG4X::LaTeXForm(\"G_{4X}\").\nG4XX::LaTeXForm(\"G_{4XX}\").\nG4Xp::LaTeXForm(\"G_{4\\pi X}\").\nKp::LaTeXForm(\"K_{\\pi}\").\nKX::LaTeXForm(\"K_{X}\").\nN::LaTeXForm(\"F\").\nNp::LaTeXForm(\"F_{\\pi}\").\nNX::LaTeXForm(\"F_{X}\").\ndelphi::LaTeXForm(\"\\delta\\phi\").\ndelh^{m? n?}::LaTeXForm(\"\\delta h^{\", m? n?, \"}\").\ndelpi::LaTeXForm(\"\\delta\\pi\").\ndelphi::LaTeXForm(\"\\delta\\phi\").\nDh::LaTeXForm(\"\\sqrt{-h}\").\ndelA_{m?}::LaTeXForm(\"\\delta A_{\",m?,\"}\").\ndCn{#}::LaTeXForm(\"\\delta\\Gamma\").         \ndR{#}::LaTeXForm(\"\\delta R\").\t\npi2::LaTeXForm(\"\\pi^{m n}\\pi_{m n}\").\t\nboxpi4::LaTeXForm(\"\\Box^{(4)}{\\pi}\").\ndelboxpi4::LaTeXForm(\"\\delta\\Box^{(4)}{\\pi}\").\npi24::LaTeXForm(\"\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\").\ndelpi24::LaTeXForm(\"\\delta\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\").\ndelpi2::LaTeXForm(\"\\delta\\pi^{m n}\\pi_{m n}\").\ndelp_{m? n?}::LaTeXForm(\"\\delta\\pi_{\",m? n?,\"}\").\ndelF_{m? n?}::LaTeXForm(\"\\delta F_{\",m? n?,\"}\").\nmathcalG{#}::LaTeXForm(\"\\mathcal{G}\").\nmathcalP{#}::LaTeXForm(\"\\mathcal{P}\").\nmathcalA{#}::LaTeXForm(\"\\mathcal{A}\").\nmathcalphi{#}::LaTeXForm(\"\\Phi\").\n{delh^{a b}, delphi, delA_{m}, delpi, h_{a b},h^{a b}, Q??}::SortOrder."
+		},
+		{
+			"cell_id": 4624657097730675890,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16645650864808379501,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "There are all parts of Lagrangian which I consider:"
+				}
+			],
+			"hidden": true,
+			"source": "There are all parts of Lagrangian which I consider:"
+		},
+		{
+			"cell_id": 15495143115520522189,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 9491453661899024237,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 992995937050071275,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = R3 -  1/4 F_{a q} F_{m n} h^{m a} h^{n q} (\\phi)**2-2(\\phi)**(-1) h^{m n} \\nabla_{n}(\\phi) \\nabla_{m}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = {R_{3}} - \\frac{1}{4}F_{a q} F_{m n} h^{m a} h^{n q} {\\phi}^{2}-2{\\phi}^{-1} h^{m n} \\nabla_{n}{\\phi} \\nabla_{m}{\\phi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 10427276516825027307,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5456726886958570661,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\Box(p) = h^{a b} \\nabla_{a}(\\nabla_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box\\left(\\pi\\right) = h^{a b} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 16229430821366923973,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10918129601359515890,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "boxpi4 = \\Box(p) + (\\phi)**(-1) h^{m n} \\nabla_{m}(\\phi) \\nabla_{n}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box^{(4)}{\\pi} = \\Box\\left(\\pi\\right)+{\\phi}^{-1} h^{m n} \\nabla_{m}{\\phi} \\nabla_{n}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 9893550869931804464,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14518783037542603993,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi2 = h^{m a} h^{n b} \\nabla_{m}(\\nabla_{n}(p)) \\nabla_{a}(\\nabla_{b}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{m n}\\pi_{m n} = h^{m a} h^{n b} \\nabla_{m}\\left(\\nabla_{n}{\\pi}\\right) \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 15502336392986066478,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2221523033911801149,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi24 = pi2 +  1/2 (\\phi)**2 h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\nabla_{r}(p) \\nabla_{s}(p) + (\\phi)**(-2) (h^{a q} \\nabla_{q}(\\phi) \\nabla_{a}(p))**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{\\mu \\nu}\\pi_{\\mu \\nu} = \\pi^{m n}\\pi_{m n}+\\frac{1}{2}{\\phi}^{2} h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\nabla_{r}{\\pi} \\nabla_{s}{\\pi}+{\\phi}^{-2} {\\left(h^{a q} \\nabla_{q}{\\phi} \\nabla_{a}{\\pi}\\right)}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 3929513204676835545,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3539652784169484315,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "N"
+						}
+					],
+					"source": "\\begin{dmath*}{}F\\end{dmath*}"
+				},
+				{
+					"cell_id": 1698106341360487168,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3270875389282504300,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-K boxpi4"
+						}
+					],
+					"source": "\\begin{dmath*}{}-K \\Box^{(4)}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 17462359677223570519,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 13568435499505649927,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "L4 = G4 R + G4X ((boxpi4)**2-pi24)"
+						}
+					],
+					"source": "\\begin{dmath*}{}{L_{4}} = {G_{4}} R+G_{4X} \\left({\\Box^{(4)}{\\pi}}^{2}-\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)\\end{dmath*}"
+				}
+			],
+			"source": "ScalarCurvature := R = R3 - \\frac{1}{4} F_{a q}F_{m n} h^{m a} h^{n q} {\\phi}**{2} -2\\phi**{-1} h^{m n}\\nabla_{n}{\\phi}\\nabla_{m}{\\phi};\nbox3D := \\Box{p} = h^{a b}\\nabla_{a}{\\nabla_{b}{p}};\nbox4D := boxpi4 = \\Box{p} + {\\phi}**{-1} h^{m n} \\nabla_{m}{\\phi} \\nabla_{n}{p};\nsq3D := pi2 = h^{m a} h^{n b} \\nabla_{m}{\\nabla_{n}{p}}\\nabla_{a}{\\nabla_{b}{p}};\nsq4D:=  pi24 = pi2 + \\frac{{\\phi}**{2}}{2}h^{a m} h^{r n}F_{m n} F_{a q}h^{q s}\\nabla_{r}{p} \\nabla_{s}{p}\n\t +\\frac{1}{\\phi**2} (h^{a q}\\nabla_{q}{\\phi}\\nabla_{a}{p})**2;\nL2 := N;\nL3:=  -K ( boxpi4);\nL4:= L4 = G4 R + G4X ((boxpi4)**2-pi24);"
+		},
+		{
+			"cell_id": 12852576650432397202,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 8000205276943151980,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Some usefull basic variations, part of them calculated in files varyingR and varyingHorndeski:"
+				}
+			],
+			"hidden": true,
+			"source": "Some usefull basic variations, part of them calculated in files varyingR and varyingHorndeski:"
+		},
+		{
+			"cell_id": 12401091892313172999,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 14010876229860199832,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11793788989834411910,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(Dh) =  -  1/2 Dh h_{a b} delh^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(\\sqrt{-h}\\right) =  - \\frac{1}{2}\\sqrt{-h} h_{a b} \\delta h^{a b}\\end{dmath*}"
+				},
+				{
+					"cell_id": 6152630985160598342,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17751956323103577765,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(N) = Np delpi -  1/2 NX \\nabla_{a}(p) \\nabla_{b}(p) delh^{a b}-h^{a b} NX \\nabla_{a}(p) \\nabla_{b}(delpi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(F\\right) = F_{\\pi} \\delta\\pi - \\frac{1}{2}F_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\delta h^{a b}-h^{a b} F_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\delta\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 9507144015096775698,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 12124542597883465793,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(K) = Kp delpi -  1/2 KX \\nabla_{a}(p) \\nabla_{b}(p) delh^{a b}-h^{a b} KX \\nabla_{a}(p) \\nabla_{b}(delpi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(K\\right) = K_{\\pi} \\delta\\pi - \\frac{1}{2}K_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\delta h^{a b}-h^{a b} K_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\delta\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14649672697373439817,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4913084237771131075,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(G4) = G4p delpi -  1/2 G4X \\nabla_{a}(p) \\nabla_{b}(p) delh^{a b}-h^{a b} G4X \\nabla_{a}(p) \\nabla_{b}(delpi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left({G_{4}}\\right) = G_{4\\pi} \\delta\\pi - \\frac{1}{2}G_{4X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\delta h^{a b}-h^{a b} G_{4X} \\nabla_{a}{\\pi} \\nabla_{b}{\\delta\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8532569370425704166,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 14349704889820438221,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(G4X) = G4Xp delpi -  1/2 G4XX \\nabla_{a}(p) \\nabla_{b}(p) delh^{a b}-h^{a b} G4XX \\nabla_{a}(p) \\nabla_{b}(delpi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(G_{4X}\\right) = G_{4\\pi X} \\delta\\pi - \\frac{1}{2}G_{4XX} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\delta h^{a b}-h^{a b} G_{4XX} \\nabla_{a}{\\pi} \\nabla_{b}{\\delta\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 14966874333938181065,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 4273509449227805741,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "dCn^{a}_{b c} =  -  1/2 h_{l c} \\nabla_{b}(delh^{l a}) -  1/2 h_{l b} \\nabla_{c}(delh^{l a}) +  1/2 h_{c m} h_{b n} h^{a q} \\nabla_{q}(delh^{m n})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\Gamma^{a}\\,_{b c} =  - \\frac{1}{2}h_{l c} \\nabla_{b}{\\delta h^{l a}} - \\frac{1}{2}h_{l b} \\nabla_{c}{\\delta h^{l a}}+\\frac{1}{2}h_{c m} h_{b n} h^{a q} \\nabla_{q}{\\delta h^{m n}}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2169495620031959882,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 11648561757935700634,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(R3) = -\\nabla_{m}(\\nabla_{n}(delh^{m n})) + h_{m n} h^{a b} \\nabla_{a}(\\nabla_{b}(delh^{m n})) + R_{m n} delh^{m n}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left({R_{3}}\\right) = -\\nabla_{m}\\left(\\nabla_{n}{\\delta h^{m n}}\\right)+h_{m n} h^{a b} \\nabla_{a}\\left(\\nabla_{b}{\\delta h^{m n}}\\right)+R_{m n} \\delta h^{m n}\\end{dmath*}"
+				},
+				{
+					"cell_id": 8185992205338141390,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16213111567713576251,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "delF_{m n} = 2\\nabla_{m}(delA_{n})"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta F_{m n} = 2\\nabla_{m}{\\delta A_{n}}\\end{dmath*}"
+				},
+				{
+					"cell_id": 5593699846467755473,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9754216618256733261,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(\\Box(p)) = delh^{a b} \\nabla_{a}(\\nabla_{b}(p)) + h^{a b} \\nabla_{a}(\\nabla_{b}(delpi)) + \\nabla_{a}(delh^{a b}) \\nabla_{b}(p) -  1/2 h_{a b} h^{c d} \\nabla_{c}(delh^{a b}) \\nabla_{d}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(\\Box\\left(\\pi\\right)\\right) = \\delta h^{a b} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)+h^{a b} \\nabla_{a}\\left(\\nabla_{b}{\\delta\\pi}\\right)+\\nabla_{a}{\\delta h^{a b}} \\nabla_{b}{\\pi} - \\frac{1}{2}h_{a b} h^{c d} \\nabla_{c}{\\delta h^{a b}} \\nabla_{d}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 168662143646963128,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9752491453833336248,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "delpi2 = 2\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(\\nabla_{d}(p)) delh^{a c} h^{b d} + 2\\nabla_{a}(\\nabla_{b}(delpi)) \\nabla_{c}(\\nabla_{d}(p)) h^{a c} h^{b d} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{b d}) \\nabla_{d}(p) h^{a c} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a d}) \\nabla_{d}(p) h^{b c}-\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a b}) \\nabla_{d}(p) h^{c d}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\pi^{m n}\\pi_{m n} = 2\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right) \\delta h^{a c} h^{b d}+2\\nabla_{a}\\left(\\nabla_{b}{\\delta\\pi}\\right) \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right) h^{a c} h^{b d}+\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{b d}} \\nabla_{d}{\\pi} h^{a c}+\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{a d}} \\nabla_{d}{\\pi} h^{b c}-\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{a b}} \\nabla_{d}{\\pi} h^{c d}\\end{dmath*}"
+				}
+			],
+			"source": "DelSqrth := \\delta(Dh) = - \\frac{1}{2}*Dh * h_{a b} delh^{a b};\nDelF:= \\delta(N) = Np delpi - \\frac{1}{2} NX \\nabla_{a}{p}\\nabla_{b}{p}  delh^{a b} - h^{a b} NX \\nabla_{a}{p} \\nabla_{b}{delpi}; \nDelK:= \\delta(K) =Kp delpi - \\frac{1}{2} KX \\nabla_{a}{p}\\nabla_{b}{p}  delh^{a b} - h^{a b} KX \\nabla_{a}{p} \\nabla_{b}{delpi}; \nDelG4 := \\delta(G4) = G4p delpi - \\frac{1}{2} G4X \\nabla_{a}{p}\\nabla_{b}{p}  delh^{a b} - h^{a b} G4X \\nabla_{a}{p} \\nabla_{b}{delpi};\nDelG4X := \\delta(G4X) = G4Xp delpi - \\frac{1}{2} G4XX \\nabla_{a}{p}\\nabla_{b}{p}  delh^{a b} - h^{a b} G4XX \\nabla_{a}{p} \\nabla_{b}{delpi};\ndeltaChristof := dCn^{a}_{b c} = -\\frac{1}{2} * ( h_{l c} \\nabla_{b}{delh^{l a}} +  h_{l b}\\nabla_{c}{delh^{l a}} - h_{c m} h_{b n} h^{a q}\\nabla_{q}{delh^{m n}});\ndeltaScalarCurvature3:= \\delta(R3) = -\\nabla_{m}{\\nabla_{n}{delh^{m n}}} + h_{m n}h^{a b} \\nabla_{a}{\\nabla_{b}{delh^{m n}}} + R_{m n} delh^{m n};\ndeltaF := delF_{m n} = 2 \\nabla_{m}{delA_{n}};\ndeltaBox := \\delta(\\Box(p)) = delh^{a b} \\nabla_{a}(\\nabla_{b}(p)) + h^{a b} \\nabla_{a}(\\nabla_{b}(delpi)) + \\nabla_{a}(delh^{a b}) \\nabla_{b}(p) -  1/2 h_{a b} h^{c d} \\nabla_{c}(delh^{a b}) \\nabla_{d}(p);\ndeltaSq := delpi2 = 2\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(\\nabla_{d}(p)) delh^{a c} h^{b d} + 2\\nabla_{a}(\\nabla_{b}(delpi)) \\nabla_{c}(\\nabla_{d}(p)) h^{a c} h^{b d} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{b d}) \\nabla_{d}(p) h^{a c} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a d}) \\nabla_{d}(p) h^{b c}-\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a b}) \\nabla_{d}(p) h^{c d};"
+		},
+		{
+			"cell_id": 3553023179926854674,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 7503486886739696549,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of 4D Scallar Curvature:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of 4D Scallar Curvature:"
+		},
+		{
+			"cell_id": 9763544953825661277,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 8356534523207045736,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10062370982027568965,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "R = R3 -  1/4 F_{a q} F_{m n} h^{m a} h^{n q} (\\phi)**2-2(\\phi)**(-1) h^{m n} \\nabla_{n}(\\phi) \\nabla_{m}(\\phi)"
+						}
+					],
+					"source": "\\begin{dmath*}{}R = {R_{3}} - \\frac{1}{4}F_{a q} F_{m n} h^{m a} h^{n q} {\\phi}^{2}-2{\\phi}^{-1} h^{m n} \\nabla_{n}{\\phi} \\nabla_{m}{\\phi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2421684101574987552,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 15590461175978527966,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\delta(R) = -\\nabla_{a}(\\nabla_{b}(delh^{a b})) + \\nabla_{a}(\\nabla_{b}(delh^{c d})) h_{c d} h^{a b} + R_{a b} delh^{a b}-F_{a b} \\nabla_{c}(delA_{d}) (\\phi)**2 h^{a c} h^{b d} -  1/2 F_{a b} F_{c d} (\\phi)**2 delh^{a c} h^{b d} -  1/2 F_{a b} F_{c d} \\phi delphi h^{a c} h^{b d} + 2\\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-2) delphi h^{a b}-2\\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1) delh^{a b}-4\\nabla_{a}(\\phi) \\nabla_{b}(delphi) (\\phi)**(-1) h^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\left(R\\right) = -\\nabla_{a}\\left(\\nabla_{b}{\\delta h^{a b}}\\right)+\\nabla_{a}\\left(\\nabla_{b}{\\delta h^{c d}}\\right) h_{c d} h^{a b}+R_{a b} \\delta h^{a b}-F_{a b} \\nabla_{c}{\\delta A_{d}} {\\phi}^{2} h^{a c} h^{b d} - \\frac{1}{2}F_{a b} F_{c d} {\\phi}^{2} \\delta h^{a c} h^{b d} - \\frac{1}{2}F_{a b} F_{c d} \\phi \\delta\\phi h^{a c} h^{b d}+2\\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-2} \\delta\\phi h^{a b}-2\\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1} \\delta h^{a b}-4\\nabla_{a}{\\phi} \\nabla_{b}{\\delta\\phi} {\\phi}^{-1} h^{a b}\\end{dmath*}"
+				}
+			],
+			"source": "deltaScalarCurvature:= @(ScalarCurvature);\nvary(deltaScalarCurvature, $R-> \\delta(R), R3 -> \\delta(R3), F_{m? n?} -> delF_{m? n?}, h^{m? n?} -> delh^{m? n?}, \\phi -> delphi$)\nsubstitute(deltaScalarCurvature, deltaF)\nsubstitute(deltaScalarCurvature, deltaScalarCurvature3)\nsort_product(deltaScalarCurvature)\nrename_dummies(deltaScalarCurvature)\ncanonicalise(deltaScalarCurvature);"
+		},
+		{
+			"cell_id": 2236784058322309008,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12899716164997118874,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of 4D Dalambertian:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of 4D Dalambertian:"
+		},
+		{
+			"cell_id": 11252728747073600483,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 17435428287668141768,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17157760012970534459,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "boxpi4 = \\Box(p) + (\\phi)**(-1) h^{m n} \\nabla_{m}(\\phi) \\nabla_{n}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Box^{(4)}{\\pi} = \\Box\\left(\\pi\\right)+{\\phi}^{-1} h^{m n} \\nabla_{m}{\\phi} \\nabla_{n}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 17228777317116072540,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10634059317757492148,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "delboxpi4 = \\nabla_{a}(\\nabla_{b}(p)) delh^{a b} + \\nabla_{a}(\\nabla_{b}(delpi)) h^{a b} + \\nabla_{a}(delh^{a b}) \\nabla_{b}(p) -  1/2 \\nabla_{a}(delh^{b c}) \\nabla_{d}(p) h_{b c} h^{a d}-\\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-2) delphi h^{a b} + \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) delh^{a b} + \\nabla_{a}(delphi) \\nabla_{b}(p) (\\phi)**(-1) h^{a b} + \\nabla_{a}(\\phi) \\nabla_{b}(delpi) (\\phi)**(-1) h^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\Box^{(4)}{\\pi} = \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\delta h^{a b}+\\nabla_{a}\\left(\\nabla_{b}{\\delta\\pi}\\right) h^{a b}+\\nabla_{a}{\\delta h^{a b}} \\nabla_{b}{\\pi} - \\frac{1}{2}\\nabla_{a}{\\delta h^{b c}} \\nabla_{d}{\\pi} h_{b c} h^{a d}-\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-2} \\delta\\phi h^{a b}+\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} \\delta h^{a b}+\\nabla_{a}{\\delta\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} h^{a b}+\\nabla_{a}{\\phi} \\nabla_{b}{\\delta\\pi} {\\phi}^{-1} h^{a b}\\end{dmath*}"
+				}
+			],
+			"source": "deltaBox4D := @(box4D);\nvary(deltaBox4D, $boxpi4 -> delboxpi4, h^{m? n?} -> delh^{m? n?}, \\phi -> delphi, p -> delpi, \\Box{p} -> \\delta(\\Box{p})$)\nsubstitute(deltaBox4D, deltaBox)\nsort_product(deltaBox4D)\nrename_dummies(deltaBox4D)\ncanonicalise(deltaBox4D);"
+		},
+		{
+			"cell_id": 10653821119184185251,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 1728773120883706525,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of 4D square of second derivative:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of 4D square of second derivative:"
+		},
+		{
+			"cell_id": 889126982250184525,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 2819365817570794943,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 5002962139896048488,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "pi24 = pi2 +  1/2 (\\phi)**2 h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\nabla_{r}(p) \\nabla_{s}(p) + (\\phi)**(-2) (h^{a q} \\nabla_{q}(\\phi) \\nabla_{a}(p))**2"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\pi^{\\mu \\nu}\\pi_{\\mu \\nu} = \\pi^{m n}\\pi_{m n}+\\frac{1}{2}{\\phi}^{2} h^{a m} h^{r n} F_{m n} F_{a q} h^{q s} \\nabla_{r}{\\pi} \\nabla_{s}{\\pi}+{\\phi}^{-2} {\\left(h^{a q} \\nabla_{q}{\\phi} \\nabla_{a}{\\pi}\\right)}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_id": 5692013511284790465,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9779717792197970716,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "delpi24 = 2\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(\\nabla_{d}(p)) delh^{a c} h^{b d} + 2\\nabla_{a}(\\nabla_{b}(delpi)) \\nabla_{c}(\\nabla_{d}(p)) h^{a c} h^{b d} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{b d}) \\nabla_{d}(p) h^{a c} + \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a d}) \\nabla_{d}(p) h^{b c}-\\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(delh^{a b}) \\nabla_{d}(p) h^{c d} + F_{a b} F_{c d} \\nabla_{e}(p) \\nabla_{f}(p) \\phi delphi h^{a c} h^{b e} h^{d f} +  1/2 F_{a b} F_{c d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 delh^{a c} h^{b e} h^{d f}-F_{a b} F_{c d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 delh^{a e} h^{b c} h^{d f} + 2F_{a b} \\nabla_{c}(delA_{d}) \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{a c} h^{b e} h^{d f}-2(\\phi)**(-3) (\\nabla_{a}(\\phi) \\nabla_{b}(p) h^{a b})**2 delphi + 2\\nabla_{a}(\\phi) \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-2) delh^{a c} h^{b d} + 2\\nabla_{a}(\\phi) \\nabla_{b}(delphi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{a c} h^{b d}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\delta\\pi^{\\mu \\nu}\\pi_{\\mu \\nu} = 2\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right) \\delta h^{a c} h^{b d}+2\\nabla_{a}\\left(\\nabla_{b}{\\delta\\pi}\\right) \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right) h^{a c} h^{b d}+\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{b d}} \\nabla_{d}{\\pi} h^{a c}+\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{a d}} \\nabla_{d}{\\pi} h^{b c}-\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\delta h^{a b}} \\nabla_{d}{\\pi} h^{c d}+F_{a b} F_{c d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} \\phi \\delta\\phi h^{a c} h^{b e} h^{d f}+\\frac{1}{2}F_{a b} F_{c d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} \\delta h^{a c} h^{b e} h^{d f}-F_{a b} F_{c d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} \\delta h^{a e} h^{b c} h^{d f}+2F_{a b} \\nabla_{c}{\\delta A_{d}} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{a c} h^{b e} h^{d f}-2{\\phi}^{-3} {\\left(\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} h^{a b}\\right)}^{2} \\delta\\phi+2\\nabla_{a}{\\phi} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} \\delta h^{a c} h^{b d}+2\\nabla_{a}{\\phi} \\nabla_{b}{\\delta\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} h^{a c} h^{b d}\\end{dmath*}"
+				}
+			],
+			"source": "deltaSq4D := @(sq4D);\nvary(deltaSq4D, $pi24 -> delpi24, pi2 -> delpi2, \\phi -> delphi, pi -> delpi, h^{a? b?} -> delh^{a? b?}, F_{m? n?} -> delF_{m? n?}$)\nsubstitute(deltaSq4D, deltaSq)\nsubstitute(deltaSq4D, deltaF)\ndistribute(deltaSq4D)\nsort_product(deltaSq4D)\nrename_dummies(deltaSq4D)\ncanonicalise(deltaSq4D);"
+		},
+		{
+			"cell_id": 12625427963251855657,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15684096515794860352,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of $S_{2}$:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of $S_{2}$:"
+		},
+		{
+			"cell_id": 12596428955554867503,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5152509154510228361,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2714010456750906434,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh N}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\sqrt{-h} F\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 16713414741932375610,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1512027937877544886,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh delh^{a b} ( -  1/2 h_{a b} N -  1/2 NX \\nabla_{a}(p) \\nabla_{b}(p)) + Dh delpi (Np + h^{a b} \\nabla_{b}(NX \\nabla_{a}(p)))}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\left(\\sqrt{-h} \\delta h^{a b} \\left( - \\frac{1}{2}h_{a b} F - \\frac{1}{2}F_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}\\right)+\\sqrt{-h} \\delta\\pi \\left(F_{\\pi}+h^{a b} \\nabla_{b}\\left(F_{X} \\nabla_{a}{\\pi}\\right)\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "S2 :=  \\int{Dh @(L2)}{x};\nvary(S2, $Dh ->  \\delta{Dh}, N -> \\delta{N}$)\nsubstitute(S2, DelSqrth)\nsubstitute(S2, DelF)\ndistribute(S2)\nintegrate_by_parts(S2, $delpi$)\nunwrap(S2)\nfactor_out(S2, $delh^{m? n?}, delpi, Dh$);"
+		},
+		{
+			"cell_id": 4599614363563176205,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 12575020991936987501,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of $S_3$:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of $S_3$:"
+		},
+		{
+			"cell_id": 2889147211056742408,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 4809444045109527074,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17813456434517201464,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-\\int{Dh K boxpi4}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}-\\int \\sqrt{-h} K \\Box^{(4)}{\\pi}\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 5528818628235160109,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9002809842278402030,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "-\\int{Dh delpi (\\nabla_{a}(\\nabla_{b}(K)) h^{a b} + Kp \\nabla_{a}(\\nabla_{b}(p)) h^{a b} + Kp \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) h^{a b} + \\nabla_{a}(KX \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a d} h^{b c} + \\nabla_{a}(KX \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-1)) h^{a c} h^{b d}-\\nabla_{a}(K \\nabla_{b}(\\phi) (\\phi)**(-1)) h^{a b}) + Dh delh^{c d} ( -  1/2 K \\nabla_{a}(\\nabla_{b}(p)) h_{c d} h^{a b} -  1/2 K \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) h_{c d} h^{a b} -  1/2 KX \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(p) \\nabla_{d}(p) h^{a b} +  1/2 \\nabla_{a}(K \\nabla_{b}(p)) h_{c d} h^{a b}) -  1/2 Dh delh^{b c} KX \\nabla_{a}(\\phi) \\nabla_{b}(p) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-1) h^{a d} + Dh delh^{a b} (K \\nabla_{a}(\\nabla_{b}(p)) + K \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1)-\\nabla_{a}(K \\nabla_{b}(p))) + Dh delphi (-K \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-2) h^{a b}-\\nabla_{a}(K \\nabla_{b}(p) (\\phi)**(-1)) h^{a b})}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}-\\int \\left(\\sqrt{-h} \\delta\\pi \\left(\\nabla_{a}\\left(\\nabla_{b}{K}\\right) h^{a b}+K_{\\pi} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) h^{a b}+K_{\\pi} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} h^{a b}+\\nabla_{a}\\left(K_{X} \\nabla_{b}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{a d} h^{b c}+\\nabla_{a}\\left(K_{X} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-1}\\right) h^{a c} h^{b d}-\\nabla_{a}\\left(K \\nabla_{b}{\\phi} {\\phi}^{-1}\\right) h^{a b}\\right)+\\sqrt{-h} \\delta h^{c d} \\left( - \\frac{1}{2}K \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) h_{c d} h^{a b} - \\frac{1}{2}K \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} h_{c d} h^{a b} - \\frac{1}{2}K_{X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} h^{a b}+\\frac{1}{2}\\nabla_{a}\\left(K \\nabla_{b}{\\pi}\\right) h_{c d} h^{a b}\\right) - \\frac{1}{2}\\sqrt{-h} \\delta h^{b c} K_{X} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-1} h^{a d}+\\sqrt{-h} \\delta h^{a b} \\left(K \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)+K \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1}-\\nabla_{a}\\left(K \\nabla_{b}{\\pi}\\right)\\right)+\\sqrt{-h} \\delta\\phi \\left(-K \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-2} h^{a b}-\\nabla_{a}\\left(K \\nabla_{b}{\\pi} {\\phi}^{-1}\\right) h^{a b}\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "S3 := \\int{Dh @(L3)}{x};\nvary(S3, $Dh ->  \\delta{Dh}, K -> \\delta{K}, p -> delpi, boxpi4 -> delboxpi4, \\phi -> delphi, h^{m? n?} -> delh^{m? n?}$ )\nsubstitute(S3, DelSqrth)\nsubstitute(S3, DelK)\nsubstitute(S3, deltaBox4D)\nsubstitute(S3, box4D)\nsubstitute(S3, box3D)\ndistribute(S3)\nrename_dummies(S3)\nfactor_out(S3, $delpi, \\nabla_{a?}{delpi}, \\nabla_{a?}{delh^{a? b?}}, delh^{a? b?}, delphi, \\nabla_{a?}{delphi}$)\nintegrate_by_parts(S3, $\\nabla_{n}{delpi}$)\nintegrate_by_parts(S3, $delpi$)\nintegrate_by_parts(S3, $delh^{a? b?}$)\nintegrate_by_parts(S3, $delphi$)\nrename_dummies(S3)\ndistribute(S3)\nunwrap(S3)\nsort_product(S3)\nrename_dummies(S3)\ncanonicalise(S3)\nfactor_out(S3, $delh^{a? b?}, delpi, Dh, delphi$);"
+		},
+		{
+			"cell_id": 13214349621395282431,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 10538710929282503113,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "Variation of the first part of $S_4$:"
+				}
+			],
+			"hidden": true,
+			"source": "Variation of the first part of $S_4$:"
+		},
+		{
+			"cell_id": 6151573242780009847,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 3628426963556857738,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 10980411781514916502,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh G4 R}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\sqrt{-h} {G_{4}} R\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 17635034828323554451,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2005145234436050896,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh delh^{a b} ( -  1/2 G4 R h_{a b} -  1/2 G4X R \\nabla_{a}(p) \\nabla_{b}(p) + G4 R_{a b}-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1)-\\nabla_{a}(\\nabla_{b}(G4))) + Dh delpi (G4p R + \\nabla_{a}(G4X R \\nabla_{b}(p)) h^{a b}) + Dh delh^{c d} \\nabla_{a}(\\nabla_{b}(G4)) h_{c d} h^{a b} + Dh delA_{d} \\nabla_{a}(F_{b c} G4 (\\phi)**2) h^{a b} h^{c d} -  1/2 Dh delh^{a c} F_{a b} F_{c d} G4 (\\phi)**2 h^{b d} + Dh delphi ( -  1/2 F_{a b} F_{c d} G4 \\phi h^{a c} h^{b d} + 2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-2) h^{a b} + 4\\nabla_{a}(G4 \\nabla_{b}(\\phi) (\\phi)**(-1)) h^{a b})}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\left(\\sqrt{-h} \\delta h^{a b} \\left( - \\frac{1}{2}{G_{4}} R h_{a b} - \\frac{1}{2}G_{4X} R \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}+{G_{4}} R_{a b}-2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1}-\\nabla_{a}\\left(\\nabla_{b}\\left({G_{4}}\\right)\\right)\\right)+\\sqrt{-h} \\delta\\pi \\left(G_{4\\pi} R+\\nabla_{a}\\left(G_{4X} R \\nabla_{b}{\\pi}\\right) h^{a b}\\right)+\\sqrt{-h} \\delta h^{c d} \\nabla_{a}\\left(\\nabla_{b}\\left({G_{4}}\\right)\\right) h_{c d} h^{a b}+\\sqrt{-h} \\delta A_{d} \\nabla_{a}\\left(F_{b c} {G_{4}} {\\phi}^{2}\\right) h^{a b} h^{c d} - \\frac{1}{2}\\sqrt{-h} \\delta h^{a c} F_{a b} F_{c d} {G_{4}} {\\phi}^{2} h^{b d}+\\sqrt{-h} \\delta\\phi \\left( - \\frac{1}{2}F_{a b} F_{c d} {G_{4}} \\phi h^{a c} h^{b d}+2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-2} h^{a b}+4\\nabla_{a}\\left({G_{4}} \\nabla_{b}{\\phi} {\\phi}^{-1}\\right) h^{a b}\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "S41 := \\int{Dh G4 R}{x};\nvary(S41, $Dh -> \\delta{Dh}, G4 -> \\delta{G4}, R -> \\delta(R)$)\nsubstitute(S41, DelSqrth)\nsubstitute(S41, DelG4)\nsubstitute(S41, deltaScalarCurvature)\ndistribute(S41)\nrename_dummies(S41)\nfactor_out(S41, $delpi, \\nabla_{a?}{delpi}, \\nabla_{a?}{\\nabla_{b?}{delh^{c? d?}}},\\nabla_{a?}{delh^{c? b?}}, delh^{a? b?}, delphi, \\nabla_{a?}{delphi}, \\nabla_{a?}{delA_{b?}}$)\nintegrate_by_parts(S41, $\\nabla_{n}{delpi}$)\nintegrate_by_parts(S41, $delpi$)\nintegrate_by_parts(S41, $\\nabla_{c?}{delh^{a? b?}}$)\nintegrate_by_parts(S41, $delh^{a? b?}$)\nintegrate_by_parts(S41, $delphi$)\nintegrate_by_parts(S41, $delA_{a?}$)\nrename_dummies(S41)\ndistribute(S41)\nunwrap(S41)\nsort_product(S41)\nrename_dummies(S41)\ncanonicalise(S41)\nfactor_out(S41, $delh^{a? b?}, delpi, Dh, delphi, delA_{a?}$);"
+		},
+		{
+			"cell_id": 14785739969414721156,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 15928888480755001236,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "And second part of $S_4$:"
+				}
+			],
+			"hidden": true,
+			"source": "And second part of $S_4$:"
+		},
+		{
+			"cell_id": 2549114422485197700,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 15997181655871695100,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 16098366599846860581,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh G4X ((boxpi4)**2-pi24)}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\sqrt{-h} G_{4X} \\left({\\Box^{(4)}{\\pi}}^{2}-\\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_id": 14905643199168519735,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8456582689603561918,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "\\int{Dh delh^{a b} ( -  1/2 G4X (boxpi4)**2 h_{a b} +  1/2 G4X h_{a b} pi24 -  1/2 G4XX \\nabla_{a}(p) \\nabla_{b}(p) (boxpi4)**2 +  1/2 G4XX \\nabla_{a}(p) \\nabla_{b}(p) pi24 + 2G4X \\nabla_{a}(\\nabla_{b}(p)) boxpi4 + 2G4X \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) boxpi4-2\\nabla_{a}(G4X \\nabla_{b}(p) boxpi4)) + Dh delpi (G4Xp (boxpi4)**2-G4Xp pi24 + \\nabla_{a}(G4XX \\nabla_{b}(p) (boxpi4)**2) h^{a b}-\\nabla_{a}(G4XX \\nabla_{b}(p) pi24) h^{a b}-2\\nabla_{a}(G4X \\nabla_{b}(\\phi) (\\phi)**(-1) boxpi4) h^{a b} + 2\\nabla_{a}(\\nabla_{b}(G4X boxpi4)) h^{a b}-2\\nabla_{a}(\\nabla_{b}(G4X \\nabla_{c}(\\nabla_{d}(p)))) h^{a d} h^{b c}) + Dh delh^{c d} (\\nabla_{a}(G4X \\nabla_{b}(p) boxpi4) h_{c d} h^{a b} + \\nabla_{a}(G4X \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a b}) + Dh delphi (-2G4X \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-2) boxpi4 h^{a b}-F_{a b} F_{c d} G4X \\nabla_{e}(p) \\nabla_{f}(p) \\phi h^{a c} h^{b e} h^{d f} + 2G4X (\\phi)**(-3) (\\nabla_{a}(\\phi) \\nabla_{b}(p) h^{a b})**2-2\\nabla_{a}(G4X \\nabla_{b}(p) (\\phi)**(-1) boxpi4) h^{a b} + 2\\nabla_{a}(G4X \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-2)) h^{a d} h^{b c}) + Dh delh^{a c} (-2G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{c}(\\nabla_{d}(p)) h^{b d} -  1/2 F_{a b} F_{c d} G4X \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{b e} h^{d f}-2G4X \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{b d}) + Dh delh^{b d} \\nabla_{a}(G4X \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a c}-Dh delh^{b c} \\nabla_{a}(G4X \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a d} + Dh delh^{a e} F_{a b} F_{c d} G4X \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{b c} h^{d f} + 2Dh delA_{f} \\nabla_{a}(F_{b c} G4X \\nabla_{d}(p) \\nabla_{e}(p) (\\phi)**2) h^{a b} h^{c d} h^{e f}}{x}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\int \\left(\\sqrt{-h} \\delta h^{a b} \\left( - \\frac{1}{2}G_{4X} {\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}G_{4X} h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu} - \\frac{1}{2}G_{4XX} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}G_{4XX} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}+2G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\Box^{(4)}{\\pi}+2G_{4X} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} \\Box^{(4)}{\\pi}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)\\right)+\\sqrt{-h} \\delta\\pi \\left(G_{4\\pi X} {\\Box^{(4)}{\\pi}}^{2}-G_{4\\pi X} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}+\\nabla_{a}\\left(G_{4XX} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}\\right) h^{a b}-\\nabla_{a}\\left(G_{4XX} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right) h^{a b}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\phi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right) h^{a b}+2\\nabla_{a}\\left(\\nabla_{b}\\left(G_{4X} \\Box^{(4)}{\\pi}\\right)\\right) h^{a b}-2\\nabla_{a}\\left(\\nabla_{b}\\left(G_{4X} \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right)\\right)\\right) h^{a d} h^{b c}\\right)+\\sqrt{-h} \\delta h^{c d} \\left(\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{c d} h^{a b}+\\nabla_{a}\\left(G_{4X} \\nabla_{b}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{a b}\\right)+\\sqrt{-h} \\delta\\phi \\left(-2G_{4X} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-2} \\Box^{(4)}{\\pi} h^{a b}-F_{a b} F_{c d} G_{4X} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} \\phi h^{a c} h^{b e} h^{d f}+2G_{4X} {\\phi}^{-3} {\\left(\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} h^{a b}\\right)}^{2}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right) h^{a b}+2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2}\\right) h^{a d} h^{b c}\\right)+\\sqrt{-h} \\delta h^{a c} \\left(-2G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right) h^{b d} - \\frac{1}{2}F_{a b} F_{c d} G_{4X} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{b e} h^{d f}-2G_{4X} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} h^{b d}\\right)+\\sqrt{-h} \\delta h^{b d} \\nabla_{a}\\left(G_{4X} \\nabla_{b}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{a c}-\\sqrt{-h} \\delta h^{b c} \\nabla_{a}\\left(G_{4X} \\nabla_{b}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{a d}+\\sqrt{-h} \\delta h^{a e} F_{a b} F_{c d} G_{4X} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{b c} h^{d f}+2\\sqrt{-h} \\delta A_{f} \\nabla_{a}\\left(F_{b c} G_{4X} \\nabla_{d}{\\pi} \\nabla_{e}{\\pi} {\\phi}^{2}\\right) h^{a b} h^{c d} h^{e f}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source": "S42 := \\int{Dh G4X (boxpi4**2 - pi24)}{x};\nvary(S42, $Dh ->  \\delta{Dh}, G4X -> \\delta{G4X}, pi24 -> delpi24, boxpi4 -> delboxpi4$ )\nsubstitute(S42, DelSqrth)\nsubstitute(S42, DelG4X)\nsubstitute(S42, deltaSq4D)\nsubstitute(S42, deltaBox4D)\ndistribute(S42)\nrename_dummies(S42)\nfactor_out(S42, $delpi, \\nabla_{a?}{delpi},\\nabla_{b?}{\\nabla_{a?}{delpi}}, \\nabla_{a?}{\\nabla_{b?}{delh^{c? d?}}},\\nabla_{a?}{delh^{c? b?}}, delh^{a? b?}, delphi, \\nabla_{a?}{delphi}, \\nabla_{a?}{delA_{b?}}$)\nintegrate_by_parts(S42, $\\nabla_{n}{delpi}$)\nintegrate_by_parts(S42, $delpi$)\nintegrate_by_parts(S42, $\\nabla_{c?}{delh^{a? b?}}$)\nintegrate_by_parts(S42, $delh^{a? b?}$)\nintegrate_by_parts(S42, $delphi$)\nintegrate_by_parts(S42, $delA_{a?}$)\ndistribute(S42)\nunwrap(S42)\nsort_product(S42)\nrename_dummies(S42)\ncanonicalise(S42)\nfactor_out(S42, $delh^{a? b?}, delpi, Dh, delphi, delA_{a?}$);"
+		},
+		{
+			"cell_id": 2507680163188451781,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 16724911490167879605,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "There are some clean up of equations of motion:"
+				}
+			],
+			"hidden": true,
+			"source": "There are some clean up of equations of motion:"
+		},
+		{
+			"cell_id": 3881991695840480044,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "mathcalG2 = S2[0][0][2]\nmathcalP2 = S2[0][1][2]\nmathcalP3 = S3[0][0][2]\nmathcalG3 = S3[0][1] + S3[0][2] + S3[0][3]\nmathcalphi3 = S3[0][4][2]\nmathcalG3 := @(mathcalG3) * Dh**(-1).\nproduct_rule(mathcalG3)\ndistribute(mathcalG3)\ncollect_factors(mathcalG3)\nsort_product(mathcalG3)\nsubstitute(mathcalG3, $h^{a? b?} \\nabla_{a?}{\\nabla_{b?}{Q??}} -> \\Box{Q??}$)\nsubstitute(mathcalG3, $\\nabla_{a?}{p}\\nabla_{b?}{p} -> X_{a? b?}$)\nsubstitute(mathcalG3, $\\nabla_{a?}{\\phi}\\nabla_{b?}{p} \\phi**(-1) h^{a? b?} -> Z$)\nrename_dummies(mathcalG3)\ncanonicalise(mathcalG3)\nsubstitute(mathcalG3, $\\nabla_{a}{K}\\nabla_{b}{p}delh^{c d}h_{c d}h^{a b} -> \\nabla_{c}{K}\\nabla_{d}{p}delh^{a b}h_{a b}h^{c d}$)\nfactor_out(mathcalG3, $delh^{a b}$)\nmathcalG3 = mathcalG3[1]"
+		},
+		{
+			"cell_id": 7378502715595026503,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "mathcalP41 = S41[0][1][2]\nmathcalG41 = S41[0][0] + S41[0][2] + S41[0][4]\nmathcalA41 = S41[0][3]\nmathcalphi41 = S41[0][5][2]\nsubstitute(mathcalG41, $delh^{c d} \\nabla_{a}{\\nabla_{b}{G4}}h_{c d} h^{a b} -> delh^{a b} \\nabla_{c}{\\nabla_{d}{G4}}h^{c d} h_{a b}$)\nsubstitute(mathcalG41, $delh^{a c} F_{a b} F_{c d} G4 \\phi**2 h^{b d} -> delh^{a b} F_{a c} F_{b d} G4 \\phi**2 h^{c d}$)\nfactor_out(mathcalG41, $delh^{a b}, Dh$)\nmathcalG41 = mathcalG41[2]"
+		},
+		{
+			"cell_id": 3791909875479886259,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "mathcalG42 = S42[0][0] + S42[0][2] + S42[0][4] + S42[0][5] + S42[0][6] + S42[0][7]\nmathcalP42 = S42[0][1][2]\nmathcalphi42 = S42[0][3][2]\nmathcalA42 = S42[0][8]\nmathcalG42:= @(mathcalG42) * Dh**(-1).\ndistribute(mathcalG42)\nsort_product(mathcalG42)\ncollect_factors(mathcalG42)\nrename_dummies(mathcalG42)\ncanonicalise(mathcalG42)\nfactor_out(mathcalG42, $delh^{a? b?}$)\nrename_dummies(mathcalG42)\nsubstitute(mathcalG42, $delh^{c d} (\\nabla_{a}{G4X \\nabla_{b}{p} boxpi4} h_{c d} h^{a b} + \\nabla_{a}{G4X \\nabla_{b}{\\nabla_{c}{p}} \\nabla_{d}{p}} h^{a b}) -> delh^{a b} (\\nabla_{c}{G4X \\nabla_{d}{p} boxpi4} h_{a b} h^{c d} + \\nabla_{c}{G4X \\nabla_{d}{\\nabla_{a}{p}} \\nabla_{b}{p}} h^{c d})$)\nsubstitute(mathcalG42, $delh^{a c} * (-2G4X \\nabla_{a}{\\nabla_{b}{p}} \\nabla_{c}{\\nabla_{d}{p}} h^{b d} -  1/2 F_{a b} F_{c d} G4X \\nabla_{e}{p} \\nabla_{f}{p} * ((\\phi)**2) * h^{b e} h^{d f}-2G4X \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} \\nabla_{c}{p} \\nabla_{d}{p} * ((\\phi)**(-2)) * h^{b d}) -> delh^{a b} * (-2G4X \\nabla_{a}{\\nabla_{c}{p}} \\nabla_{b}{\\nabla_{d}{p}} h^{c d} -  1/2 F_{a c} F_{b d} G4X \\nabla_{e}{p} \\nabla_{f}{p}* ((\\phi)**2) * h^{c e} h^{d f}-2G4X \\nabla_{a}{\\phi} \\nabla_{c}{\\phi} \\nabla_{b}{p} \\nabla_{d}{p} * ((\\phi)**(-2)) * h^{c d})$)\nsubstitute(mathcalG42, $delh^{b d} \\nabla_{a}(G4X \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a c} -> delh^{a b} \\nabla_{d}(G4X \\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(p)) h^{d c}$)\nsubstitute(mathcalG42, $delh^{b c} \\nabla_{a}(G4X \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a d} -> delh^{a b} \\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d}$)\nsubstitute(mathcalG42, $delh^{a e} F_{a b} F_{c d} G4X \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{b c} h^{d f} -> delh^{a b} F_{a e} F_{c d} G4X \\nabla_{b}(p) \\nabla_{f}(p) (\\phi)**2 h^{e c} h^{d f}$)\nfactor_out(mathcalG42, $delh^{a? b?}$)\nmathcalG42 = mathcalG42[1]\nfactor_out(mathcalG42, $\\frac{1}{2}, G4X, boxpi4, pi42, G4XX$)\nfactor_out(mathcalG42, $\\nabla_{a}{p}\\nabla_{b}{p}$)\nmathcalA4 := @(mathcalA41) + @(mathcalA42).\nrename_dummies(mathcalA4)\nsubstitute(mathcalA4, $delA_{d}\\nabla_{c}{F_{a b} G4 *((\\phi)**2)}h^{c a} h^{b d} -> delA_{f}\\nabla_{c}{F_{a b} G4 *((\\phi)**2)}h^{c a} h^{b f}$)\nfactor_out(mathcalA4, $Dh, delA_{f}$)\nmathcalA4 = mathcalA4[2]"
+		},
+		{
+			"cell_id": 18002670773341445671,
+			"cell_origin": "client",
+			"cell_type": "latex",
+			"cells": [
+				{
+					"cell_id": 17562329740045660796,
+					"cell_origin": "client",
+					"cell_type": "latex_view",
+					"source": "We denote by $\\mathcal{G}_{a b}$ the terms before the variation with respect to the metric, by $\\mathcal{P}$ terms before the variation with respect to the field $\\pi$, by $\\mathcal{A}^{m}$ terms before the variation with respect to the vector field $A_{m}$, \nby $\\Phi$ terms before the variation with respect to the dilaton field $\\phi$, and $Z = h^{a b}\\nabla_{a}{\\phi}\\nabla_{b}{\\pi} \\phi^{-1}$, then:"
+				}
+			],
+			"hidden": true,
+			"source": "We denote by $\\mathcal{G}_{a b}$ the terms before the variation with respect to the metric, by $\\mathcal{P}$ terms before the variation with respect to the field $\\pi$, by $\\mathcal{A}^{m}$ terms before the variation with respect to the vector field $A_{m}$, \nby $\\Phi$ terms before the variation with respect to the dilaton field $\\phi$, and $Z = h^{a b}\\nabla_{a}{\\phi}\\nabla_{b}{\\pi} \\phi^{-1}$, then:"
+		},
+		{
+			"cell_id": 385996201404573004,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"cells": [
+				{
+					"cell_id": 5389069499467249828,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 9342228947382916431,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{2}_{a b} =  -  1/2 h_{a b} N -  1/2 NX \\nabla_{a}(p) \\nabla_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{2}\\,_{a b} =  - \\frac{1}{2}h_{a b} F - \\frac{1}{2}F_{X} \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2991797610439888441,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18056248388944397163,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{2} = Np + h^{a b} \\nabla_{b}(NX \\nabla_{a}(p))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{2} = F_{\\pi}+h^{a b} \\nabla_{b}\\left(F_{X} \\nabla_{a}{\\pi}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 6018962382361089289,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 1595858029068621114,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{3}_{a b} =  1/2 K Z h_{a b} +  1/2 KX X_{a b} \\Box(p) -  1/2 \\nabla_{c}(K) \\nabla_{d}(p) h_{a b} h^{c d} +  1/2 KX Z X_{a b}-K \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) + \\nabla_{a}(K) \\nabla_{b}(p)"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{3}\\,_{a b} = \\frac{1}{2}K Z h_{a b}+\\frac{1}{2}K_{X} X_{a b} \\Box\\left(\\pi\\right) - \\frac{1}{2}\\nabla_{c}{K} \\nabla_{d}{\\pi} h_{a b} h^{c d}+\\frac{1}{2}K_{X} Z X_{a b}-K \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1}+\\nabla_{a}{K} \\nabla_{b}{\\pi}\\end{dmath*}"
+				},
+				{
+					"cell_id": 13565622618978133144,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 18218173224637731271,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{3} = -\\nabla_{a}(\\nabla_{b}(K)) h^{a b}-Kp \\nabla_{a}(\\nabla_{b}(p)) h^{a b}-Kp \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1) h^{a b}-\\nabla_{a}(KX \\nabla_{b}(\\nabla_{c}(p)) \\nabla_{d}(p)) h^{a d} h^{b c}-\\nabla_{a}(KX \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-1)) h^{a c} h^{b d} + \\nabla_{a}(K \\nabla_{b}(\\phi) (\\phi)**(-1)) h^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{3} = -\\nabla_{a}\\left(\\nabla_{b}{K}\\right) h^{a b}-K_{\\pi} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) h^{a b}-K_{\\pi} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1} h^{a b}-\\nabla_{a}\\left(K_{X} \\nabla_{b}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{a d} h^{b c}-\\nabla_{a}\\left(K_{X} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-1}\\right) h^{a c} h^{b d}+\\nabla_{a}\\left(K \\nabla_{b}{\\phi} {\\phi}^{-1}\\right) h^{a b}\\end{dmath*}"
+				},
+				{
+					"cell_id": 2440641207738573133,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 2094282350234781626,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalphi^{3} = K \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-2) h^{a b} + \\nabla_{a}(K \\nabla_{b}(p) (\\phi)**(-1)) h^{a b}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Phi^{3} = K \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-2} h^{a b}+\\nabla_{a}\\left(K \\nabla_{b}{\\pi} {\\phi}^{-1}\\right) h^{a b}\\end{dmath*}"
+				},
+				{
+					"cell_id": 10209870096723582895,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 3152282862752552288,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalG^{4}_{a b} =  -  1/2 G4 R h_{a b} -  1/2 G4X R \\nabla_{a}(p) \\nabla_{b}(p) + G4 R_{a b}-2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-1)-\\nabla_{a}(\\nabla_{b}(G4)) + \\nabla_{c}(\\nabla_{d}(G4)) h^{c d} h_{a b} -  1/2 F_{a c} F_{b d} G4 (\\phi)**2 h^{c d}-2\\nabla_{a}(G4X \\nabla_{b}(p) boxpi4) + \\nabla_{c}(G4X \\nabla_{d}(p) boxpi4) h_{a b} h^{c d} + \\nabla_{c}(G4X \\nabla_{d}(\\nabla_{a}(p)) \\nabla_{b}(p)) h^{c d} + \\nabla_{d}(G4X \\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(p)) h^{d c}-\\nabla_{c}(G4X \\nabla_{a}(\\nabla_{b}(p)) \\nabla_{d}(p)) h^{c d} + G4X ( -  1/2 (boxpi4)**2 h_{a b} +  1/2 h_{a b} pi24-2\\nabla_{a}(\\nabla_{c}(p)) \\nabla_{b}(\\nabla_{d}(p)) h^{c d} -  1/2 F_{a c} F_{b d} \\nabla_{e}(p) \\nabla_{f}(p) (\\phi)**2 h^{c e} h^{d f}-2\\nabla_{a}(\\phi) \\nabla_{c}(\\phi) \\nabla_{b}(p) \\nabla_{d}(p) (\\phi)**(-2) h^{c d} + F_{a e} F_{c d} \\nabla_{b}(p) \\nabla_{f}(p) (\\phi)**2 h^{e c} h^{d f}) + G4XX ( -  1/2 \\nabla_{a}(p) \\nabla_{b}(p) (boxpi4)**2 +  1/2 \\nabla_{a}(p) \\nabla_{b}(p) pi24) + G4X boxpi4 (2\\nabla_{a}(\\nabla_{b}(p)) + 2\\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-1))"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{G}^{4}\\,_{a b} =  - \\frac{1}{2}{G_{4}} R h_{a b} - \\frac{1}{2}G_{4X} R \\nabla_{a}{\\pi} \\nabla_{b}{\\pi}+{G_{4}} R_{a b}-2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-1}-\\nabla_{a}\\left(\\nabla_{b}\\left({G_{4}}\\right)\\right)+\\nabla_{c}\\left(\\nabla_{d}\\left({G_{4}}\\right)\\right) h^{c d} h_{a b} - \\frac{1}{2}F_{a c} F_{b d} {G_{4}} {\\phi}^{2} h^{c d}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} \\Box^{(4)}{\\pi}\\right)+\\nabla_{c}\\left(G_{4X} \\nabla_{d}{\\pi} \\Box^{(4)}{\\pi}\\right) h_{a b} h^{c d}+\\nabla_{c}\\left(G_{4X} \\nabla_{d}\\left(\\nabla_{a}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{c d}+\\nabla_{d}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}{\\pi}\\right) h^{d c}-\\nabla_{c}\\left(G_{4X} \\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right) \\nabla_{d}{\\pi}\\right) h^{c d}+G_{4X} \\left( - \\frac{1}{2}{\\Box^{(4)}{\\pi}}^{2} h_{a b}+\\frac{1}{2}h_{a b} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}-2\\nabla_{a}\\left(\\nabla_{c}{\\pi}\\right) \\nabla_{b}\\left(\\nabla_{d}{\\pi}\\right) h^{c d} - \\frac{1}{2}F_{a c} F_{b d} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{c e} h^{d f}-2\\nabla_{a}{\\phi} \\nabla_{c}{\\phi} \\nabla_{b}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2} h^{c d}+F_{a e} F_{c d} \\nabla_{b}{\\pi} \\nabla_{f}{\\pi} {\\phi}^{2} h^{e c} h^{d f}\\right)+G_{4XX} \\left( - \\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}+\\frac{1}{2}\\nabla_{a}{\\pi} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right)+G_{4X} \\Box^{(4)}{\\pi} \\left(2\\nabla_{a}\\left(\\nabla_{b}{\\pi}\\right)+2\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-1}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_id": 5663104065202913289,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 17188797866137210522,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalP^{4} = G4p R + \\nabla_{a}(G4X R \\nabla_{b}(p)) h^{a b} + G4Xp (boxpi4)**2-G4Xp pi24 + \\nabla_{a}(G4XX \\nabla_{b}(p) (boxpi4)**2) h^{a b}-\\nabla_{a}(G4XX \\nabla_{b}(p) pi24) h^{a b}-2\\nabla_{a}(G4X \\nabla_{b}(\\phi) (\\phi)**(-1) boxpi4) h^{a b} + 2\\nabla_{a}(\\nabla_{b}(G4X boxpi4)) h^{a b}-2\\nabla_{a}(\\nabla_{b}(G4X \\nabla_{c}(\\nabla_{d}(p)))) h^{a d} h^{b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{P}^{4} = G_{4\\pi} R+\\nabla_{a}\\left(G_{4X} R \\nabla_{b}{\\pi}\\right) h^{a b}+G_{4\\pi X} {\\Box^{(4)}{\\pi}}^{2}-G_{4\\pi X} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}+\\nabla_{a}\\left(G_{4XX} \\nabla_{b}{\\pi} {\\Box^{(4)}{\\pi}}^{2}\\right) h^{a b}-\\nabla_{a}\\left(G_{4XX} \\nabla_{b}{\\pi} \\pi^{\\mu \\nu}\\pi_{\\mu \\nu}\\right) h^{a b}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\phi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right) h^{a b}+2\\nabla_{a}\\left(\\nabla_{b}\\left(G_{4X} \\Box^{(4)}{\\pi}\\right)\\right) h^{a b}-2\\nabla_{a}\\left(\\nabla_{b}\\left(G_{4X} \\nabla_{c}\\left(\\nabla_{d}{\\pi}\\right)\\right)\\right) h^{a d} h^{b c}\\end{dmath*}"
+				},
+				{
+					"cell_id": 16816582271734808017,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 6735375743007046415,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalphi^{4} =  -  1/2 F_{a b} F_{c d} G4 \\phi h^{a c} h^{b d} + 2G4 \\nabla_{a}(\\phi) \\nabla_{b}(\\phi) (\\phi)**(-2) h^{a b} + 4\\nabla_{a}(G4 \\nabla_{b}(\\phi) (\\phi)**(-1)) h^{a b}-2G4X \\nabla_{a}(\\phi) \\nabla_{b}(p) (\\phi)**(-2) boxpi4 h^{a b}-F_{a b} F_{c d} G4X \\nabla_{e}(p) \\nabla_{f}(p) \\phi h^{a c} h^{b e} h^{d f} + 2G4X (\\phi)**(-3) (\\nabla_{a}(\\phi) \\nabla_{b}(p) h^{a b})**2-2\\nabla_{a}(G4X \\nabla_{b}(p) (\\phi)**(-1) boxpi4) h^{a b} + 2\\nabla_{a}(G4X \\nabla_{b}(\\phi) \\nabla_{c}(p) \\nabla_{d}(p) (\\phi)**(-2)) h^{a d} h^{b c}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\Phi^{4} =  - \\frac{1}{2}F_{a b} F_{c d} {G_{4}} \\phi h^{a c} h^{b d}+2{G_{4}} \\nabla_{a}{\\phi} \\nabla_{b}{\\phi} {\\phi}^{-2} h^{a b}+4\\nabla_{a}\\left({G_{4}} \\nabla_{b}{\\phi} {\\phi}^{-1}\\right) h^{a b}-2G_{4X} \\nabla_{a}{\\phi} \\nabla_{b}{\\pi} {\\phi}^{-2} \\Box^{(4)}{\\pi} h^{a b}-F_{a b} F_{c d} G_{4X} \\nabla_{e}{\\pi} \\nabla_{f}{\\pi} \\phi h^{a c} h^{b e} h^{d f}+2G_{4X} {\\phi}^{-3} {\\left(\\nabla_{a}{\\phi} \\nabla_{b}{\\pi} h^{a b}\\right)}^{2}-2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\pi} {\\phi}^{-1} \\Box^{(4)}{\\pi}\\right) h^{a b}+2\\nabla_{a}\\left(G_{4X} \\nabla_{b}{\\phi} \\nabla_{c}{\\pi} \\nabla_{d}{\\pi} {\\phi}^{-2}\\right) h^{a d} h^{b c}\\end{dmath*}"
+				},
+				{
+					"cell_id": 7969925350338196692,
+					"cell_origin": "server",
+					"cell_type": "latex_view",
+					"cells": [
+						{
+							"cell_id": 8140890558842965125,
+							"cell_origin": "server",
+							"cell_type": "input_form",
+							"source": "mathcalA^{4 f} = \\nabla_{c}(F_{a b} G4 (\\phi)**2) h^{c a} h^{b f} + 2\\nabla_{c}(F_{a b} G4X \\nabla_{d}(p) \\nabla_{e}(p) (\\phi)**2) h^{c a} h^{b d} h^{e f}"
+						}
+					],
+					"source": "\\begin{dmath*}{}\\mathcal{A}^{4 f} = \\nabla_{c}\\left(F_{a b} {G_{4}} {\\phi}^{2}\\right) h^{c a} h^{b f}+2\\nabla_{c}\\left(F_{a b} G_{4X} \\nabla_{d}{\\pi} \\nabla_{e}{\\pi} {\\phi}^{2}\\right) h^{c a} h^{b d} h^{e f}\\end{dmath*}"
+				}
+			],
+			"source": "mathcalG2 := mathcalG^{(2)}_{a b} = @(mathcalG2);\nmathcalP2:= mathcalP^{(2)} = @(mathcalP2); \nmathcalG3 := mathcalG^{(3)}_{a b} = -@(mathcalG3);\nmathcalP3 := mathcalP^{(3)} = -@(mathcalP3);\nmathcalphi3 := mathcalphi^{(3)} = -@(mathcalphi3);\nmathcalG4 := mathcalG^{(4)}_{a b} = @(mathcalG41) + @(mathcalG42);\nmathcalP4 := mathcalP^{(4)} = @(mathcalP41) + @(mathcalP42);\nmathcalphi4 := mathcalphi^{(4)} = @(mathcalphi41) + @(mathcalphi42);\nmathcalA4 := mathcalA^{(4)}^{f} = @(mathcalA4);"
+		},
+		{
+			"cell_id": 9104249326930724149,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": "#mathcalG2 := @(mathcalG2);\n#mathcalP2:= @(mathcalP2); \n#mathcalG3 := -@(mathcalG3);\n#mathcalP3 := -@(mathcalP3);\n#mathcalphi3 := -@(mathcalphi3);\n#mathcalG4 := @(mathcalG41) + @(mathcalG42);\n#mathcalP4 :=  @(mathcalP41) + @(mathcalP42);\n#mathcalphi4 := @(mathcalphi41) + @(mathcalphi42);\n#mathcalA4 :=  @(mathcalA4);"
+		},
+		{
+			"cell_id": 2883015450616609414,
+			"cell_origin": "client",
+			"cell_type": "input",
+			"source": ""
+		}
+	],
+	"description": "Cadabra JSON notebook format",
+	"version": 1.0
+}
